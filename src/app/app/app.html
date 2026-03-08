@@ -48,22 +48,6 @@
     }
     
     /* Active state with lighter yellow background */
-    .nav-active {
-        background: linear-gradient(135deg, #fef08a 0%, #edc70b 100%) !important;
-        color: #1f2937 !important;
-        font-weight: 600 !important;
-        box-shadow: 0 2px 8px rgba(253, 224, 71, 0.4);
-    }
-    
-    .nav-active:hover {
-        background: linear-gradient(135deg, #fde047 0%, #f9c804 100%) !important;
-        color: #1f2937 !important;
-    }
-    
-    .nav-active::after {
-        display: none;
-    }
-    
     /* Mobile menu button */
     .mobile-menu-btn {
         padding: 0.5rem;
@@ -93,15 +77,60 @@
     }
     
     .mobile-nav-link:hover {
-        color: #2563eb;
+        color: #d9ff00;
         background: rgba(37, 99, 235, 0.08);
         padding-left: 1.25rem;
     }
     
     .mobile-nav-active {
         background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
-        color: #1f2937 !important;
+        color: #d4ff00 !important;
         font-weight: 600;
+    }
+
+    /* Login button from Uiverse.io by reglobby */
+    .user-profile {
+      width: 131px;
+      height: 51px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      background: linear-gradient(
+        to bottom right,
+        #2e8eff 0%,
+        rgba(212, 255, 0, 0.99) 30%
+      );
+      background-color: rgba(46, 142, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none; /* To remove underline from <a> tag */
+    }
+
+    .user-profile:hover,
+    .user-profile:focus {
+      background-color: rgba(46, 142, 255, 0.7);
+      box-shadow: 0 0 10px rgba(46, 142, 255, 0.5);
+      outline: none;
+    }
+
+    .user-profile-inner {
+      width: 127px;
+      height: 47px;
+      border-radius: 9999px;
+      background-color: #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .user-profile-inner svg {
+      width: 27px;
+      height: 27px;
+      fill: #fff;
     }
 </style>
 
@@ -131,9 +160,21 @@
                 <a routerLink="/about-us" class="nav-link" routerLinkActive="nav-active">
                     À Propos
                 </a>
-            <div class="hidden md:flex items-center space-x-3"></div>
-    <a routerLink="/login" class="btn login-btn">Login</a>
-    <a routerLink="/signup" class="btn signup-btn">Sign Up</a>
+            <a routerLink="/login" aria-label="User Login Button" tabindex="0" role="button" class="user-profile">
+                <div class="user-profile-inner">
+                    <svg
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <g data-name="Layer 2" id="Layer_2">
+                        <path
+                          d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z"
+                        ></path>
+                      </g>
+                    </svg>
+                </div>
+            </a>
             </div>
 
             <!-- Mobile Menu Button -->
