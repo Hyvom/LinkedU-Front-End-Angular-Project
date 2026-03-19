@@ -2,7 +2,7 @@
 // AUTH MODELS
 // ===========================
 export interface LoginPayload {
-  email: string;
+  identifier: string;  // accepts email OR username
   password: string;
 }
 

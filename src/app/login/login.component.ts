@@ -14,7 +14,7 @@ import { LoginPayload } from '../shared/models/models';
 })
 export class LoginComponent {
   form: LoginPayload = {
-    email: '',
+    identifier: '',
     password: ''
   };
 
@@ -27,8 +27,8 @@ export class LoginComponent {
   ) {}
 
   onSubmit(): void {
-    if (!this.form.email || !this.form.password) {
-      this.errorMessage = 'Email and password are required.';
+    if (!this.form.identifier || !this.form.password) {
+      this.errorMessage = 'Please fill all fields.';
       return;
     }
 
@@ -42,18 +42,18 @@ export class LoginComponent {
           response.role,
           response.userId
         );
-
         const role = response.role.toUpperCase();
         if (role === 'ADMIN' || role === 'AGENT') {
           this.router.navigateByUrl('/admin');
-        } else if (role === 'STUDENT' || role === 'USER') {
+        } else if (role === 'STUDENT') {
           this.router.navigateByUrl('/student');
-        } else {
+        } else if (role === 'GUEST' || role === 'USER') {
           this.router.navigateByUrl('/');
+          // GUEST has limited access - full student dashboard requires contract registration
         }
       },
       error: (err: { error?: { message?: string } }) => {
-        this.errorMessage = err?.error?.message || 'Invalid email or password.';
+        this.errorMessage = err?.error?.message || 'Invalid credentials.';
         this.isSubmitting = false;
       }
     });

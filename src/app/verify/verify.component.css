@@ -1,0 +1,197 @@
+/* ========================================
+   LINKEDU EMAIL VERIFY PAGE
+   ======================================== */
+
+.verify-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 50%, #0f172a 100%);
+  padding: 2rem 1rem;
+}
+
+.verify-page::before {
+  content: '';
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 8s ease-in-out infinite;
+}
+
+/* ── Card ── */
+.verify-card {
+  position: relative;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.5s ease-out;
+}
+
+/* ── Accent Bar ── */
+.card-accent-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1d4ed8, #f59e0b, #1d4ed8);
+  border-radius: 24px 24px 0 0;
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+.error-bar {
+  background: linear-gradient(90deg, #ef4444, #dc2626, #ef4444);
+}
+
+/* ── Icons ── */
+.verify-icon {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.loading-icon { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+.success-icon { background: linear-gradient(135deg, #16a34a, #22c55e); }
+.info-icon    { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+.warning-icon { background: linear-gradient(135deg, #d97706, #f59e0b); }
+.error-icon   { background: linear-gradient(135deg, #dc2626, #ef4444); }
+
+/* ── Text ── */
+.verify-title {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 0.75rem 0;
+}
+
+.verify-subtitle {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0 0 1.75rem 0;
+}
+
+/* ── Countdown ── */
+.countdown-bar {
+  margin-bottom: 1.5rem;
+}
+
+.countdown-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 0.75rem 0;
+}
+
+.countdown-number {
+  font-weight: 800;
+  color: #1d4ed8;
+  font-size: 1rem;
+}
+
+.countdown-track {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.countdown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1d4ed8, #f59e0b);
+  border-radius: 99px;
+  width: 100%;
+  animation: countdown linear forwards;
+}
+
+/* ── Buttons ── */
+.verify-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.verify-btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.35);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(29, 78, 216, 0.45);
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.secondary-btn {
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+}
+
+.secondary-btn:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+/* ── Animations ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes countdown {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+.spin { animation: spin 1s linear infinite; }
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .verify-card { padding: 2rem 1.5rem; }
+  .verify-title { font-size: 1.375rem; }
+  .verify-icon { width: 72px; height: 72px; }
+}
