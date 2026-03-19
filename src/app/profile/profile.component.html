@@ -1,0 +1,276 @@
+<div class="profile-page">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="profile-loading">
+    <div class="loading-spinner"></div>
+    <p>Loading profile...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading" class="profile-container">
+
+    <!-- Left Panel — Avatar + Basic Info -->
+    <div class="profile-sidebar">
+      <div class="avatar-section">
+        <div class="avatar-circle">
+          <!-- Uploading spinner -->
+          <div *ngIf="isUploadingAvatar" class="avatar-uploading">
+            <div class="avatar-spinner"></div>
+          </div>
+          <!-- Preview or current avatar -->
+          <img *ngIf="!isUploadingAvatar && (avatarPreview || profile?.avatar)"
+            [src]="avatarPreview || 'http://localhost:8080' + profile!.avatar"
+            alt="Avatar" class="avatar-img" />
+          <!-- Initials fallback -->
+          <span *ngIf="!isUploadingAvatar && !avatarPreview && !profile?.avatar"
+            class="avatar-initials">{{ getInitials() }}</span>
+        </div>
+
+        <!-- Camera overlay button -->
+        <label class="avatar-upload-btn" [class.disabled]="isUploadingAvatar"
+          title="Change avatar">
+          <input type="file" accept="image/*" (change)="onAvatarSelected($event)"
+            [disabled]="isUploadingAvatar" style="display:none" />
+          <svg *ngIf="!isUploadingAvatar" width="14" height="14" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <svg *ngIf="isUploadingAvatar" class="spin" width="14" height="14" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+        </label>
+
+        <div class="role-badge" [ngClass]="getRoleBadgeClass()">
+          {{ userRole }}
+        </div>
+      </div>
+
+      <div class="sidebar-info">
+        <h2 class="sidebar-name">
+          {{ profile?.user?.firstName || '—' }} {{ profile?.user?.lastName || '' }}
+        </h2>
+        <p class="sidebar-username">&#64;{{ profile?.user?.username || '—' }}</p>
+        <p class="sidebar-email">{{ profile?.user?.email || '—' }}</p>
+      </div>
+
+      <div class="sidebar-stats">
+        <div class="stat-item">
+          <span class="stat-label">Member Since</span>
+          <span class="stat-value">2024</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Role</span>
+          <span class="stat-value">{{ userRole }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Profile</span>
+          <span class="stat-value" [class.text-green]="hasProfile" [class.text-gray]="!hasProfile">
+            {{ hasProfile ? 'Complete' : 'Incomplete' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Edit Button -->
+      <button *ngIf="!isEditing" (click)="startEditing()" class="edit-btn">
+        ✏️ {{ hasProfile ? 'Edit Profile' : 'Create Profile' }}
+      </button>
+      <button *ngIf="isEditing" (click)="cancelEditing()" class="cancel-btn">
+        ✕ Cancel
+      </button>
+    </div>
+
+    <!-- Right Panel — Profile Details / Edit Form -->
+    <div class="profile-main">
+
+      <!-- Messages -->
+      <div *ngIf="successMessage" class="alert alert-success">✅ {{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="alert alert-error">⚠️ {{ errorMessage }}</div>
+
+      <!-- VIEW MODE -->
+      <div *ngIf="!isEditing">
+
+        <!-- No profile yet -->
+        <div *ngIf="!hasProfile" class="no-profile">
+          <div class="no-profile-icon">👤</div>
+          <h3>No profile yet</h3>
+          <p>Click "Create Profile" to set up your student profile.</p>
+        </div>
+
+        <!-- Profile View -->
+        <div *ngIf="hasProfile">
+
+          <!-- Section: About -->
+          <div class="profile-section">
+            <h3 class="section-title">About</h3>
+            <p class="bio-text">{{ profile?.bio || 'No bio added yet.' }}</p>
+          </div>
+
+          <!-- Section: Academic -->
+          <div class="profile-section">
+            <h3 class="section-title">Academic Info</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Current Level</span>
+                <span class="info-value">{{ profile?.currentStudyLevel || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Wished Level</span>
+                <span class="info-value">{{ profile?.wishedStudyLevel || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Speciality</span>
+                <span class="info-value">{{ profile?.speciality || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">University Year</span>
+                <span class="info-value">{{ profile?.universityYear ? 'Year ' + profile?.universityYear : '—' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">College Type</span>
+                <span class="info-value">{{ profile?.collegeType || '—' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Budget</span>
+                <span class="info-value">{{ profile?.budget ? '$' + profile?.budget : '—' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Languages -->
+          <div class="profile-section">
+            <h3 class="section-title">Languages</h3>
+            <div class="languages-list" *ngIf="languages.length > 0">
+              <div *ngFor="let lang of languages" class="lang-chip">
+                <span class="lang-name">{{ lang.name }}</span>
+                <span class="lang-level">{{ lang.level }}</span>
+              </div>
+            </div>
+            <p *ngIf="languages.length === 0" class="text-muted">No languages added.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EDIT MODE -->
+      <div *ngIf="isEditing">
+        <h3 class="form-title">{{ hasProfile ? 'Update Profile' : 'Create Profile' }}</h3>
+
+        <form class="profile-form" (ngSubmit)="onSave()">
+
+          <!-- Bio -->
+          <div class="form-group">
+            <label class="form-label">Bio</label>
+            <textarea name="bio" [(ngModel)]="form.bio" rows="3"
+              placeholder="Tell us about yourself..."
+              class="form-input form-textarea"></textarea>
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="form-group">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" name="dateOfBirth" [(ngModel)]="form.dateOfBirth"
+              class="form-input" />
+          </div>
+
+          <!-- Academic Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Current Study Level</label>
+              <select name="currentStudyLevel" [(ngModel)]="form.currentStudyLevel"
+                class="form-input form-select">
+                <option [ngValue]="undefined">— Select —</option>
+                <option *ngFor="let level of studyLevels" [value]="level">{{ level }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Wished Study Level</label>
+              <select name="wishedStudyLevel" [(ngModel)]="form.wishedStudyLevel"
+                class="form-input form-select">
+                <option [ngValue]="undefined">— Select —</option>
+                <option *ngFor="let level of studyLevels" [value]="level">{{ level }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Speciality + Year -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Speciality</label>
+              <input type="text" name="speciality" [(ngModel)]="form.speciality"
+                placeholder="e.g. Computer Science"
+                class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">University Year</label>
+              <select name="universityYear" [(ngModel)]="form.universityYear"
+                class="form-input form-select">
+                <option [ngValue]="undefined">— Select —</option>
+                <option *ngFor="let y of universityYears" [value]="y">Year {{ y }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- College Type + Budget -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">College Type</label>
+              <select name="collegeType" [(ngModel)]="form.collegeType"
+                class="form-input form-select">
+                <option [ngValue]="undefined">— Select —</option>
+                <option *ngFor="let type of collegeTypes" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Budget (USD)</label>
+              <input type="number" name="budget" [(ngModel)]="form.budget"
+                placeholder="e.g. 15000"
+                class="form-input" />
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="form-group">
+            <div class="languages-header">
+              <label class="form-label">Languages</label>
+              <button type="button" (click)="addLanguage()" class="add-lang-btn">+ Add</button>
+            </div>
+            <div *ngFor="let lang of languages; let i = index" class="lang-row">
+              <input [(ngModel)]="lang.name" [name]="'lang_name_' + i"
+                (ngModelChange)="updateLanguage()"
+                placeholder="Language" class="form-input lang-input" />
+              <select [(ngModel)]="lang.level" [name]="'lang_level_' + i"
+                (ngModelChange)="updateLanguage()"
+                class="form-input form-select lang-select">
+                <option *ngFor="let lvl of languageLevels" [value]="lvl">{{ lvl }}</option>
+              </select>
+              <button type="button" (click)="removeLanguage(i)" class="remove-lang-btn">✕</button>
+            </div>
+          </div>
+
+          <!-- Avatar URL -->
+          <div class="form-group">
+            <label class="form-label">Avatar URL (optional)</label>
+            <input type="text" name="avatar" [(ngModel)]="form.avatar"
+              placeholder="https://..."
+              class="form-input" />
+          </div>
+
+          <!-- Submit -->
+          <div class="form-actions">
+            <button type="button" (click)="cancelEditing()" class="cancel-btn">Cancel</button>
+            <button type="submit" [disabled]="isSaving" class="save-btn">
+              {{ isSaving ? 'Saving...' : hasProfile ? 'Update Profile' : 'Create Profile' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

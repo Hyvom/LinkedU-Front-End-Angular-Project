@@ -56,6 +56,55 @@ export interface User {
 }
 
 // ===========================
+// STUDENT PROFILE MODELS
+// ===========================
+export type StudyLevel = 'BACHELOR' | 'MASTER' | 'PHD';
+export type CollegeType = 'PUBLIC' | 'PRIVATE';
+
+export interface Language {
+  name: string;
+  level: string;  // A1, A2, B1, B2, C1, C2
+  rank: number;
+}
+
+export interface StudentProfileDTO {
+  dateOfBirth?: string;
+  bio?: string;
+  avatar?: string;
+  currentStudyLevel?: StudyLevel;
+  wishedStudyLevel?: StudyLevel;
+  speciality?: string;
+  universityYear?: number;
+  languages?: string;  // JSON string
+  budget?: number;
+  collegeType?: CollegeType;
+}
+
+export interface StudentProfileResponse {
+  id: number;
+  dateOfBirth?: string;
+  bio?: string;
+  avatar?: string;
+  currentStudyLevel?: StudyLevel;
+  wishedStudyLevel?: StudyLevel;
+  speciality?: string;
+  universityYear?: number;
+  languages?: string;
+  budget?: number;
+  collegeType?: CollegeType;
+  user?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+    phoneNumber: string;
+    address: string;
+    role: string;
+  };
+}
+
+// ===========================
 // PRODUCT KEYS
 // ===========================
 export interface ProductKey {

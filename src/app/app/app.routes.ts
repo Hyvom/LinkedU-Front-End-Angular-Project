@@ -9,6 +9,7 @@ import { BlogsComponent } from '../blogs/blogs.component';
 import { AboutUsComponent } from '../about-us/about-us.component';
 import { LoginComponent } from '../login/login.component';
 import { VerifyComponent } from '../verify/verify.component';
+import { ProfileComponent } from '../profile/profile.component';
 import { GuestSignupComponent } from '../signup/guest-signup/guest-signup.component';
 import { ContractSignupComponent } from '../signup/contract-signup/contract-signup.component';
 
@@ -37,6 +38,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'verify', component: VerifyComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'signup', redirectTo: 'signup/guest', pathMatch: 'full' },
   { path: 'signup/guest', component: GuestSignupComponent },
   { path: 'signup/contract', component: ContractSignupComponent },
