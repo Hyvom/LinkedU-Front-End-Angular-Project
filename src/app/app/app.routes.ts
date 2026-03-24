@@ -29,6 +29,7 @@ import { SuisseComponent } from '../destinations/pays/suisse.component';
 import { TurkiyeComponent } from '../destinations/pays/turkiye.component';
 
 // Protected pages
+import { DestinationsAdminComponent } from '../admin/destinations/destinations-admin.component/destinations-admin.component';
 import { AdminComponent } from '../admin/admin.component';
 import { StudentProfileComponent } from '../student/student.component';
 import { TicketComponent } from '../ticket/ticket.component';
@@ -78,6 +79,12 @@ export const routes: Routes = [
         path: 'users',
         loadComponent: () =>
           import('../admin/users.component/users.component').then(m => m.UsersComponent)
+      },
+      {
+        path: 'destinations',
+        loadComponent: () =>
+          import('../admin/destinations/destinations-admin.component/destinations-admin.component')
+            .then(m => m.DestinationsAdminComponent)
       }
     ]
   },

@@ -117,18 +117,16 @@ export interface ProductKey {
   createdAt?: string;
 }
 
-
-
 // ===========================
-// DESTINATIONS
+// DESTINATION MODELS
 // ===========================
 export interface Destination {
   id?: number;
-  name: string;
+  countryName: string;
   description: string;
-  countryCode?: string;
-  imageUrl?: string;
-  isActive?: boolean;
+  paragraph: string;
+  offers: string;
+  universities: string;
 }
 
 // ===========================
