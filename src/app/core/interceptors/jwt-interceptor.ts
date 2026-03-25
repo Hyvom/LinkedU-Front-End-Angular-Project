@@ -9,6 +9,15 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  if (req.headers.has('Authorization')) {
+    return next(req);
+  }
+
+  const isBackendRequest = req.url.startsWith('http://localhost:8080');
+  if (!isBackendRequest) {
+    return next(req);
+  }
+
   const token = localStorage.getItem('token');
   if (token) {
     const cloned = req.clone({

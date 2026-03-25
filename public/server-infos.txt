@@ -1,0 +1,14 @@
+LinkedU Server Information
+
+Backend Base URL: http://localhost:8080
+Frontend Base URL: http://localhost:4200
+
+Main API Endpoints:
+- POST /api/auth/login
+- POST /api/auth/register/guest
+- POST /api/auth/register/contract
+- GET /api/auth/verify
+
+Notes:
+- Update this file with any server details you want the chatbot to use.
+- Keep information short and accurate.

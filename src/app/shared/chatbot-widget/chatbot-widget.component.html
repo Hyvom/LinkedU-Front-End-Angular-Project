@@ -1,0 +1,28 @@
+<button class="chatbot-fab" type="button" (click)="toggleChat()" aria-label="Open chatbot">
+  <img class="chatbot-icon" src="/pics/chatbotlogo.png" alt="Chatbot" />
+</button>
+
+<section class="chatbot-panel" *ngIf="isOpen">
+  <header class="chatbot-header">
+    <h3>LinkedU Assistant</h3>
+    <button type="button" class="close-btn" (click)="toggleChat()">×</button>
+  </header>
+
+  <div class="chatbot-messages">
+    <div *ngFor="let message of messages" [class.user]="message.role === 'user'" class="chat-message">
+      {{ message.content }}
+    </div>
+    <div *ngIf="isLoading" class="chat-message">Thinking...</div>
+  </div>
+
+  <form class="chatbot-input" (ngSubmit)="sendMessage()">
+    <input
+      type="text"
+      name="question"
+      [(ngModel)]="question"
+      placeholder="Ask about LinkedU website..."
+      autocomplete="off"
+    />
+    <button type="submit" [disabled]="isLoading">Send</button>
+  </form>
+</section>
