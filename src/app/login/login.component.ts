@@ -43,8 +43,10 @@ export class LoginComponent {
           response.userId
         );
         const role = response.role.toUpperCase();
-        if (role === 'ADMIN' || role === 'AGENT') {
+        if (role === 'ADMIN') {
           this.router.navigateByUrl('/admin');
+        } else if (role === 'AGENT') {
+          this.router.navigateByUrl('/agent');
         } else if (role === 'STUDENT') {
           this.router.navigateByUrl('/student');
         } else if (role === 'GUEST' || role === 'USER') {

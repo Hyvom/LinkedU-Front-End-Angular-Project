@@ -59,6 +59,40 @@ export interface AssignRolePayload {
 }
 
 // ===========================
+// AGENT MODELS
+// ===========================
+export interface AssignedStudent {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  phoneNumber: string;
+  role: string;
+  enabled: boolean;
+}
+
+export interface DocumentResponseDTO {
+  id: number;
+  documentType: string;
+  fileName: string;
+  filePath: string;
+  status: string;
+  uploadedAt: string;
+  // CV
+  summary?: string;
+  experience?: string;
+  skills?: string;
+  // Passport
+  issueDate?: string;
+  expiryDate?: string;
+  issuingCountry?: string;
+  // ID Card
+  numId?: string;
+  birthday?: string;
+}
+
+// ===========================
 // STUDENT PROFILE MODELS
 // ===========================
 export type StudyLevel = 'BACHELOR' | 'MASTER' | 'PHD';

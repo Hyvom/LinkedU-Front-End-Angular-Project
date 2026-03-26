@@ -1,0 +1,339 @@
+<div class="agent-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="agent-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">👨‍💼</div>
+      <div>
+        <h3>Agent Portal</h3>
+        <p>LinkedU</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button (click)="currentView = 'students'; backToStudents()"
+        [class.active]="currentView === 'students'" class="nav-btn">
+        👥 My Students
+        <span class="nav-count" *ngIf="students.length > 0">{{ students.length }}</span>
+      </button>
+    </nav>
+
+    <button (click)="logout()" class="logout-btn">🚪 Logout</button>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="agent-main">
+
+    <!-- ═══ STUDENTS LIST ═══ -->
+    <div *ngIf="currentView === 'students'">
+
+      <div class="page-header">
+        <h2>👥 My Students</h2>
+        <p class="page-sub">Students assigned to you for monitoring</p>
+      </div>
+
+      <div *ngIf="isLoadingStudents" class="loading-state">
+        <div class="spinner"></div><p>Loading students...</p>
+      </div>
+
+      <div *ngIf="studentsError" class="alert alert-error">⚠️ {{ studentsError }}</div>
+
+      <div *ngIf="!isLoadingStudents && students.length === 0" class="empty-state">
+        <div class="empty-icon">👥</div>
+        <h3>No students assigned yet</h3>
+        <p>Contact admin to assign students to your account.</p>
+      </div>
+
+      <div *ngIf="!isLoadingStudents && students.length > 0" class="students-grid">
+        <div *ngFor="let student of students" class="student-card" (click)="selectStudent(student)">
+          <div class="student-card-avatar">
+            {{ getInitials(student) }}
+          </div>
+          <div class="student-card-info">
+            <h4>{{ student.firstName }} {{ student.lastName }}</h4>
+            <p class="student-email">{{ student.email }}</p>
+            <p class="student-username">&#64;{{ student.username }}</p>
+          </div>
+          <div class="student-card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STUDENT DETAIL ═══ -->
+    <div *ngIf="currentView === 'student-detail' && selectedStudent">
+
+      <!-- Header -->
+      <div class="detail-header">
+        <button (click)="backToStudents()" class="back-btn">← Back to Students</button>
+        <div class="detail-student-info">
+          <div class="detail-avatar">{{ getInitials(selectedStudent) }}</div>
+          <div>
+            <h2>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h2>
+            <p>{{ selectedStudent.email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="detail-tabs">
+        <button (click)="setTab('profile')" [class.active]="activeTab === 'profile'" class="tab-btn">
+          👤 Profile
+        </button>
+        <button (click)="setTab('documents')" [class.active]="activeTab === 'documents'" class="tab-btn">
+          📄 Documents
+        </button>
+        <button (click)="setTab('progress')" [class.active]="activeTab === 'progress'" class="tab-btn">
+          📊 Progress
+        </button>
+      </div>
+
+      <!-- ── PROFILE TAB ── -->
+      <div *ngIf="activeTab === 'profile'">
+        <div *ngIf="isLoadingProfile" class="loading-state">
+          <div class="spinner"></div><p>Loading profile...</p>
+        </div>
+
+        <div *ngIf="!isLoadingProfile && !studentProfile" class="empty-state">
+          <div class="empty-icon">👤</div>
+          <h3>No profile created yet</h3>
+          <p>This student hasn't set up their profile.</p>
+        </div>
+
+        <div *ngIf="!isLoadingProfile && studentProfile" class="profile-view">
+
+          <!-- Profile Hero -->
+          <div class="profile-hero">
+            <div class="hero-avatar">
+              <img *ngIf="getAvatarUrl()" [src]="getAvatarUrl()" alt="avatar" class="hero-img" />
+              <span *ngIf="!getAvatarUrl()">{{ getInitials(selectedStudent) }}</span>
+            </div>
+            <div class="hero-info">
+              <h3>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h3>
+              <p>{{ selectedStudent.email }}</p>
+              <div class="hero-tags">
+                <span class="tag" *ngIf="studentProfile.currentStudyLevel">
+                  {{ studentProfile.currentStudyLevel }}
+                </span>
+                <span class="tag tag-yellow" *ngIf="studentProfile.speciality">
+                  {{ studentProfile.speciality }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Grid -->
+          <div class="info-grid">
+            <div class="info-card">
+              <h4 class="card-title">🎓 Academic</h4>
+              <div class="card-rows">
+                <div class="card-row">
+                  <span class="row-label">Current Level</span>
+                  <span class="row-value">{{ studentProfile.currentStudyLevel || '—' }}</span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">Target Level</span>
+                  <span class="row-value">{{ studentProfile.wishedStudyLevel || '—' }}</span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">Speciality</span>
+                  <span class="row-value">{{ studentProfile.speciality || '—' }}</span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">University Year</span>
+                  <span class="row-value">{{ studentProfile.universityYear ? 'Year ' + studentProfile.universityYear : '—' }}</span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">College Type</span>
+                  <span class="row-value">{{ studentProfile.collegeType || '—' }}</span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">Budget</span>
+                  <span class="row-value">{{ studentProfile.budget ? '$' + studentProfile.budget : '—' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h4 class="card-title">🌐 Languages</h4>
+              <div class="lang-chips" *ngIf="studentProfile.languages">
+                <div *ngFor="let lang of parseLanguages(studentProfile.languages)" class="lang-chip">
+                  <span class="lang-name">{{ lang.name }}</span>
+                  <span class="lang-badge">{{ lang.level }}</span>
+                </div>
+              </div>
+              <p *ngIf="!studentProfile.languages" class="text-muted">No languages added.</p>
+
+              <h4 class="card-title" style="margin-top: 1.25rem;">📝 Bio</h4>
+              <p class="bio-text">{{ studentProfile.bio || 'No bio added.' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DOCUMENTS TAB ── -->
+      <div *ngIf="activeTab === 'documents'">
+
+        <div *ngIf="verifySuccess" class="alert alert-success">✅ {{ verifySuccess }}</div>
+        <div *ngIf="verifyError" class="alert alert-error">⚠️ {{ verifyError }}</div>
+
+        <div *ngIf="isLoadingDocs" class="loading-state">
+          <div class="spinner"></div><p>Loading documents...</p>
+        </div>
+
+        <div *ngIf="!isLoadingDocs && documents.length === 0" class="empty-state">
+          <div class="empty-icon">📄</div>
+          <h3>No documents uploaded</h3>
+          <p>This student hasn't uploaded any documents yet.</p>
+        </div>
+
+        <div *ngIf="!isLoadingDocs && documents.length > 0" class="documents-list">
+          <div *ngFor="let doc of documents" class="doc-card">
+
+            <div class="doc-card-header">
+              <div class="doc-type-icon">
+                {{ doc.documentType === 'CV' ? '📋' : doc.documentType === 'PASSPORT' ? '🛂' : '🪪' }}
+              </div>
+              <div class="doc-info">
+                <h4>{{ doc.documentType }}</h4>
+                <p class="doc-filename">{{ doc.fileName }}</p>
+                <p class="doc-date">{{ doc.uploadedAt | date:'mediumDate' }}</p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(doc.status)">
+                {{ getStatusLabel(doc.status) }}
+              </span>
+            </div>
+
+            <!-- CV Extra Info -->
+            <div *ngIf="doc.documentType === 'CV' && (doc.summary || doc.skills)" class="doc-extra">
+              <div *ngIf="doc.summary" class="extra-item">
+                <span class="extra-label">Summary</span>
+                <p class="extra-value">{{ doc.summary }}</p>
+              </div>
+              <div *ngIf="doc.skills" class="extra-item">
+                <span class="extra-label">Skills</span>
+                <p class="extra-value">{{ doc.skills }}</p>
+              </div>
+            </div>
+
+            <!-- Passport Extra Info -->
+            <div *ngIf="doc.documentType === 'PASSPORT'" class="doc-extra">
+              <div class="extra-row">
+                <div class="extra-item">
+                  <span class="extra-label">Issue Date</span>
+                  <p class="extra-value">{{ doc.issueDate || '—' }}</p>
+                </div>
+                <div class="extra-item">
+                  <span class="extra-label">Expiry Date</span>
+                  <p class="extra-value">{{ doc.expiryDate || '—' }}</p>
+                </div>
+                <div class="extra-item">
+                  <span class="extra-label">Issuing Country</span>
+                  <p class="extra-value">{{ doc.issuingCountry || '—' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ID Card Extra Info -->
+            <div *ngIf="doc.documentType === 'ID_CARD'" class="doc-extra">
+              <div class="extra-row">
+                <div class="extra-item">
+                  <span class="extra-label">ID Number</span>
+                  <p class="extra-value">{{ doc.numId || '—' }}</p>
+                </div>
+                <div class="extra-item">
+                  <span class="extra-label">Birthday</span>
+                  <p class="extra-value">{{ doc.birthday || '—' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="doc-actions">
+              <a [href]="getDocumentDownloadUrl(doc.filePath)"
+                target="_blank" download class="download-btn">
+                ⬇️ Download
+              </a>
+              <div *ngIf="doc.status === 'PENDING'" class="verify-actions">
+                <button (click)="verifyDocument(doc.id, 'APPROVED')"
+                  [disabled]="isVerifying" class="approve-btn">
+                  ✅ Approve
+                </button>
+                <button (click)="verifyDocument(doc.id, 'REJECTED')"
+                  [disabled]="isVerifying" class="reject-btn">
+                  ❌ Reject
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROGRESS TAB ── -->
+      <div *ngIf="activeTab === 'progress'">
+
+        <div *ngIf="progressSuccess" class="alert alert-success">✅ {{ progressSuccess }}</div>
+        <div *ngIf="progressError" class="alert alert-error">⚠️ {{ progressError }}</div>
+
+        <div *ngIf="isLoadingProgress" class="loading-state">
+          <div class="spinner"></div><p>Loading progress...</p>
+        </div>
+
+        <div *ngIf="!isLoadingProgress">
+
+          <!-- Overview Bar -->
+          <div class="progress-overview">
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar-fill"
+                [style.width]="(getCompletedCount() / allStages.length * 100) + '%'">
+              </div>
+            </div>
+            <p class="progress-text">
+              {{ getCompletedCount() }} / {{ allStages.length }} stages completed
+            </p>
+          </div>
+
+          <!-- Stages -->
+          <div class="stages-list">
+            <div *ngFor="let stage of allStages" class="stage-card" [ngClass]="getStageClass(stage)">
+
+              <div class="stage-left">
+                <div class="stage-icon-big">{{ stageIcons[stage] }}</div>
+                <div>
+                  <h4 class="stage-name">{{ stageLabels[stage] }}</h4>
+                  <span class="stage-current-status">
+                    {{ getStageStatus(stage).replace('_', ' ') }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Status Buttons -->
+              <div class="stage-controls">
+                <button
+                  (click)="updateStageStatus(stage, 'NOT_STARTED')"
+                  [disabled]="isUpdatingProgress || getStageStatus(stage) === 'NOT_STARTED'"
+                  class="stage-btn btn-not-started">
+                  Not Started
+                </button>
+                <button
+                  (click)="updateStageStatus(stage, 'IN_PROGRESS')"
+                  [disabled]="isUpdatingProgress || getStageStatus(stage) === 'IN_PROGRESS'"
+                  class="stage-btn btn-in-progress">
+                  In Progress
+                </button>
+                <button
+                  (click)="updateStageStatus(stage, 'COMPLETED')"
+                  [disabled]="isUpdatingProgress || getStageStatus(stage) === 'COMPLETED'"
+                  class="stage-btn btn-completed">
+                  Completed
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>

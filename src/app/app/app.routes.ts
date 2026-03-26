@@ -32,6 +32,7 @@ import { TurkiyeComponent } from '../destinations/pays/turkiye.component';
 import { DestinationsAdminComponent } from '../admin/destinations/destinations-admin.component/destinations-admin.component';
 import { AdminComponent } from '../admin/admin.component';
 import { StudentProfileComponent } from '../student/student.component';
+import { AgentComponent } from '../agent/agent.component';
 import { TicketComponent } from '../ticket/ticket.component';
 
 export const routes: Routes = [
@@ -96,6 +97,14 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['STUDENT', 'USER', 'GUEST'] }
   },
+  
+  {
+    path: 'agent',
+    component: AgentComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['AGENT'] }
+  },
+
   {
     path: 'ticket',
     component: TicketComponent,
