@@ -1,27 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProfileService } from '../core/services/profile.service';
-import { AuthService } from '../core/services/auth.service';
+import { AgentProfileService } from '../../core/services/agent-profile.service';
+import { AuthService } from '../../core/services/auth.service';
 import {
-  StudentProfileDTO,
-  StudentProfileResponse,
-  StudyLevel,
-  CollegeType,
-  OnlineStatus,
-  Language
-} from '../shared/models/models';
+  AgentProfileDTO,
+  AgentProfileResponse,
+  OnlineStatus
+} from '../../shared/models/models';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-agent-profile',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  templateUrl: './agent-profile.component.html',
+  styleUrl: './agent-profile.component.css'
 })
-export class ProfileComponent implements OnInit {
+export class AgentProfileComponent implements OnInit {
 
-  // State
   isLoading = true;
   isSaving = false;
   isEditing = false;
@@ -31,43 +27,27 @@ export class ProfileComponent implements OnInit {
   isUploadingAvatar = false;
   avatarPreview: string | null = null;
 
-  // User info from localStorage
   userRole = '';
   userId = '';
 
-  // Profile data
-  profile: StudentProfileResponse | null = null;
+  profile: AgentProfileResponse | null = null;
 
-  // Edit form — now includes the 4 new fields
-  form: StudentProfileDTO = {
+  form: AgentProfileDTO = {
     dateOfBirth: '',
     bio: '',
     avatar: '',
-    currentStudyLevel: undefined,
-    wishedStudyLevel: undefined,
-    speciality: '',
-    universityYear: undefined,
-    languages: '[]',
-    budget: undefined,
-    collegeType: undefined,
-    onlineStatus: undefined,
-    availabilityTime: '',
     address: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    contactName: '',
+    email: '',
+    availabilityTime: '',
+    onlineStatus: undefined
   };
 
-  // Languages array (parsed from JSON)
-  languages: Language[] = [];
-
-  // Dropdown options
-  studyLevels: StudyLevel[] = ['BACHELOR', 'MASTER', 'PHD'];
-  collegeTypes: CollegeType[] = ['PUBLIC', 'PRIVATE'];
-  languageLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-  universityYears = [1, 2, 3, 4];
   onlineStatusOptions: OnlineStatus[] = ['ONLINE', 'AWAY', 'OFFLINE'];
 
   constructor(
-    private readonly profileService: ProfileService,
+    private readonly profileService: AgentProfileService,
     private readonly authService: AuthService
   ) {}
 
@@ -93,60 +73,25 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  populateForm(data: StudentProfileResponse): void {
+  populateForm(data: AgentProfileResponse): void {
     this.form = {
       dateOfBirth: data.dateOfBirth || '',
       bio: data.bio || '',
       avatar: data.avatar || '',
-      currentStudyLevel: data.currentStudyLevel,
-      wishedStudyLevel: data.wishedStudyLevel,
-      speciality: data.speciality || '',
-      universityYear: data.universityYear,
-      languages: data.languages || '[]',
-      budget: data.budget,
-      collegeType: data.collegeType,
-      onlineStatus: data.onlineStatus,
-      availabilityTime: data.availabilityTime || '',
       address: data.address || '',
-      phoneNumber: data.phoneNumber || ''
+      phoneNumber: data.phoneNumber || '',
+      contactName: data.contactName || '',
+      email: data.email || '',
+      availabilityTime: data.availabilityTime || '',
+      onlineStatus: data.onlineStatus
     };
-    this.parseLanguages();
-  }
-
-  parseLanguages(): void {
-    try {
-      this.languages = JSON.parse(this.form.languages || '[]');
-    } catch {
-      this.languages = [];
-    }
-  }
-
-  syncLanguages(): void {
-    this.form.languages = JSON.stringify(this.languages);
-  }
-
-  addLanguage(): void {
-    this.languages.push({ name: '', level: 'B1', rank: this.languages.length + 1 });
-    this.syncLanguages();
-  }
-
-  removeLanguage(index: number): void {
-    this.languages.splice(index, 1);
-    this.languages.forEach((l, i) => l.rank = i + 1);
-    this.syncLanguages();
-  }
-
-  updateLanguage(): void {
-    this.syncLanguages();
   }
 
   startEditing(): void {
     this.isEditing = true;
     this.errorMessage = '';
     this.successMessage = '';
-    if (this.profile) {
-      this.populateForm(this.profile);
-    }
+    if (this.profile) this.populateForm(this.profile);
   }
 
   cancelEditing(): void {
@@ -158,7 +103,6 @@ export class ProfileComponent implements OnInit {
     this.isSaving = true;
     this.errorMessage = '';
     this.successMessage = '';
-    this.syncLanguages();
 
     const action = this.hasProfile
       ? this.profileService.updateProfile(this.form)
@@ -179,11 +123,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getRoleBadgeClass(): string {
-    const role = this.userRole.toUpperCase();
-    if (role === 'ADMIN') return 'badge-admin';
-    if (role === 'AGENT') return 'badge-agent';
-    if (role === 'STUDENT') return 'badge-student';
-    return 'badge-guest';
+    return 'badge-agent';
   }
 
   getInitials(): string {
@@ -192,19 +132,12 @@ export class ProfileComponent implements OnInit {
     return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase() || '??';
   }
 
-  getAvatarUrl(): string {
-    if (this.avatarPreview) return this.avatarPreview;
-    if (!this.profile?.avatar) return '';
-    if (this.profile.avatar.startsWith('http')) return this.profile.avatar;
-    return 'http://localhost:8080' + this.profile.avatar;
-  }
-
   getStatusClass(): string {
     switch (this.profile?.onlineStatus) {
-      case 'ONLINE': return 'status-online';
-      case 'AWAY':   return 'status-away';
+      case 'ONLINE':  return 'status-online';
+      case 'AWAY':    return 'status-away';
       case 'OFFLINE': return 'status-offline';
-      default: return 'status-offline';
+      default:        return 'status-offline';
     }
   }
 
@@ -218,16 +151,13 @@ export class ProfileComponent implements OnInit {
       this.errorMessage = 'Please select a valid image file.';
       return;
     }
-
     if (file.size > 5 * 1024 * 1024) {
       this.errorMessage = 'Image must be less than 5MB.';
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = (e) => {
-      this.avatarPreview = e.target?.result as string;
-    };
+    reader.onload = (e) => { this.avatarPreview = e.target?.result as string; };
     reader.readAsDataURL(file);
 
     this.isUploadingAvatar = true;
@@ -237,9 +167,7 @@ export class ProfileComponent implements OnInit {
       next: (res) => {
         this.successMessage = 'Avatar updated successfully!';
         this.isUploadingAvatar = false;
-        if (this.profile) {
-          this.profile.avatar = res.avatarUrl;
-        }
+        if (this.profile) this.profile.avatar = res.avatarUrl;
         this.loadProfile(false);
       },
       error: (err: { error?: { error?: string } }) => {

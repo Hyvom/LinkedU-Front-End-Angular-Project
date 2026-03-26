@@ -112,9 +112,13 @@ export interface StudentProfileDTO {
   wishedStudyLevel?: StudyLevel;
   speciality?: string;
   universityYear?: number;
-  languages?: string;  // JSON string
+  languages?: string;       // JSON string
   budget?: number;
   collegeType?: CollegeType;
+  onlineStatus?: OnlineStatus;
+  availabilityTime?: string;
+  address?: string;
+  phoneNumber?: string;
 }
 
 export interface StudentProfileResponse {
@@ -129,6 +133,82 @@ export interface StudentProfileResponse {
   languages?: string;
   budget?: number;
   collegeType?: CollegeType;
+  onlineStatus?: OnlineStatus;
+  availabilityTime?: string;
+  address?: string;
+  phoneNumber?: string;
+  user?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+    phoneNumber: string;
+    address: string;
+    role: string;
+  };
+}
+// ===========================
+// PROFILE MODELS BASED ON ROLES
+// ===========================
+export type OnlineStatus = 'ONLINE' | 'AWAY' | 'OFFLINE';
+
+// ── Guest ──────────────────────────────────────────────
+export interface GuestProfileDTO {
+  dateOfBirth?: string;
+  bio?: string;
+  avatar?: string;
+  onlineStatus?: OnlineStatus;
+  availabilityTime?: string;
+  address?: string;
+  phoneNumber?: string;
+}
+
+export interface GuestProfileResponse {
+  id: number;
+  dateOfBirth?: string;
+  bio?: string;
+  avatar?: string;
+  onlineStatus?: OnlineStatus;
+  availabilityTime?: string;
+  address?: string;
+  phoneNumber?: string;
+  user?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+    phoneNumber: string;
+    address: string;
+    role: string;
+  };
+}
+
+// ── Agent ──────────────────────────────────────────────
+export interface AgentProfileDTO {
+  dateOfBirth?: string;
+  bio?: string;
+  avatar?: string;
+  address?: string;
+  phoneNumber?: string;
+  contactName?: string;
+  email?: string;
+  availabilityTime?: string;
+  onlineStatus?: OnlineStatus;
+}
+
+export interface AgentProfileResponse {
+  id: number;
+  dateOfBirth?: string;
+  bio?: string;
+  avatar?: string;
+  address?: string;
+  phoneNumber?: string;
+  contactName?: string;
+  email?: string;
+  availabilityTime?: string;
+  onlineStatus?: OnlineStatus;
   user?: {
     id: number;
     firstName: string;

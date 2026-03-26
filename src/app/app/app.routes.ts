@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../core/guards/auth-guard';
 import { roleGuard } from '../core/guards/role-guard';
+import { profileRedirectGuard } from '../core/guards/profile-redirect.guard';
 
 // Public pages
 import { HomeComponent } from '../home/home.component';
@@ -31,9 +32,13 @@ import { TurkiyeComponent } from '../destinations/pays/turkiye.component';
 // Protected pages
 import { DestinationsAdminComponent } from '../admin/destinations/destinations-admin.component/destinations-admin.component';
 import { AdminComponent } from '../admin/admin.component';
+//profile routes
 import { StudentProfileComponent } from '../student/student.component';
+import { GuestProfileComponent } from '../profile/guest-profile.component/guest-profile.component';
+import { AgentProfileComponent } from '../profile/agent-profile.component/agent-profile.component';
 import { AgentComponent } from '../agent/agent.component';
 import { TicketComponent } from '../ticket/ticket.component';
+
 
 export const routes: Routes = [
   // ── Public ──────────────────────────────────────────
@@ -63,6 +68,11 @@ export const routes: Routes = [
   { path: 'destinations/pays/georgie', component: GeorgieComponent },
   { path: 'destinations/pays/malte', component: MalteComponent },
 
+  // ── profiles ───────────────────────────────────────
+  { path: 'profile/student', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'profile/guest',   component: GuestProfileComponent,  canActivate: [authGuard] },
+  { path: 'profile/agent',   component: AgentProfileComponent,  canActivate: [authGuard] },
+  { path: 'profile',         canActivate: [profileRedirectGuard], component: StudentProfileComponent },
   // ── Admin only ───────────────────────────────────────
   {
     path: 'admin',
@@ -97,7 +107,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['STUDENT', 'USER', 'GUEST'] }
   },
-  
+
   {
     path: 'agent',
     component: AgentComponent,
