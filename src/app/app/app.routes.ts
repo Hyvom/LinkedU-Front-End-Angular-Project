@@ -94,7 +94,7 @@ export const routes: Routes = [
     path: 'student',
     component: StudentProfileComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['STUDENT', 'USER'] }
+    data: { roles: ['STUDENT', 'USER', 'GUEST'] }
   },
   {
     path: 'ticket',

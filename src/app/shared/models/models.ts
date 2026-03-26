@@ -211,3 +211,48 @@ export interface ChatNotification {
   messageId: number;
   isRead: boolean;
 }
+
+// ===========================
+// DOCUMENT MODELS
+// ===========================
+export type DocumentStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type DocumentType = 'CV' | 'PASSPORT' | 'ID_CARD';
+
+export interface StudentDocument {
+  id: number;
+  documentType: DocumentType;
+  fileName: string;
+  filePath: string;
+  status: DocumentStatus;
+  uploadedAt: string;
+  // CV fields
+  summary?: string;
+  experience?: string;
+  skills?: string;
+  // Passport fields
+  issueDate?: string;
+  expiryDate?: string;
+  issuingCountry?: string;
+  // ID Card fields
+  numId?: string;
+  birthday?: string;
+}
+
+// ===========================
+// PROGRESS MODELS
+// ===========================
+export type ProgressStage =
+  'ORIENTATION' |
+  'DOSSIER_PREPARATION' |
+  'INTERVIEW' |
+  'DOCUMENT_VERIFICATION' |
+  'ADMISSION_CONFIRMATION';
+
+export type ProgressStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
+
+export interface Progress {
+  id: number;
+  stage: ProgressStage;
+  status: ProgressStatus;
+  updatedAt: string;
+}

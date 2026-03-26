@@ -1,363 +1,384 @@
-<main class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 pt-20 min-h-screen">
-    <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 container">
+<div class="student-layout">
 
-        <!-- Profile Header -->
-        <header class="bg-white/95 shadow-2xl backdrop-blur-sm mb-8 sm:mb-12 p-6 sm:p-8 border border-white/20 rounded-3xl">
-            <div class="flex lg:flex-row flex-col lg:justify-between lg:items-start">
-                <div class="flex lg:flex-row flex-col items-center lg:items-start lg:space-x-8">
-                    <div class="group relative">
-                        <img src="/api/placeholder/200/200" alt="Profile Picture" 
-                             class="shadow-2xl border-4 border-white rounded-full w-32 sm:w-48 h-32 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                        <label for="pfp-upload" 
-                               class="right-0 bottom-0 absolute bg-blue-600 hover:bg-blue-700 shadow-lg p-2 sm:p-3 rounded-full text-white hover:scale-110 transition-all duration-300 cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 sm:w-6 h-5 sm:h-6" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                            </svg>
-                        </label>
-                        <input type="file" id="pfp-upload" class="hidden" accept="image/*">
-                    </div>
-                    <div class="mt-4 lg:mt-0 lg:text-left text-center">
-                        <h1 class="font-bold text-gray-900 text-3xl sm:text-4xl lg:text-5xl">Dhia Eddine Bouhouch</h1>
-                        <p class="mt-2 text-gray-600 text-lg sm:text-xl">Computer Science Student | Full Stack Developer</p>
-                        <div class="flex justify-center lg:justify-start items-center space-x-4 mt-4">
-                            <div class="flex items-center text-gray-600">
-                                <img src="/api/placeholder/24/16" alt="Flag" 
-                                     class="shadow-sm mr-2 rounded-sm w-6 h-4 object-cover">
-                                <span class="font-semibold">Tunisia</span>
-                            </div>
-                            <span class="text-gray-300">•</span>
-                            <div class="flex items-center text-gray-600">
-                                <span class="mr-1">🌍</span>
-                                <span class="font-semibold">GMT+1</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Quick Stats -->
-                <div class="flex flex-wrap justify-center lg:justify-end gap-4 mt-6 lg:mt-0">
-                    <div class="bg-blue-50 px-4 py-2 rounded-xl text-center">
-                        <div class="font-bold text-blue-600 text-xl">4</div>
-                        <div class="text-gray-600 text-sm">Documents</div>
-                    </div>
-                    <div class="bg-green-50 px-4 py-2 rounded-xl text-center">
-                        <div class="font-bold text-green-600 text-xl">156</div>
-                        <div class="text-gray-600 text-sm">Connections</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap justify-center lg:justify-start gap-4 mt-8 pt-6 border-gray-200 border-t">
-                <button class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl px-8 sm:px-10 py-3 rounded-xl font-semibold text-white text-lg transition-all hover:-translate-y-1 transform">
-                    <span>🤝</span>
-                    <span>Connect</span>
-                </button>
-                <button class="flex items-center space-x-2 bg-gray-200 hover:bg-gray-300 shadow-lg hover:shadow-xl px-8 sm:px-10 py-3 rounded-xl font-semibold text-gray-800 text-lg transition-all hover:-translate-y-1 transform">
-                    <span>💬</span>
-                    <span>Message</span>
-                </button>
-                <button class="flex items-center space-x-2 bg-purple-100 hover:bg-purple-200 px-8 sm:px-10 py-3 rounded-xl font-semibold text-purple-700 text-lg transition-all hover:-translate-y-1 transform">
-                    <span>⭐</span>
-                    <span>Save</span>
-                </button>
-            </div>
-        </header>
+  <!-- ── SIDEBAR ── -->
+  <aside class="student-sidebar">
 
-        <!-- Profile Body -->
-        <div class="gap-8 grid grid-cols-1 lg:grid-cols-3">
-
-            <!-- Main Content -->
-            <div class="space-y-8 lg:col-span-2">
-
-                <!-- Interests Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 sm:p-8 border border-white/20 rounded-2xl">
-                    <h2 class="flex items-center mb-6 font-bold text-gray-800 text-2xl sm:text-3xl">
-                        <span class="mr-3">🎯</span>
-                        Interested in
-                    </h2>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">
-                            France
-                        </span>
-                        <span class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">
-                            Canada
-                        </span>
-                        <span class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">
-                            Germany
-                        </span>
-                        <span class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">
-                            Switzerland
-                        </span>
-                    </div>
-                </section>
-
-                <!-- Skills Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 sm:p-8 border border-white/20 rounded-2xl">
-                    <h2 class="flex items-center mb-6 font-bold text-gray-800 text-2xl sm:text-3xl">
-                        <span class="mr-3">⚡</span>
-                        Skills
-                    </h2>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">Angular</span>
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">React</span>
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">Node.js</span>
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">Python</span>
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">TypeScript</span>
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">MongoDB</span>
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">PostgreSQL</span>
-                        <span class="bg-gradient-to-r from-green-50 to-emerald-50 shadow-sm hover:shadow-md px-4 py-2 rounded-full font-medium text-gray-800 transition-shadow cursor-default">Docker</span>
-                    </div>
-                </section>
-
-                <!-- Education Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 sm:p-8 border border-white/20 rounded-2xl">
-                    <h2 class="flex items-center mb-6 font-bold text-gray-800 text-2xl sm:text-3xl">
-                        <span class="mr-3">📚</span>
-                        Education
-                    </h2>
-                    <div class="space-y-6">
-                        <div class="relative pb-6 pl-8 border-blue-200 border-l-2">
-                            <div class="left-0 absolute bg-blue-600 border-4 border-white rounded-full w-4 h-4 -translate-x-1/2"></div>
-                            <div class="ml-4">
-                                <h3 class="font-bold text-gray-900 text-xl">Master in Computer Science</h3>
-                                <p class="font-semibold text-gray-700 text-lg">National School of Computer Science</p>
-                                <p class="text-gray-500">2023 - Present • 3.8/4.0</p>
-                                <p class="mt-2 text-gray-600">Specializing in Software Engineering and Distributed Systems</p>
-                            </div>
-                        </div>
-                        <div class="relative pl-8">
-                            <div class="left-0 absolute bg-blue-600 border-4 border-white rounded-full w-4 h-4 -translate-x-1/2"></div>
-                            <div class="ml-4">
-                                <h3 class="font-bold text-gray-900 text-xl">Bachelor in Computer Science</h3>
-                                <p class="font-semibold text-gray-700 text-lg">Faculty of Sciences of Tunis</p>
-                                <p class="text-gray-500">2020 - 2023 • 3.6/4.0</p>
-                                <p class="mt-2 text-gray-600">Graduated with honors</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Documents Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 sm:p-8 border border-white/20 rounded-2xl">
-                    <h2 class="flex justify-between items-center mb-6 font-bold text-gray-800 text-2xl sm:text-3xl">
-                        <span class="flex items-center">
-                            <span class="mr-3">📁</span>
-                            Documents
-                        </span>
-                        <span class="font-normal text-gray-500 text-sm">Total: 8.5 MB</span>
-                    </h2>
-                    <div class="gap-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-                        <div class="group bg-gray-50 hover:bg-white hover:shadow-2xl p-4 border border-gray-200 rounded-xl text-center transition-all hover:-translate-y-1 cursor-pointer">
-                            <div class="mb-3 text-5xl">📄</div>
-                            <p class="font-semibold text-gray-800 text-sm truncate">Resume.pdf</p>
-                            <p class="text-gray-500 text-xs">2.4 MB</p>
-                            <div class="opacity-0 group-hover:opacity-100 mt-2 transition-opacity">
-                                <button class="text-blue-600 hover:text-blue-800 text-xs">Download</button>
-                            </div>
-                        </div>
-                        <div class="group bg-gray-50 hover:bg-white hover:shadow-2xl p-4 border border-gray-200 rounded-xl text-center transition-all hover:-translate-y-1 cursor-pointer">
-                            <div class="mb-3 text-5xl">📄</div>
-                            <p class="font-semibold text-gray-800 text-sm truncate">Transcript.pdf</p>
-                            <p class="text-gray-500 text-xs">1.8 MB</p>
-                            <div class="opacity-0 group-hover:opacity-100 mt-2 transition-opacity">
-                                <button class="text-blue-600 hover:text-blue-800 text-xs">Download</button>
-                            </div>
-                        </div>
-                        <div class="group bg-gray-50 hover:bg-white hover:shadow-2xl p-4 border border-gray-200 rounded-xl text-center transition-all hover:-translate-y-1 cursor-pointer">
-                            <div class="mb-3 text-5xl">🖼️</div>
-                            <p class="font-semibold text-gray-800 text-sm truncate">Certificate.jpg</p>
-                            <p class="text-gray-500 text-xs">3.2 MB</p>
-                            <div class="opacity-0 group-hover:opacity-100 mt-2 transition-opacity">
-                                <button class="text-blue-600 hover:text-blue-800 text-xs">Download</button>
-                            </div>
-                        </div>
-                        <div class="group bg-gray-50 hover:bg-white hover:shadow-2xl p-4 border border-gray-200 rounded-xl text-center transition-all hover:-translate-y-1 cursor-pointer">
-                            <div class="mb-3 text-5xl">📝</div>
-                            <p class="font-semibold text-gray-800 text-sm truncate">Cover Letter.docx</p>
-                            <p class="text-gray-500 text-xs">1.1 MB</p>
-                            <div class="opacity-0 group-hover:opacity-100 mt-2 transition-opacity">
-                                <button class="text-blue-600 hover:text-blue-800 text-xs">Download</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Upload Card -->
-                        <label class="flex flex-col justify-center items-center bg-gray-50 hover:bg-gray-100 p-4 border-2 border-gray-300 border-dashed rounded-xl text-center transition-all hover:-translate-y-1 cursor-pointer">
-                            <input type="file" class="hidden" multiple>
-                            <div class="mb-2 text-gray-400 text-4xl">📤</div>
-                            <p class="font-semibold text-gray-500 text-sm">Upload</p>
-                            <p class="mt-1 text-gray-400 text-xs">Max 10MB</p>
-                        </label>
-                    </div>
-                </section>
-
-                <!-- Experience Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 sm:p-8 border border-white/20 rounded-2xl">
-                    <h2 class="flex items-center mb-6 font-bold text-gray-800 text-2xl sm:text-3xl">
-                        <span class="mr-3">💼</span>
-                        Experience
-                    </h2>
-                    <div class="space-y-6">
-                        <div class="flex items-start">
-                            <div class="flex flex-shrink-0 justify-center items-center bg-purple-100 rounded-xl w-12 h-12 text-purple-600 text-2xl">
-                                💻
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-bold text-gray-900 text-xl">Full Stack Developer Intern</h3>
-                                <p class="font-semibold text-gray-700">Tech Solutions Inc.</p>
-                                <p class="text-gray-500 text-sm">Jun 2023 - Sep 2023</p>
-                                <p class="mt-2 text-gray-600">Developed and maintained web applications using Angular and Node.js</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="flex flex-shrink-0 justify-center items-center bg-purple-100 rounded-xl w-12 h-12 text-purple-600 text-2xl">
-                                📚
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="font-bold text-gray-900 text-xl">Teaching Assistant</h3>
-                                <p class="font-semibold text-gray-700">National School of Computer Science</p>
-                                <p class="text-gray-500 text-sm">Sep 2022 - May 2023</p>
-                                <p class="mt-2 text-gray-600">Assisted in teaching Web Development and Database courses</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="space-y-8">
-
-                <!-- Messages Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm border border-white/20 rounded-2xl">
-                    <div class="p-6">
-                        <h2 class="flex items-center mb-4 font-bold text-gray-800 text-2xl">
-                            <span class="mr-2">💬</span>
-                            Messages
-                            <span class="bg-blue-100 ml-auto px-2 py-1 rounded-full text-blue-600 text-xs">3 new</span>
-                        </h2>
-                        <div class="space-y-4 pr-2 h-96 overflow-y-auto">
-                            <div class="flex gap-3">
-                                <div class="flex flex-shrink-0 justify-center items-center bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg rounded-full w-10 h-10 font-bold text-white">TC</div>
-                                <div class="bg-gray-100 p-3 rounded-2xl rounded-tl-none max-w-[80%]">
-                                    <p class="text-gray-800">Bonjour Dhia, dossier reçu! 👋</p>
-                                    <span class="block mt-1 text-gray-500 text-xs">10:30 AM</span>
-                                </div>
-                            </div>
-                            <div class="flex flex-row-reverse gap-3">
-                                <div class="flex flex-shrink-0 justify-center items-center bg-gradient-to-br from-yellow-400 to-yellow-500 shadow-lg rounded-full w-10 h-10 font-bold text-blue-900">D</div>
-                                <div class="bg-blue-600 p-3 rounded-2xl rounded-tr-none max-w-[80%]">
-                                    <p class="text-white">Merci! 🙏</p>
-                                    <span class="block mt-1 text-blue-200 text-xs">10:32 AM</span>
-                                </div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="flex flex-shrink-0 justify-center items-center bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg rounded-full w-10 h-10 font-bold text-white">TC</div>
-                                <div class="bg-gray-100 p-3 rounded-2xl rounded-tl-none max-w-[80%]">
-                                    <p class="text-gray-800">Je vous contacterai bientôt pour un entretien.</p>
-                                    <span class="block mt-1 text-gray-500 text-xs">10:35 AM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 p-4 border-gray-200 border-t rounded-b-2xl">
-                        <div class="relative">
-                            <input type="text" placeholder="Type a message..." 
-                                   class="bg-white py-3 pr-12 pl-4 border border-gray-300 focus:border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                            <button class="top-1/2 right-2 absolute bg-blue-600 hover:bg-blue-700 p-2 rounded-lg text-white transition-colors -translate-y-1/2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Contact Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 border border-white/20 rounded-2xl">
-                    <h2 class="flex items-center mb-4 font-bold text-gray-800 text-2xl">
-                        <span class="mr-2">📞</span>
-                        Contact
-                    </h2>
-                    <div class="space-y-4">
-                        <div class="flex items-center bg-gray-50 hover:bg-gray-100 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl">📧</span>
-                            <span class="text-gray-700 truncate">dhia.bouhouch@example.com</span>
-                        </div>
-                        <div class="flex items-center bg-gray-50 hover:bg-gray-100 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl">📱</span>
-                            <span class="text-gray-700">+216 12 345 678</span>
-                        </div>
-                        <div class="flex items-center bg-gray-50 hover:bg-gray-100 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl">📍</span>
-                            <span class="text-gray-700">Tunis, Tunisia</span>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- Links Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 border border-white/20 rounded-2xl">
-                    <h2 class="flex items-center mb-4 font-bold text-gray-800 text-2xl">
-                        <span class="mr-2">🔗</span>
-                        Links
-                    </h2>
-                    <div class="space-y-3">
-                        <a href="#" target="_blank" rel="noopener noreferrer" 
-                           class="group flex items-center bg-gray-50 hover:bg-blue-50 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl group-hover:scale-110 transition-transform">💼</span>
-                            <span class="font-medium text-gray-700 group-hover:text-blue-600">LinkedIn</span>
-                            <span class="opacity-0 group-hover:opacity-100 ml-auto transition-opacity">↗️</span>
-                        </a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" 
-                           class="group flex items-center bg-gray-50 hover:bg-blue-50 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl group-hover:scale-110 transition-transform">🐙</span>
-                            <span class="font-medium text-gray-700 group-hover:text-blue-600">GitHub</span>
-                            <span class="opacity-0 group-hover:opacity-100 ml-auto transition-opacity">↗️</span>
-                        </a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" 
-                           class="group flex items-center bg-gray-50 hover:bg-blue-50 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl group-hover:scale-110 transition-transform">🌐</span>
-                            <span class="font-medium text-gray-700 group-hover:text-blue-600">Portfolio</span>
-                            <span class="opacity-0 group-hover:opacity-100 ml-auto transition-opacity">↗️</span>
-                        </a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" 
-                           class="group flex items-center bg-gray-50 hover:bg-blue-50 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl group-hover:scale-110 transition-transform">🐦</span>
-                            <span class="font-medium text-gray-700 group-hover:text-blue-600">Twitter</span>
-                            <span class="opacity-0 group-hover:opacity-100 ml-auto transition-opacity">↗️</span>
-                        </a>
-                        <a href="#" 
-                           class="group flex items-center bg-gradient-to-r from-blue-50 hover:from-blue-100 to-indigo-50 hover:to-indigo-100 p-3 rounded-xl transition-colors">
-                            <span class="mr-3 text-2xl group-hover:scale-110 transition-transform">📄</span>
-                            <span class="font-medium text-gray-700 group-hover:text-blue-600">Download CV</span>
-                            <span class="ml-auto text-blue-600">↓</span>
-                        </a>
-                    </div>
-                </section>
-
-                <!-- Availability Section -->
-                <section class="bg-white/95 shadow-xl backdrop-blur-sm p-6 border border-white/20 rounded-2xl">
-                    <h2 class="flex items-center mb-4 font-bold text-gray-800 text-2xl">
-                        <span class="mr-2">⏰</span>
-                        Availability
-                    </h2>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Status:</span>
-                            <span class="bg-green-100 px-3 py-1 rounded-full font-semibold text-green-700 text-sm">
-                                Available
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Response time:</span>
-                            <span class="font-medium text-gray-800">Within 24h</span>
-                        </div>
-                        <div class="bg-gray-200 mt-2 rounded-full w-full h-2">
-                            <div class="bg-blue-600 rounded-full w-[92%] h-2"></div>
-                        </div>
-                        <p class="mt-1 text-gray-500 text-sm text-center">Profile 92% complete</p>
-                    </div>
-                </section>
-            </div>
-        </div>
+    <!-- Profile Summary -->
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar">
+        <img *ngIf="getAvatarUrl()" [src]="getAvatarUrl()" alt="avatar" class="avatar-img" />
+        <span *ngIf="!getAvatarUrl()" class="avatar-initials">{{ getInitials() }}</span>
+      </div>
+      <div class="sidebar-info" *ngIf="!isLoadingProfile">
+        <p class="sidebar-name">{{ profile?.user?.firstName }} {{ profile?.user?.lastName }}</p>
+        <span class="sidebar-role">{{ userRole }}</span>
+      </div>
+      <div class="sidebar-info" *ngIf="isLoadingProfile">
+        <div class="skeleton skeleton-name"></div>
+        <div class="skeleton skeleton-role"></div>
+      </div>
     </div>
-</main>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <button (click)="setSection('profile')"
+        [class.active]="activeSection === 'profile'" class="nav-btn">
+        👤 Profile
+      </button>
+      <button (click)="setSection('documents')"
+        [class.active]="activeSection === 'documents'" class="nav-btn">
+        📄 Documents
+      </button>
+      <button (click)="setSection('progress')"
+        [class.active]="activeSection === 'progress'" class="nav-btn">
+        📊 My Progress
+      </button>
+      <a routerLink="/profile" class="nav-btn nav-link-btn">
+        🔗 Full Profile
+      </a>
+      <button class="nav-btn nav-chat" disabled>
+        💬 Chat <span class="coming-soon">Soon</span>
+      </button>
+    </nav>
+
+    <button (click)="logout()" class="logout-btn">🚪 Logout</button>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="student-main">
+
+    <!-- ═══════════ PROFILE SECTION ═══════════ -->
+    <div *ngIf="activeSection === 'profile'">
+
+      <div *ngIf="isLoadingProfile" class="loading-state">
+        <div class="spinner"></div><p>Loading profile...</p>
+      </div>
+
+      <div *ngIf="!isLoadingProfile && !profile" class="empty-state">
+        <div class="empty-icon">👤</div>
+        <h3>No profile found</h3>
+        <p>Go to your profile page to set up your student profile.</p>
+        <a routerLink="/profile" class="primary-btn">Go to Profile</a>
+      </div>
+
+      <div *ngIf="!isLoadingProfile && profile">
+
+        <!-- Profile Header Card -->
+        <div class="profile-hero">
+          <div class="hero-avatar">
+            <img *ngIf="getAvatarUrl()" [src]="getAvatarUrl()" alt="avatar" class="hero-avatar-img" />
+            <span *ngIf="!getAvatarUrl()" class="hero-initials">{{ getInitials() }}</span>
+          </div>
+          <div class="hero-info">
+            <h2>{{ profile.user?.firstName }} {{ profile.user?.lastName }}</h2>
+            <p class="hero-username">&#64;{{ profile.user?.username }}</p>
+            <p class="hero-email">{{ profile.user?.email }}</p>
+            <div class="hero-tags">
+              <span class="tag tag-role">{{ userRole }}</span>
+              <span *ngIf="profile.currentStudyLevel" class="tag tag-level">{{ profile.currentStudyLevel }}</span>
+              <span *ngIf="profile.speciality" class="tag tag-spec">{{ profile.speciality }}</span>
+            </div>
+          </div>
+          <a routerLink="/profile" class="edit-profile-btn">✏️ Edit Profile</a>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="info-cards">
+
+          <!-- Academic Card -->
+          <div class="info-card">
+            <h4 class="card-title">🎓 Academic Info</h4>
+            <div class="card-grid">
+              <div class="card-item">
+                <span class="item-label">Current Level</span>
+                <span class="item-value">{{ profile.currentStudyLevel || '—' }}</span>
+              </div>
+              <div class="card-item">
+                <span class="item-label">Target Level</span>
+                <span class="item-value">{{ profile.wishedStudyLevel || '—' }}</span>
+              </div>
+              <div class="card-item">
+                <span class="item-label">University Year</span>
+                <span class="item-value">{{ profile.universityYear ? 'Year ' + profile.universityYear : '—' }}</span>
+              </div>
+              <div class="card-item">
+                <span class="item-label">College Type</span>
+                <span class="item-value">{{ profile.collegeType || '—' }}</span>
+              </div>
+              <div class="card-item">
+                <span class="item-label">Budget</span>
+                <span class="item-value">{{ profile.budget ? '$' + profile.budget : '—' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio Card -->
+          <div class="info-card">
+            <h4 class="card-title">📝 About Me</h4>
+            <p class="bio-text">{{ profile.bio || 'No bio added yet.' }}</p>
+          </div>
+
+          <!-- Languages Card -->
+          <div class="info-card">
+            <h4 class="card-title">🌐 Languages</h4>
+            <div class="lang-chips" *ngIf="profile.languages">
+              <ng-container *ngFor="let lang of parseLanguages(profile.languages)">
+                <div class="lang-chip">
+                  <span class="lang-name">{{ lang.name }}</span>
+                  <span class="lang-badge">{{ lang.level }}</span>
+                </div>
+              </ng-container>
+            </div>
+            <p *ngIf="!profile.languages" class="text-muted">No languages added.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ DOCUMENTS SECTION ═══════════ -->
+    <div *ngIf="activeSection === 'documents'">
+
+      <div class="section-header">
+        <h2>📄 My Documents</h2>
+        <p class="section-sub">Upload and manage your required documents</p>
+      </div>
+
+      <!-- Alerts -->
+      <div *ngIf="uploadSuccess" class="alert alert-success">✅ {{ uploadSuccess }}</div>
+      <div *ngIf="uploadError" class="alert alert-error">⚠️ {{ uploadError }}</div>
+
+      <!-- Document Tabs -->
+      <div class="doc-tabs">
+        <button (click)="activeDocTab = 'cv'; uploadError = ''; uploadSuccess = ''"
+          [class.active]="activeDocTab === 'cv'" class="doc-tab">
+          📋 CV
+          <span *ngIf="getDocumentByType('CV')"
+            [ngClass]="getStatusClass(getDocumentByType('CV')!.status)"
+            class="tab-status-dot"></span>
+        </button>
+        <button (click)="activeDocTab = 'passport'; uploadError = ''; uploadSuccess = ''"
+          [class.active]="activeDocTab === 'passport'" class="doc-tab">
+          🛂 Passport
+          <span *ngIf="getDocumentByType('PASSPORT')"
+            [ngClass]="getStatusClass(getDocumentByType('PASSPORT')!.status)"
+            class="tab-status-dot"></span>
+        </button>
+        <button (click)="activeDocTab = 'idcard'; uploadError = ''; uploadSuccess = ''"
+          [class.active]="activeDocTab === 'idcard'" class="doc-tab">
+          🪪 ID Card
+          <span *ngIf="getDocumentByType('ID_CARD')"
+            [ngClass]="getStatusClass(getDocumentByType('ID_CARD')!.status)"
+            class="tab-status-dot"></span>
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoadingDocs" class="loading-state">
+        <div class="spinner"></div><p>Loading documents...</p>
+      </div>
+
+      <div *ngIf="!isLoadingDocs" class="doc-content">
+
+        <!-- ── CV TAB ── -->
+        <div *ngIf="activeDocTab === 'cv'">
+          <!-- Existing CV -->
+          <div *ngIf="getDocumentByType('CV')" class="doc-existing">
+            <div class="doc-existing-header">
+              <div>
+                <p class="doc-filename">📎 {{ getDocumentByType('CV')!.fileName }}</p>
+                <p class="doc-date">Uploaded: {{ getDocumentByType('CV')!.uploadedAt | date:'mediumDate' }}</p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('CV')!.status)">
+                {{ getStatusLabel(getDocumentByType('CV')!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- CV Upload Form -->
+          <div class="doc-form-card">
+            <h4>{{ getDocumentByType('CV') ? '🔄 Replace CV' : '⬆️ Upload CV' }}</h4>
+            <div class="form-group">
+              <label class="form-label">CV File (PDF/DOC) *</label>
+              <div class="file-input-wrapper">
+                <input type="file" accept=".pdf,.doc,.docx" (change)="onFileSelected($event, 'cv')" class="file-input" id="cv-file" />
+                <label for="cv-file" class="file-label">
+                  {{ cvFile ? cvFile.name : '📂 Choose file...' }}
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Professional Summary</label>
+              <textarea name="cvSummary" [(ngModel)]="cvForm.summary" rows="3"
+                placeholder="Brief summary of your background..."
+                class="form-input form-textarea"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Experience</label>
+                <textarea name="cvExp" [(ngModel)]="cvForm.experience" rows="3"
+                  placeholder="Work/internship experience..."
+                  class="form-input form-textarea"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Skills</label>
+                <textarea name="cvSkills" [(ngModel)]="cvForm.skills" rows="3"
+                  placeholder="Technical and soft skills..."
+                  class="form-input form-textarea"></textarea>
+              </div>
+            </div>
+            <button (click)="uploadCv()" [disabled]="isUploading" class="upload-btn">
+              {{ isUploading ? 'Uploading...' : '⬆️ Upload CV' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ── PASSPORT TAB ── -->
+        <div *ngIf="activeDocTab === 'passport'">
+          <div *ngIf="getDocumentByType('PASSPORT')" class="doc-existing">
+            <div class="doc-existing-header">
+              <div>
+                <p class="doc-filename">📎 {{ getDocumentByType('PASSPORT')!.fileName }}</p>
+                <p class="doc-date">Uploaded: {{ getDocumentByType('PASSPORT')!.uploadedAt | date:'mediumDate' }}</p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('PASSPORT')!.status)">
+                {{ getStatusLabel(getDocumentByType('PASSPORT')!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="doc-form-card">
+            <h4>{{ getDocumentByType('PASSPORT') ? '🔄 Replace Passport' : '⬆️ Upload Passport' }}</h4>
+            <div class="form-group">
+              <label class="form-label">Passport File (PDF/Image) *</label>
+              <div class="file-input-wrapper">
+                <input type="file" accept=".pdf,image/*" (change)="onFileSelected($event, 'passport')" class="file-input" id="passport-file" />
+                <label for="passport-file" class="file-label">
+                  {{ passportFile ? passportFile.name : '📂 Choose file...' }}
+                </label>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Issue Date *</label>
+                <input type="date" [(ngModel)]="passportForm.issueDate" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Expiry Date *</label>
+                <input type="date" [(ngModel)]="passportForm.expiryDate" class="form-input" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Issuing Country *</label>
+              <input type="text" [(ngModel)]="passportForm.issuingCountry"
+                placeholder="e.g. Tunisia" class="form-input" />
+            </div>
+            <button (click)="uploadPassport()" [disabled]="isUploading" class="upload-btn">
+              {{ isUploading ? 'Uploading...' : '⬆️ Upload Passport' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ── ID CARD TAB ── -->
+        <div *ngIf="activeDocTab === 'idcard'">
+          <div *ngIf="getDocumentByType('ID_CARD')" class="doc-existing">
+            <div class="doc-existing-header">
+              <div>
+                <p class="doc-filename">📎 {{ getDocumentByType('ID_CARD')!.fileName }}</p>
+                <p class="doc-date">Uploaded: {{ getDocumentByType('ID_CARD')!.uploadedAt | date:'mediumDate' }}</p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('ID_CARD')!.status)">
+                {{ getStatusLabel(getDocumentByType('ID_CARD')!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="doc-form-card">
+            <h4>{{ getDocumentByType('ID_CARD') ? '🔄 Replace ID Card' : '⬆️ Upload ID Card' }}</h4>
+            <div class="form-group">
+              <label class="form-label">ID Card File (PDF/Image) *</label>
+              <div class="file-input-wrapper">
+                <input type="file" accept=".pdf,image/*" (change)="onFileSelected($event, 'idcard')" class="file-input" id="idcard-file" />
+                <label for="idcard-file" class="file-label">
+                  {{ idCardFile ? idCardFile.name : '📂 Choose file...' }}
+                </label>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">ID Number *</label>
+                <input type="text" [(ngModel)]="idCardForm.numId"
+                  placeholder="e.g. 12345678" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date of Birth *</label>
+                <input type="date" [(ngModel)]="idCardForm.birthday" class="form-input" />
+              </div>
+            </div>
+            <button (click)="uploadIdCard()" [disabled]="isUploading" class="upload-btn">
+              {{ isUploading ? 'Uploading...' : '⬆️ Upload ID Card' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════ PROGRESS SECTION ═══════════ -->
+    <div *ngIf="activeSection === 'progress'">
+
+      <div class="section-header">
+        <h2>📊 My Progress</h2>
+        <p class="section-sub">Track your study abroad application journey</p>
+      </div>
+
+      <div *ngIf="isLoadingProgress" class="loading-state">
+        <div class="spinner"></div><p>Loading progress...</p>
+      </div>
+
+      <div *ngIf="!isLoadingProgress">
+
+        <!-- Progress Bar -->
+        <div class="progress-overview">
+          <div class="progress-bar-wrapper">
+            <div class="progress-bar-fill"
+              [style.width]="(getCompletedCount() / allStages.length * 100) + '%'">
+            </div>
+          </div>
+          <p class="progress-text">
+            {{ getCompletedCount() }} / {{ allStages.length }} stages completed
+          </p>
+        </div>
+
+        <!-- Stages Timeline -->
+        <div class="stages-timeline">
+          <div *ngFor="let stage of allStages; let i = index"
+            class="stage-item" [ngClass]="getStageClass(stage)">
+
+            <div class="stage-connector" *ngIf="i > 0"></div>
+
+            <div class="stage-circle">
+              <span *ngIf="getStageStatus(stage) === 'COMPLETED'">✓</span>
+              <span *ngIf="getStageStatus(stage) === 'IN_PROGRESS'">⟳</span>
+              <span *ngIf="getStageStatus(stage) === 'NOT_STARTED'">{{ i + 1 }}</span>
+            </div>
+
+            <div class="stage-content">
+              <div class="stage-icon">{{ stageIcons[stage] }}</div>
+              <div class="stage-info">
+                <h4 class="stage-name">{{ stageLabels[stage] }}</h4>
+                <span class="stage-status-label">
+                  {{ getStageStatus(stage) === 'COMPLETED' ? 'Completed' :
+                     getStageStatus(stage) === 'IN_PROGRESS' ? 'In Progress' : 'Not Started' }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
