@@ -25,7 +25,8 @@ export class SignupComponent {
     email: '',
     phoneNumber: '',
     address: '',
-    password: ''
+    password: '',
+    confirmPassword:'',
   };
 
   contractForm: ContractRegisterPayload = {
@@ -37,7 +38,8 @@ export class SignupComponent {
     phoneNumber: '',
     address: '',
     password: '',
-    productKey: ''
+    productKey: '',
+    confirmPassword :'',
   };
 
   isSubmitting = false;

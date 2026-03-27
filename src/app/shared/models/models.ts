@@ -15,6 +15,7 @@ export interface GuestRegisterPayload {
   phoneNumber: string;
   address: string;
   password: string;
+  confirmPassword: string;
 }
 
 export interface ContractRegisterPayload {
@@ -26,6 +27,7 @@ export interface ContractRegisterPayload {
   phoneNumber: string;
   address: string;
   password: string;
+  confirmPassword: string;
   productKey: string;
 }
 

@@ -1,83 +1,106 @@
 <div class="verify-page">
 
-  <!-- Loading State -->
+  <!-- LOADING -->
   <div *ngIf="state === 'loading'" class="verify-card">
+
+    <div class="logo-container">
+      <img src="/assets/Pictures/logo.png" alt="LinkedU Logo" />
+    </div>
+
     <div class="card-accent-bar"></div>
+
     <div class="verify-icon loading-icon">
-      <svg class="spin" width="48" height="48" fill="none" stroke="white" viewBox="0 0 24 24">
+      <svg class="spin" width="48" height="48" fill="none" stroke="#fbbf24" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
       </svg>
     </div>
+
     <h2 class="verify-title">Verifying your email...</h2>
     <p class="verify-subtitle">Please wait a moment</p>
   </div>
 
-  <!-- Success State -->
-  <div *ngIf="state === 'success'" class="verify-card">
-    <div class="card-accent-bar"></div>
+  <!-- SUCCESS (CLEANED) -->
+  <div *ngIf="state === 'success' || state === 'already_verified'" class="verify-card">
+
+    <div class="logo-container">
+      <img src="/assets/Pictures/logo.png" alt="LinkedU Logo" />
+    </div>
+
+    <div class="card-accent-bar success-bar"></div>
+
     <div class="verify-icon success-icon">
-      <svg width="48" height="48" fill="none" stroke="white" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+      <svg width="48" height="48" fill="none" stroke="#34d399" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+          d="M5 13l4 4L19 7"/>
       </svg>
     </div>
-    <h2 class="verify-title">Email Verified! 🎉</h2>
-    <p class="verify-subtitle">{{ message }}</p>
+
+    <h2 class="verify-title">Account Verified Successfully 🎉</h2>
+    <p class="verify-subtitle">
+      Your LinkedU account is now active and ready to use.
+    </p>
+
     <div class="countdown-bar">
       <p class="countdown-text">
-        Redirecting to login in <span class="countdown-number">{{ countdown }}</span> seconds...
+        Redirecting to login in
+        <span class="countdown-number">{{ countdown }}</span> seconds...
       </p>
+
       <div class="countdown-track">
-        <div class="countdown-fill" [style.animation-duration]="'5s'"></div>
+        <div class="countdown-fill"></div>
       </div>
     </div>
+
     <a routerLink="/login" class="verify-btn primary-btn">
-      Login Now
+      Go to Login
     </a>
   </div>
 
-  <!-- Already Verified State -->
-  <div *ngIf="state === 'already_verified'" class="verify-card">
-    <div class="card-accent-bar"></div>
-    <div class="verify-icon info-icon">
-      <svg width="48" height="48" fill="none" stroke="white" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
-    </div>
-    <h2 class="verify-title">Already Verified</h2>
-    <p class="verify-subtitle">{{ message }}</p>
-    <a routerLink="/login" class="verify-btn primary-btn">Go to Login</a>
-  </div>
-
-  <!-- Expired State -->
+  <!-- EXPIRED -->
   <div *ngIf="state === 'expired'" class="verify-card">
-    <div class="card-accent-bar"></div>
+
+    <div class="logo-container">
+      <img src="/assets/Pictures/logo.png"alt="LinkedU Logo" />
+    </div>
+
+    <div class="card-accent-bar warning-bar"></div>
+
     <div class="verify-icon warning-icon">
-      <svg width="48" height="48" fill="none" stroke="white" viewBox="0 0 24 24">
+      <svg width="48" height="48" fill="none" stroke="#fbbf24" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
       </svg>
     </div>
+
     <h2 class="verify-title">Link Expired</h2>
     <p class="verify-subtitle">{{ message }}</p>
+
     <div class="verify-actions">
       <a routerLink="/signup/guest" class="verify-btn secondary-btn">Register Again</a>
       <a routerLink="/login" class="verify-btn primary-btn">Login</a>
     </div>
   </div>
 
-  <!-- Invalid / Error State -->
+  <!-- ERROR -->
   <div *ngIf="state === 'invalid' || state === 'error'" class="verify-card">
+
+    <div class="logo-container">
+      <img src="/assets/Pictures/logo.png" alt="LinkedU Logo" />
+    </div>
+
     <div class="card-accent-bar error-bar"></div>
+
     <div class="verify-icon error-icon">
-      <svg width="48" height="48" fill="none" stroke="white" viewBox="0 0 24 24">
+      <svg width="48" height="48" fill="none" stroke="#fb7185" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M6 18L18 6M6 6l12 12"/>
       </svg>
     </div>
+
     <h2 class="verify-title">Verification Failed</h2>
     <p class="verify-subtitle">{{ message }}</p>
+
     <div class="verify-actions">
       <a routerLink="/signup/guest" class="verify-btn secondary-btn">Register Again</a>
       <a routerLink="/login" class="verify-btn primary-btn">Login</a>

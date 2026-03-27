@@ -21,7 +21,8 @@ export class GuestSignupComponent {
     email: '',
     phoneNumber: '',
     address: '',
-    password: ''
+    password: '',
+    confirmPassword: '',
   };
 
   isSubmitting = false;
@@ -39,6 +40,10 @@ export class GuestSignupComponent {
     if (len < 6) return 'Weak';
     if (len < 9) return 'Medium';
     return 'Strong';
+  }
+
+  get passwordsMatch(): boolean {
+    return this.form.password.trim() === this.form.confirmPassword.trim();
   }
 
   get passwordStrengthClass(): string {

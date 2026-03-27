@@ -22,7 +22,8 @@ export class ContractSignupComponent {
     phoneNumber: '',
     address: '',
     password: '',
-    productKey: ''
+    confirmPassword: '',
+    productKey: '',
   };
 
   isSubmitting = false;
@@ -48,11 +49,18 @@ export class ContractSignupComponent {
     if (len < 9) return 'text-yellow-500';
     return 'text-green-500';
   }
+  
+  get passwordsMatch(): boolean {
+    return this.form.password.trim() === this.form.confirmPassword.trim();
+  }
 
   onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
-
+    if (this.form.password !== this.form.confirmPassword) {
+      this.errorMessage = 'Passwords do not match.';
+    return;
+}
     if (!this.form.username || !this.form.firstName || !this.form.lastName ||
         !this.form.email || !this.form.password || !this.form.phoneNumber ||
         !this.form.birthDate || !this.form.productKey) {

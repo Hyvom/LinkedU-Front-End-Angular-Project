@@ -1,70 +1,94 @@
 <div class="signup-page">
+
+  <!-- LEFT IMAGE -->
+  <div class="left-panel">
+    <div class="carousel-container">
+      <div class="image-bg"></div>
+      <div class="carousel-overlay"></div>
+    </div>
+  </div>
+
+  <!-- FORM -->
   <div class="signup-card">
 
-    <!-- Accent bar -->
     <div class="card-accent-bar"></div>
 
-    <!-- Header -->
+    <!-- LOGO -->
+    <div class="logo-container">
+      <img src="/assets/Pictures/logo.png" alt="LinkedU Logo" />
+    </div>
+
+    <!-- HEADER -->
     <div class="signup-header">
       <h2>Join LinkedU</h2>
       <p>Start your study abroad journey</p>
     </div>
 
-    <!-- Tab Switcher -->
+    <!-- TABS -->
     <div class="tab-switcher">
       <a routerLink="/signup/guest" class="tab-btn active">🌍 Guest Registration</a>
       <a routerLink="/signup/contract" class="tab-btn">📄 Contract Registration</a>
     </div>
 
     <p class="tab-description">
-      Register as a guest to explore our platform. You'll need to verify your email.
+      Register as a guest to explore our platform.
     </p>
 
-    <!-- Form -->
     <form class="signup-form" (ngSubmit)="onSubmit()">
 
-      <input class="form-input" name="username" [(ngModel)]="form.username"
-        placeholder="Username *" required />
+      <input class="form-input" name="username" [(ngModel)]="form.username" placeholder="Username *" required />
 
       <div class="form-row">
-        <input class="form-input" name="firstName" [(ngModel)]="form.firstName"
-          placeholder="First name *" required />
-        <input class="form-input" name="lastName" [(ngModel)]="form.lastName"
-          placeholder="Last name *" required />
+        <input class="form-input" name="firstName" [(ngModel)]="form.firstName" placeholder="First name *" required />
+        <input class="form-input" name="lastName" [(ngModel)]="form.lastName" placeholder="Last name *" required />
       </div>
 
-      <input class="form-input" name="email" type="email" [(ngModel)]="form.email"
-        placeholder="Email address *" required />
+      <input class="form-input" name="email" type="email" [(ngModel)]="form.email" placeholder="Email address *" required />
 
       <div class="form-row">
-        <input class="form-input" name="phoneNumber" [(ngModel)]="form.phoneNumber"
-          placeholder="Phone number *" required />
-        <input class="form-input" name="birthDate" type="date" [(ngModel)]="form.birthDate"
-          required />
+        <input class="form-input" name="phoneNumber" [(ngModel)]="form.phoneNumber" placeholder="Phone number *" required />
+        <input class="form-input" name="birthDate" type="date" [(ngModel)]="form.birthDate" required />
       </div>
 
-      <input class="form-input" name="address" [(ngModel)]="form.address"
-        placeholder="Address (optional)" />
+      <input class="form-input" name="address" [(ngModel)]="form.address" placeholder="Address (optional)" />
 
-      <input class="form-input" name="password" type="password" [(ngModel)]="form.password"
-        placeholder="Password *" required />
+      <!-- PASSWORD -->
+      <input class="form-input" name="password" type="password" [(ngModel)]="form.password" placeholder="Password *" required />
 
-      <p *ngIf="form.password.length > 0" class="password-strength">
-        Password strength:
-        <span [ngClass]="{
-          'strength-weak': passwordStrength === 'Weak',
-          'strength-medium': passwordStrength === 'Medium',
-          'strength-strong': passwordStrength === 'Strong'
-        }">{{ passwordStrength }}</span>
+      <!-- STRENGTH BAR -->
+      <div *ngIf="form.password.length > 0" class="strength-bar">
+        <div class="strength-fill"
+          [ngClass]="{
+            'weak': passwordStrength === 'Weak',
+            'medium': passwordStrength === 'Medium',
+            'strong': passwordStrength === 'Strong'
+          }">
+        </div>
+      </div>
+
+      <p *ngIf="form.password.length > 0" class="password-strength">{{ passwordStrength }}
+        {{ passwordStrength }}
+      </p>
+
+      <!-- CONFIRM PASSWORD -->
+      <input class="form-input"
+        name="confirmPassword"
+        type="password"
+        [(ngModel)]="form.confirmPassword"
+        placeholder="Confirm Password *"
+        required />
+
+      <p *ngIf="form.confirmPassword && !passwordsMatch"
+         class="error-message">
+        ⚠️ Passwords do not match
       </p>
 
       <div *ngIf="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
       <div *ngIf="successMessage" class="success-message">✅ {{ successMessage }}</div>
 
-      <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-        <span class="submit-btn-text">
-          {{ isSubmitting ? 'Creating account...' : 'Create Guest Account' }}
-        </span>
+      <button type="submit" class="submit-btn"
+        [disabled]="isSubmitting || !passwordsMatch">
+        {{ isSubmitting ? 'Creating account...' : 'Create Guest Account' }}
       </button>
 
     </form>
