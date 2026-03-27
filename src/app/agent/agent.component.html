@@ -10,6 +10,57 @@
       </div>
     </div>
 
+    <!-- ── Agent's own profile card ── -->
+    <div class="agent-profile-card">
+      <div *ngIf="isLoadingAgentProfile" class="agent-profile-loading">
+        <div class="skeleton skeleton-avatar"></div>
+        <div class="skeleton skeleton-name"></div>
+      </div>
+
+      <div *ngIf="!isLoadingAgentProfile" class="agent-profile-inner">
+        <!-- Avatar -->
+        <div class="agent-avatar-wrap">
+          <img *ngIf="getAgentAvatarUrl()" [src]="getAgentAvatarUrl()"
+            alt="avatar" class="agent-avatar-img" />
+          <span *ngIf="!getAgentAvatarUrl()" class="agent-avatar-initials">
+            {{ getAgentInitials() }}
+          </span>
+          <!-- Status dot -->
+          <span class="agent-status-dot" [ngClass]="getAgentStatusClass()"></span>
+        </div>
+
+        <!-- Info -->
+        <div class="agent-profile-info">
+          <p class="agent-profile-name">
+            {{ agentProfile?.user?.firstName || '—' }}
+            {{ agentProfile?.user?.lastName || '' }}
+          </p>
+          <p class="agent-profile-email">{{ agentProfile?.user?.email || '—' }}</p>
+          <p class="agent-profile-status">
+            {{ agentProfile?.onlineStatus || 'OFFLINE' }}
+            <span *ngIf="agentProfile?.availabilityTime" class="agent-availability">
+              · {{ agentProfile?.availabilityTime }}
+            </span>
+          </p>
+          <p *ngIf="agentProfile?.address" class="agent-profile-address">
+            📍 {{ agentProfile?.address }}
+          </p>
+          <p *ngIf="agentProfile?.phoneNumber" class="agent-profile-phone">
+            📞 {{ agentProfile?.phoneNumber }}
+          </p>
+        </div>
+
+        <!-- Edit link -->
+        <a routerLink="/profile/agent" class="agent-edit-profile-btn" title="Edit profile">✏️</a>
+      </div>
+
+      <!-- No profile yet -->
+      <div *ngIf="!isLoadingAgentProfile && !agentProfile" class="agent-no-profile">
+        <p>No profile yet.</p>
+        <a routerLink="/profile/agent" class="setup-profile-btn">Set up profile →</a>
+      </div>
+    </div>
+
     <nav class="sidebar-nav">
       <button (click)="currentView = 'students'; backToStudents()"
         [class.active]="currentView === 'students'" class="nav-btn">
@@ -45,10 +96,9 @@
       </div>
 
       <div *ngIf="!isLoadingStudents && students.length > 0" class="students-grid">
-        <div *ngFor="let student of students" class="student-card" (click)="selectStudent(student)">
-          <div class="student-card-avatar">
-            {{ getInitials(student) }}
-          </div>
+        <div *ngFor="let student of students" class="student-card"
+          (click)="selectStudent(student)">
+          <div class="student-card-avatar">{{ getInitials(student) }}</div>
           <div class="student-card-info">
             <h4>{{ student.firstName }} {{ student.lastName }}</h4>
             <p class="student-email">{{ student.email }}</p>
@@ -76,15 +126,12 @@
 
       <!-- Tabs -->
       <div class="detail-tabs">
-        <button (click)="setTab('profile')" [class.active]="activeTab === 'profile'" class="tab-btn">
-          👤 Profile
-        </button>
-        <button (click)="setTab('documents')" [class.active]="activeTab === 'documents'" class="tab-btn">
-          📄 Documents
-        </button>
-        <button (click)="setTab('progress')" [class.active]="activeTab === 'progress'" class="tab-btn">
-          📊 Progress
-        </button>
+        <button (click)="setTab('profile')"
+          [class.active]="activeTab === 'profile'" class="tab-btn">👤 Profile</button>
+        <button (click)="setTab('documents')"
+          [class.active]="activeTab === 'documents'" class="tab-btn">📄 Documents</button>
+        <button (click)="setTab('progress')"
+          [class.active]="activeTab === 'progress'" class="tab-btn">📊 Progress</button>
       </div>
 
       <!-- ── PROFILE TAB ── -->
@@ -104,8 +151,11 @@
           <!-- Profile Hero -->
           <div class="profile-hero">
             <div class="hero-avatar">
-              <img *ngIf="getAvatarUrl()" [src]="getAvatarUrl()" alt="avatar" class="hero-img" />
-              <span *ngIf="!getAvatarUrl()">{{ getInitials(selectedStudent) }}</span>
+              <img *ngIf="getStudentAvatarUrl()" [src]="getStudentAvatarUrl()"
+                alt="avatar" class="hero-img" />
+              <span *ngIf="!getStudentAvatarUrl()">{{ getInitials(selectedStudent) }}</span>
+              <!-- Online status dot on avatar -->
+              <span class="hero-status-dot" [ngClass]="getStudentStatusClass()"></span>
             </div>
             <div class="hero-info">
               <h3>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h3>
@@ -117,12 +167,18 @@
                 <span class="tag tag-yellow" *ngIf="studentProfile.speciality">
                   {{ studentProfile.speciality }}
                 </span>
+                <span class="tag tag-status" *ngIf="studentProfile.onlineStatus"
+                  [ngClass]="getStudentStatusClass()">
+                  {{ studentProfile.onlineStatus }}
+                </span>
               </div>
             </div>
           </div>
 
           <!-- Info Grid -->
           <div class="info-grid">
+
+            <!-- Academic Card -->
             <div class="info-card">
               <h4 class="card-title">🎓 Academic</h4>
               <div class="card-rows">
@@ -140,7 +196,9 @@
                 </div>
                 <div class="card-row">
                   <span class="row-label">University Year</span>
-                  <span class="row-value">{{ studentProfile.universityYear ? 'Year ' + studentProfile.universityYear : '—' }}</span>
+                  <span class="row-value">
+                    {{ studentProfile.universityYear ? 'Year ' + studentProfile.universityYear : '—' }}
+                  </span>
                 </div>
                 <div class="card-row">
                   <span class="row-label">College Type</span>
@@ -148,24 +206,53 @@
                 </div>
                 <div class="card-row">
                   <span class="row-label">Budget</span>
-                  <span class="row-value">{{ studentProfile.budget ? '$' + studentProfile.budget : '—' }}</span>
+                  <span class="row-value">
+                    {{ studentProfile.budget ? '$' + studentProfile.budget : '—' }}
+                  </span>
                 </div>
               </div>
             </div>
 
+            <!-- Contact & Status Card — NEW fields -->
             <div class="info-card">
-              <h4 class="card-title">🌐 Languages</h4>
+              <h4 class="card-title">📞 Contact & Status</h4>
+              <div class="card-rows">
+                <div class="card-row">
+                  <span class="row-label">Status</span>
+                  <span class="row-value">
+                    <span class="status-dot-inline"
+                      [ngClass]="getStudentStatusClass()"></span>
+                    {{ studentProfile.onlineStatus || '—' }}
+                  </span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">Availability</span>
+                  <span class="row-value">{{ studentProfile.availabilityTime || '—' }}</span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">Address</span>
+                  <span class="row-value">{{ studentProfile.address || '—' }}</span>
+                </div>
+                <div class="card-row">
+                  <span class="row-label">Phone</span>
+                  <span class="row-value">{{ studentProfile.phoneNumber || '—' }}</span>
+                </div>
+              </div>
+
+              <h4 class="card-title" style="margin-top:1.25rem">🌐 Languages</h4>
               <div class="lang-chips" *ngIf="studentProfile.languages">
-                <div *ngFor="let lang of parseLanguages(studentProfile.languages)" class="lang-chip">
+                <div *ngFor="let lang of parseLanguages(studentProfile.languages)"
+                  class="lang-chip">
                   <span class="lang-name">{{ lang.name }}</span>
                   <span class="lang-badge">{{ lang.level }}</span>
                 </div>
               </div>
               <p *ngIf="!studentProfile.languages" class="text-muted">No languages added.</p>
 
-              <h4 class="card-title" style="margin-top: 1.25rem;">📝 Bio</h4>
+              <h4 class="card-title" style="margin-top:1.25rem">📝 Bio</h4>
               <p class="bio-text">{{ studentProfile.bio || 'No bio added.' }}</p>
             </div>
+
           </div>
         </div>
       </div>
@@ -191,7 +278,8 @@
 
             <div class="doc-card-header">
               <div class="doc-type-icon">
-                {{ doc.documentType === 'CV' ? '📋' : doc.documentType === 'PASSPORT' ? '🛂' : '🪪' }}
+                {{ doc.documentType === 'CV' ? '📋' :
+                   doc.documentType === 'PASSPORT' ? '🛂' : '🪪' }}
               </div>
               <div class="doc-info">
                 <h4>{{ doc.documentType }}</h4>
@@ -203,8 +291,8 @@
               </span>
             </div>
 
-            <!-- CV Extra Info -->
-            <div *ngIf="doc.documentType === 'CV' && (doc.summary || doc.skills)" class="doc-extra">
+            <div *ngIf="doc.documentType === 'CV' && (doc.summary || doc.skills)"
+              class="doc-extra">
               <div *ngIf="doc.summary" class="extra-item">
                 <span class="extra-label">Summary</span>
                 <p class="extra-value">{{ doc.summary }}</p>
@@ -215,7 +303,6 @@
               </div>
             </div>
 
-            <!-- Passport Extra Info -->
             <div *ngIf="doc.documentType === 'PASSPORT'" class="doc-extra">
               <div class="extra-row">
                 <div class="extra-item">
@@ -233,7 +320,6 @@
               </div>
             </div>
 
-            <!-- ID Card Extra Info -->
             <div *ngIf="doc.documentType === 'ID_CARD'" class="doc-extra">
               <div class="extra-row">
                 <div class="extra-item">
@@ -247,21 +333,14 @@
               </div>
             </div>
 
-            <!-- Actions -->
             <div class="doc-actions">
               <a [href]="getDocumentDownloadUrl(doc.filePath)"
-                target="_blank" download class="download-btn">
-                ⬇️ Download
-              </a>
+                target="_blank" download class="download-btn">⬇️ Download</a>
               <div *ngIf="doc.status === 'PENDING'" class="verify-actions">
                 <button (click)="verifyDocument(doc.id, 'APPROVED')"
-                  [disabled]="isVerifying" class="approve-btn">
-                  ✅ Approve
-                </button>
+                  [disabled]="isVerifying" class="approve-btn">✅ Approve</button>
                 <button (click)="verifyDocument(doc.id, 'REJECTED')"
-                  [disabled]="isVerifying" class="reject-btn">
-                  ❌ Reject
-                </button>
+                  [disabled]="isVerifying" class="reject-btn">❌ Reject</button>
               </div>
             </div>
 
@@ -280,8 +359,6 @@
         </div>
 
         <div *ngIf="!isLoadingProgress">
-
-          <!-- Overview Bar -->
           <div class="progress-overview">
             <div class="progress-bar-wrapper">
               <div class="progress-bar-fill"
@@ -293,9 +370,9 @@
             </p>
           </div>
 
-          <!-- Stages -->
           <div class="stages-list">
-            <div *ngFor="let stage of allStages" class="stage-card" [ngClass]="getStageClass(stage)">
+            <div *ngFor="let stage of allStages" class="stage-card"
+              [ngClass]="getStageClass(stage)">
 
               <div class="stage-left">
                 <div class="stage-icon-big">{{ stageIcons[stage] }}</div>
@@ -307,26 +384,16 @@
                 </div>
               </div>
 
-              <!-- Status Buttons -->
               <div class="stage-controls">
-                <button
-                  (click)="updateStageStatus(stage, 'NOT_STARTED')"
+                <button (click)="updateStageStatus(stage, 'NOT_STARTED')"
                   [disabled]="isUpdatingProgress || getStageStatus(stage) === 'NOT_STARTED'"
-                  class="stage-btn btn-not-started">
-                  Not Started
-                </button>
-                <button
-                  (click)="updateStageStatus(stage, 'IN_PROGRESS')"
+                  class="stage-btn btn-not-started">Not Started</button>
+                <button (click)="updateStageStatus(stage, 'IN_PROGRESS')"
                   [disabled]="isUpdatingProgress || getStageStatus(stage) === 'IN_PROGRESS'"
-                  class="stage-btn btn-in-progress">
-                  In Progress
-                </button>
-                <button
-                  (click)="updateStageStatus(stage, 'COMPLETED')"
+                  class="stage-btn btn-in-progress">In Progress</button>
+                <button (click)="updateStageStatus(stage, 'COMPLETED')"
                   [disabled]="isUpdatingProgress || getStageStatus(stage) === 'COMPLETED'"
-                  class="stage-btn btn-completed">
-                  Completed
-                </button>
+                  class="stage-btn btn-completed">Completed</button>
               </div>
 
             </div>

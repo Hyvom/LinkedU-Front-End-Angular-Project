@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import {
   AssignedStudent,
   DocumentResponseDTO,
-  Progress
+  Progress,
+  AgentProfileResponse
 } from '../../shared/models/models';
 
 @Injectable({ providedIn: 'root' })
@@ -65,4 +66,12 @@ export class AgentService {
       `${this.api}/api/student-profile/${studentId}`
     );
   }
+
+  // ── Agent Profile ──
+  getMyAgentProfile(): Observable<any> {
+    return this.http.get<any>(
+      `${this.api}/api/agent-profile/me`
+    );
+  }
+
 }

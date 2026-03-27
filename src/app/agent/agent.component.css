@@ -572,3 +572,122 @@
   .stage-card { flex-direction: column; align-items: flex-start; }
   .stage-controls { width: 100%; }
 }
+
+/* ── Agent profile card in sidebar ── */
+.agent-profile-card {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.agent-profile-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.agent-avatar-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+
+.agent-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.agent-avatar-initials {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #6366f1;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-status-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #1e1e2e;
+}
+
+.agent-profile-name  { font-weight: 600; font-size: 0.9rem; color: #fff; margin: 0; }
+.agent-profile-email { font-size: 0.75rem; color: #94a3b8; margin: 0; }
+.agent-profile-status { font-size: 0.75rem; color: #94a3b8; margin: 0; }
+.agent-availability  { color: #6366f1; }
+.agent-profile-address,
+.agent-profile-phone { font-size: 0.72rem; color: #94a3b8; margin: 0; }
+
+.agent-edit-profile-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.8rem;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.agent-edit-profile-btn:hover { opacity: 1; }
+
+.agent-no-profile { text-align: center; font-size: 0.8rem; color: #94a3b8; }
+.setup-profile-btn {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  color: #6366f1;
+  text-decoration: none;
+}
+
+.agent-profile-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+/* ── Status dots ── */
+.status-online  { background-color: #22c55e; }
+.status-away    { background-color: #f59e0b; }
+.status-offline { background-color: #9ca3af; }
+
+.hero-status-dot {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.status-dot-inline {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* ── Student status tag ── */
+.tag-status { font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; }
+.tag-status.status-online  { background: #dcfce7; color: #16a34a; }
+.tag-status.status-away    { background: #fef9c3; color: #b45309; }
+.tag-status.status-offline { background: #f1f5f9; color: #64748b; }

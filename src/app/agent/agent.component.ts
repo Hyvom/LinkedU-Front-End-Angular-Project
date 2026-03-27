@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { AgentService } from '../core/services/agent.service';
 import {
   AssignedStudent,
   DocumentResponseDTO,
   Progress,
-  ProgressStage
+  ProgressStage,
+  AgentProfileResponse
 } from '../shared/models/models';
 
 type AgentView = 'students' | 'student-detail';
@@ -17,7 +18,7 @@ type DetailTab = 'profile' | 'documents' | 'progress';
 @Component({
   selector: 'app-agent',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './agent.component.html',
   styleUrl: './agent.component.css'
 })
@@ -26,6 +27,10 @@ export class AgentComponent implements OnInit {
   // ── Auth ──
   agentId = 0;
   agentName = '';
+
+  // ── Agent's own profile ──
+  agentProfile: AgentProfileResponse | null = null;
+  isLoadingAgentProfile = true;
 
   // ── Navigation ──
   currentView: AgentView = 'students';
@@ -87,12 +92,48 @@ export class AgentComponent implements OnInit {
 
   ngOnInit(): void {
     this.agentId = Number(this.authService.getUserId());
+    this.loadAgentProfile();
     this.loadStudents();
   }
 
   logout(): void {
     this.authService.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  // ── Agent's own profile ──
+  loadAgentProfile(): void {
+    this.isLoadingAgentProfile = true;
+    this.agentService.getMyAgentProfile().subscribe({
+      next: (data) => {
+        this.agentProfile = data;
+        this.isLoadingAgentProfile = false;
+      },
+      error: () => {
+        this.isLoadingAgentProfile = false;
+      }
+    });
+  }
+
+  getAgentAvatarUrl(): string {
+    if (!this.agentProfile?.avatar) return '';
+    if (this.agentProfile.avatar.startsWith('http')) return this.agentProfile.avatar;
+    return 'http://localhost:8080' + this.agentProfile.avatar;
+  }
+
+  getAgentInitials(): string {
+    const f = this.agentProfile?.user?.firstName?.charAt(0) || '';
+    const l = this.agentProfile?.user?.lastName?.charAt(0) || '';
+    return (f + l).toUpperCase() || '??';
+  }
+
+  getAgentStatusClass(): string {
+    switch (this.agentProfile?.onlineStatus) {
+      case 'ONLINE':  return 'status-online';
+      case 'AWAY':    return 'status-away';
+      case 'OFFLINE': return 'status-offline';
+      default:        return 'status-offline';
+    }
   }
 
   // ── Students ──
@@ -131,15 +172,11 @@ export class AgentComponent implements OnInit {
 
   setTab(tab: DetailTab): void {
     this.activeTab = tab;
-    if (tab === 'documents' && this.documents.length === 0) {
-      this.loadDocuments();
-    }
-    if (tab === 'progress' && this.progressList.length === 0) {
-      this.loadProgress();
-    }
+    if (tab === 'documents' && this.documents.length === 0) this.loadDocuments();
+    if (tab === 'progress'  && this.progressList.length === 0) this.loadProgress();
   }
 
-  // ── Profile ──
+  // ── Student Profile ──
   loadStudentProfile(studentId: number): void {
     this.isLoadingProfile = true;
     this.agentService.getStudentProfile(studentId).subscribe({
@@ -147,9 +184,7 @@ export class AgentComponent implements OnInit {
         this.studentProfile = data;
         this.isLoadingProfile = false;
       },
-      error: () => {
-        this.isLoadingProfile = false;
-      }
+      error: () => { this.isLoadingProfile = false; }
     });
   }
 
@@ -157,13 +192,22 @@ export class AgentComponent implements OnInit {
     return `${student.firstName.charAt(0)}${student.lastName.charAt(0)}`.toUpperCase();
   }
 
-  getAvatarUrl(): string {
+  getStudentAvatarUrl(): string {
     if (!this.studentProfile?.avatar) return '';
     if (this.studentProfile.avatar.startsWith('http')) return this.studentProfile.avatar;
     return 'http://localhost:8080' + this.studentProfile.avatar;
   }
 
-  parseLanguages(json: string): { name: string; level: string }[] {
+  getStudentStatusClass(): string {
+    switch (this.studentProfile?.onlineStatus) {
+      case 'ONLINE':  return 'status-online';
+      case 'AWAY':    return 'status-away';
+      case 'OFFLINE': return 'status-offline';
+      default:        return 'status-offline';
+    }
+  }
+
+  parseLanguages(json: string): { name: string; level: string; rank: number }[] {
     try { return JSON.parse(json); } catch { return []; }
   }
 
@@ -190,7 +234,6 @@ export class AgentComponent implements OnInit {
     this.isVerifying = true;
     this.verifySuccess = '';
     this.verifyError = '';
-
     this.agentService.verifyDocument(documentId, this.agentId, status).subscribe({
       next: () => {
         this.verifySuccess = `Document ${status.toLowerCase()} successfully!`;
@@ -236,7 +279,7 @@ export class AgentComponent implements OnInit {
 
   getStageClass(stage: ProgressStage): string {
     const status = this.getStageStatus(stage);
-    if (status === 'COMPLETED') return 'stage-completed';
+    if (status === 'COMPLETED')  return 'stage-completed';
     if (status === 'IN_PROGRESS') return 'stage-inprogress';
     return 'stage-notstarted';
   }
@@ -254,7 +297,6 @@ export class AgentComponent implements OnInit {
     const existing = this.getStageProgress(stage);
 
     if (existing) {
-      // Update existing
       this.agentService.updateProgressStatus(existing.id, newStatus).subscribe({
         next: () => {
           this.progressSuccess = `${this.stageLabels[stage]} updated to ${newStatus.replace('_', ' ')}!`;
@@ -268,7 +310,6 @@ export class AgentComponent implements OnInit {
         }
       });
     } else {
-      // Create new then update
       this.agentService.createProgress(this.selectedStudent.id, stage).subscribe({
         next: (created) => {
           this.agentService.updateProgressStatus(created.id, newStatus).subscribe({
