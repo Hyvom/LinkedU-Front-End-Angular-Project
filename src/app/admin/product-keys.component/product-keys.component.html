@@ -2,75 +2,136 @@
 
   <!-- Header -->
   <div class="pk-header">
-    <h2>🔑 Product Key Management</h2>
-    <p>Generate contract registration keys and view all unused keys.</p>
+    <h2>
+      <i class="fa-solid fa-key header-icon"></i>
+      Product Key Management
+    </h2>
+    <p>Generate contract registration keys and manage available keys.</p>
   </div>
 
   <!-- Create Section -->
   <div class="pk-card">
-    <h3>Generate New Keys</h3>
-    <div class="pk-form">
-      <label for="quantity">Number of keys to generate</label>
-      <input
-        id="quantity"
-        type="number"
-        [(ngModel)]="quantity"
-        min="1"
-        max="100"
-        placeholder="e.g. 5"
-      />
-      <button (click)="createKeys()" [disabled]="creating || quantity < 1">
-        {{ creating ? 'Generating...' : 'Generate Keys' }}
+
+    <div class="pk-card-header">
+      <h3>
+        <i class="fa-solid fa-plus-circle"></i>
+        Generate New Keys
+      </h3>
+    </div>
+
+    <!-- FORM ROW -->
+    <div class="pk-form-row">
+      <div class="input-group">
+        <label for="quantity">Number of keys</label>
+        <input
+          id="quantity"
+          type="number"
+          [(ngModel)]="quantity"
+          min="1"
+          max="100"
+          placeholder="e.g. 5"
+        />
+      </div>
+
+      <button
+        class="primary-btn"
+        (click)="createKeys()"
+        [disabled]="creating || quantity < 1">
+        <i class="fa-solid fa-bolt"></i>
+        {{ creating ? 'Generating...' : 'Generate' }}
       </button>
     </div>
 
     <!-- Feedback -->
-    <p class="msg-success" *ngIf="successMsg">{{ successMsg }}</p>
-    <p class="msg-error" *ngIf="errorMsg">{{ errorMsg }}</p>
+    <p class="msg-success" *ngIf="successMsg">
+      <i class="fa-solid fa-circle-check"></i>
+      {{ successMsg }}
+    </p>
+    <p class="msg-error" *ngIf="errorMsg">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      {{ errorMsg }}
+    </p>
 
     <!-- Newly Created Keys -->
     <div *ngIf="newlyCreatedKeys.length > 0" class="pk-new-keys">
-      <h4>Newly Created Keys — Copy and share these:</h4>
+      <h4>
+        <i class="fa-solid fa-copy"></i>
+        Newly Created Keys
+      </h4>
+
       <div class="pk-key-row" *ngFor="let key of newlyCreatedKeys">
         <span class="key-value">{{ key.keyValue }}</span>
-        <button class="btn-copy" (click)="copyKey(key.keyValue)">Copy</button>
+        <button class="btn-copy" (click)="copyKey(key.keyValue)">
+          <i class="fa-solid fa-copy"></i>
+          Copy
+        </button>
       </div>
     </div>
   </div>
 
   <!-- Available Keys Table -->
   <div class="pk-card">
+
     <div class="pk-table-header">
-      <h3>Available (Unused) Keys</h3>
-      <button class="btn-refresh" (click)="loadAvailableKeys()">↻ Refresh</button>
+      <h3>
+        <i class="fa-solid fa-database"></i>
+        Available Keys
+      </h3>
+
+      <button class="btn-refresh" (click)="loadAvailableKeys()">
+        <i class="fa-solid fa-rotate-right"></i>
+        Refresh
+      </button>
     </div>
 
-    <p *ngIf="loading">Loading...</p>
+    <p *ngIf="loading" class="loading-msg">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading...
+    </p>
 
-    <table *ngIf="!loading && availableKeys.length > 0">
+    <table *ngIf="!loading && availableKeys.length > 0" class="pk-table">
       <thead>
         <tr>
           <th>#</th>
-          <th>Key Value</th>
-          <th>Status</th>
-          <th>Copy</th>
+          <th>
+            <i class="fa-solid fa-key"></i>
+            Key Value
+          </th>
+          <th>
+            <i class="fa-solid fa-circle-check"></i>
+            Status
+          </th>
+          <th>
+            <i class="fa-solid fa-copy"></i>
+            Action
+          </th>
         </tr>
       </thead>
+
       <tbody>
         <tr *ngFor="let key of availableKeys; let i = index">
           <td>{{ i + 1 }}</td>
           <td class="key-value">{{ key.keyValue }}</td>
-          <td><span class="badge-available">Available</span></td>
           <td>
-            <button class="btn-copy" (click)="copyKey(key.keyValue)">Copy</button>
+            <span class="badge-available">
+              Available
+            </span>
+          </td>
+          <td>
+            <button class="btn-copy" (click)="copyKey(key.keyValue)">
+              <i class="fa-solid fa-copy"></i>
+              Copy
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
 
     <p *ngIf="!loading && availableKeys.length === 0" class="empty-msg">
+      <i class="fa-solid fa-database"></i>
       No available keys found.
     </p>
+
   </div>
 
 </div>

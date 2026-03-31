@@ -1,8 +1,9 @@
 <div class="users-container">
-
   <!-- Header -->
   <div class="users-header">
-    <h2>👥 User Management</h2>
+    <h2>
+      <i class="fas fa-users"></i> User Management
+    </h2>
     <p>View all users, assign roles, and link agents to students.</p>
   </div>
 
@@ -15,98 +16,105 @@
   <div class="users-card" *ngIf="!loading">
     <div class="card-header">
       <h3>All Users ({{ users.length }})</h3>
-      <button class="btn-refresh" (click)="loadUsers()">↻ Refresh</button>
+      <button class="btn-refresh" (click)="loadUsers()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
     </div>
 
-    <table *ngIf="users.length > 0">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Current Role</th>
-          <th>Status</th>
-          <th>Assign Role</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ user.firstName }} {{ user.lastName }}</td>
-          <td class="email-cell">{{ user.email }}</td>
-          <td>
-            <span class="badge" [ngClass]="getRoleBadgeClass(user.role)">
-              {{ user.role }}
-            </span>
-          </td>
-          <td>
-            <span class="badge" [ngClass]="user.enabled ? 'badge-enabled' : 'badge-disabled'">
-              {{ user.enabled ? 'Active' : 'Inactive' }}
-            </span>
-          </td>
-          <td>
-            <select [(ngModel)]="selectedRoleMap[user.id]">
-              <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
-            </select>
-          </td>
-          <td>
-            <button
-              class="btn-assign"
-              (click)="assignRole(user)"
-              [disabled]="assigningRole === user.id || selectedRoleMap[user.id] === user.role">
-              {{ assigningRole === user.id ? '...' : 'Apply' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table *ngIf="users.length > 0">
+        <thead>
+          <tr>
+            <th><i class="fas fa-user"></i> Name</th>
+            <th><i class="fas fa-envelope"></i> Email</th>
+            <th><i class="fas fa-user-tag"></i> Current Role</th>
+            <th><i class="fas fa-toggle-on"></i> Status</th>
+            <th><i class="fas fa-cogs"></i> Assign Role</th>
+            <th><i class="fas fa-check"></i> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users; let i = index">
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td class="email-cell">{{ user.email }}</td>
+            <td>
+              <span class="badge" [ngClass]="getRoleBadgeClass(user.role)">
+                <i [ngClass]="getRoleIcon(user.role)"></i>
+                {{ user.role }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="user.enabled ? 'badge-enabled' : 'badge-disabled'">
+                <i [ngClass]="user.enabled ? 'fas fa-circle-check' : 'fas fa-circle-xmark'"></i>
+                {{ user.enabled ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <select [(ngModel)]="selectedRoleMap[user.id]" [ngClass]="getSelectedRoleClass(selectedRoleMap[user.id])">
+                <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+              </select>
+            </td>
+            <td>
+              <button
+                class="btn-assign"
+                (click)="assignRole(user)"
+                [disabled]="assigningRole === user.id || selectedRoleMap[user.id] === user.role">
+                {{ assigningRole === user.id ? '...' : 'Apply' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <p *ngIf="users.length === 0" class="empty-msg">No users found.</p>
+      <p *ngIf="users.length === 0" class="empty-msg">No users found.</p>
+    </div>
   </div>
 
   <!-- Assign Agent to Students -->
   <div class="users-card" *ngIf="!loading && students.length > 0">
     <div class="card-header">
-      <h3>Assign Agent to Students</h3>
+      <h3>
+        <i class="fas fa-user-tie"></i> Assign Agent to Students
+      </h3>
     </div>
 
-    <p *ngIf="agents.length === 0" class="empty-msg">
-      No agents available. Assign the AGENT role to a user first.
-    </p>
+    <div class="table-container">
+      <p *ngIf="agents.length === 0" class="empty-msg">
+        No agents available. Assign the AGENT role to a user first.
+      </p>
 
-    <table *ngIf="agents.length > 0">
-      <thead>
-        <tr>
-          <th>Student</th>
-          <th>Email</th>
-          <th>Assign Agent</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let student of students">
-          <td>{{ student.firstName }} {{ student.lastName }}</td>
-          <td class="email-cell">{{ student.email }}</td>
-          <td>
-            <select [(ngModel)]="selectedAgentMap[student.id]">
-              <option [ngValue]="undefined" disabled>-- Select Agent --</option>
-              <option *ngFor="let agent of agents" [ngValue]="agent.id">
-                {{ agent.firstName }} {{ agent.lastName }}
-              </option>
-            </select>
-          </td>
-          <td>
-            <button
-              class="btn-assign"
-              (click)="assignAgent(student)"
-              [disabled]="assigningAgent === student.id || !selectedAgentMap[student.id]">
-              {{ assigningAgent === student.id ? '...' : 'Assign' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <table *ngIf="agents.length > 0">
+        <thead>
+          <tr>
+            <th><i class="fas fa-user-graduate"></i> Student</th>
+            <th><i class="fas fa-envelope"></i> Email</th>
+            <th><i class="fas fa-user-tie"></i> Assign Agent</th>
+            <th><i class="fas fa-check"></i> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students">
+            <td>{{ student.firstName }} {{ student.lastName }}</td>
+            <td class="email-cell">{{ student.email }}</td>
+            <td>
+              <select [(ngModel)]="selectedAgentMap[student.id]">
+                <option [ngValue]="undefined" disabled>-- Select Agent --</option>
+                <option *ngFor="let agent of agents" [ngValue]="agent.id">
+                  {{ agent.firstName }} {{ agent.lastName }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <button
+                class="btn-assign-agent"
+                (click)="assignAgent(student)"
+                [disabled]="assigningAgent === student.id || !selectedAgentMap[student.id]">
+                {{ assigningAgent === student.id ? '...' : 'Assign' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
 </div>

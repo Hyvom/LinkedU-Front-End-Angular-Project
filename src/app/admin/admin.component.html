@@ -1,5 +1,4 @@
 <div class="admin-layout">
-
   <!-- Sidebar -->
   <aside class="admin-sidebar">
     <div class="sidebar-brand">
@@ -8,15 +7,27 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a routerLink="product-keys" routerLinkActive="active">🔑 Product Keys</a>
-      <a routerLink="users" routerLinkActive="active">👥 Users</a>
-      <a routerLink="destinations" routerLinkActive="active">🌍 Destinations</a>
-      <a routerLink="quizzes" routerLinkActive="active">📝 Quizzes</a>
-      <a routerLink="chats" routerLinkActive="active">💬 Chat Rooms</a>
+      <a routerLink="product-keys" routerLinkActive="active">
+        <i class="fas fa-key"></i> Product Keys
+      </a>
+      <a routerLink="users" routerLinkActive="active">
+        <i class="fas fa-users"></i> Users
+      </a>
+      <a routerLink="destinations" routerLinkActive="active">
+        <i class="fas fa-globe"></i> Destinations
+      </a>
+      <a routerLink="quizzes" routerLinkActive="active">
+        <i class="fas fa-question-circle"></i> Quizzes
+      </a>
+      <a routerLink="chats" routerLinkActive="active">
+        <i class="fas fa-comments"></i> Chat Rooms
+      </a>
     </nav>
 
     <div class="sidebar-footer">
-      <button (click)="logout()">🚪 Logout</button>
+      <button (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
     </div>
   </aside>
 
@@ -24,5 +35,4 @@
   <main class="admin-main">
     <router-outlet></router-outlet>
   </main>
-
 </div>

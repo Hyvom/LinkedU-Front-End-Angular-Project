@@ -3,20 +3,37 @@
   <!-- Header -->
   <div class="dest-header">
     <div class="dest-header-left">
-      <h2 *ngIf="viewMode === 'list'">🌍 Destinations</h2>
+      <h2 *ngIf="viewMode === 'list'">
+        <i class="fa-solid fa-globe"></i>
+        Destinations
+      </h2>
       <div *ngIf="viewMode !== 'list'" class="breadcrumb">
-        <button (click)="showList()" class="back-btn">← Back</button>
-        <h2>{{ viewMode === 'create' ? '➕ New Destination' : '✏️ Edit Destination' }}</h2>
+        <button (click)="showList()" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          Back
+        </button>
+        <h2>
+          <i *ngIf="viewMode === 'create'" class="fa-solid fa-plus-circle"></i>
+          <i *ngIf="viewMode === 'edit'" class="fa-solid fa-pen"></i>
+          {{ viewMode === 'create' ? 'New Destination' : 'Edit Destination' }}
+        </h2>
       </div>
     </div>
     <button *ngIf="viewMode === 'list'" (click)="showCreate()" class="primary-btn">
-      + Add Destination
+      <i class="fa-solid fa-plus"></i>
+      Add Destination
     </button>
   </div>
 
   <!-- Alerts -->
-  <div *ngIf="successMessage" class="alert alert-success">✅ {{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="alert alert-error">⚠️ {{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">
+    <i class="fa-solid fa-circle-check"></i>
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-error">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    {{ errorMessage }}
+  </div>
 
   <!-- ── LIST VIEW ── -->
   <div *ngIf="viewMode === 'list'">
@@ -24,12 +41,17 @@
     <!-- Loading -->
     <div *ngIf="isLoading" class="loading-state">
       <div class="spinner"></div>
-      <p>Loading destinations...</p>
+      <p>
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Loading destinations...
+      </p>
     </div>
 
     <!-- Empty -->
     <div *ngIf="!isLoading && destinations.length === 0" class="empty-state">
-      <div class="empty-icon">🌍</div>
+      <div class="empty-icon">
+        <i class="fa-solid fa-globe"></i>
+      </div>
       <h3>No destinations yet</h3>
       <p>Click "Add Destination" to create your first one.</p>
     </div>
@@ -42,8 +64,12 @@
         <div *ngIf="deleteConfirmId === dest.id" class="delete-confirm">
           <p>Delete <strong>{{ dest.countryName }}</strong>?</p>
           <div class="delete-actions">
-            <button (click)="cancelDelete()" class="cancel-btn">Cancel</button>
+            <button (click)="cancelDelete()" class="cancel-btn">
+              <i class="fa-solid fa-times"></i>
+              Cancel
+            </button>
             <button (click)="onDelete(dest.id!)" [disabled]="isDeleting" class="danger-btn">
+              <i class="fa-solid fa-trash"></i>
               {{ isDeleting ? 'Deleting...' : 'Delete' }}
             </button>
           </div>
@@ -51,10 +77,16 @@
 
         <!-- Card Content -->
         <div class="dest-card-header">
-          <div class="dest-flag">🌐</div>
+          <div class="dest-flag">
+            <i class="fa-solid fa-flag-checkered"></i>
+          </div>
           <div class="dest-card-actions">
-            <button (click)="showEdit(dest)" class="icon-btn edit-icon" title="Edit">✏️</button>
-            <button (click)="confirmDelete(dest.id!)" class="icon-btn delete-icon" title="Delete">🗑️</button>
+            <button (click)="showEdit(dest)" class="icon-btn edit-icon" title="Edit">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button (click)="confirmDelete(dest.id!)" class="icon-btn delete-icon" title="Delete">
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </div>
         </div>
 
@@ -62,8 +94,14 @@
         <p class="dest-desc">{{ (dest.description || '') | slice:0:100 }}{{ (dest.description || '').length > 100 ? '...' : '' }}</p>
 
         <div class="dest-stats">
-          <span class="stat-chip">🏛️ {{ getUniversitiesCount(dest.universities) }} Universities</span>
-          <span class="stat-chip">🎯 {{ getOffersCount(dest.offers) }} Offers</span>
+          <span class="stat-chip">
+            <i class="fa-solid fa-building-columns"></i>
+            {{ getUniversitiesCount(dest.universities) }} Universities
+          </span>
+          <span class="stat-chip">
+            <i class="fa-solid fa-tag"></i>
+            {{ getOffersCount(dest.offers) }} Offers
+          </span>
         </div>
 
       </div>
@@ -76,14 +114,20 @@
 
       <!-- Country Name -->
       <div class="form-group">
-        <label class="form-label">Country Name *</label>
+        <label class="form-label">
+          <i class="fa-solid fa-location-dot"></i>
+          Country Name *
+        </label>
         <input type="text" name="countryName" [(ngModel)]="form.countryName"
           placeholder="e.g. France" required class="form-input" />
       </div>
 
       <!-- Description -->
       <div class="form-group">
-        <label class="form-label">Short Description</label>
+        <label class="form-label">
+          <i class="fa-solid fa-align-left"></i>
+          Short Description
+        </label>
         <input type="text" name="description" [(ngModel)]="form.description"
           placeholder="A brief one-line description..."
           class="form-input" />
@@ -91,7 +135,10 @@
 
       <!-- Paragraph -->
       <div class="form-group">
-        <label class="form-label">Full Paragraph</label>
+        <label class="form-label">
+          <i class="fa-solid fa-paragraph"></i>
+          Full Paragraph
+        </label>
         <textarea name="paragraph" [(ngModel)]="form.paragraph" rows="5"
           placeholder="Detailed description about studying in this country..."
           class="form-input form-textarea"></textarea>
@@ -100,14 +147,20 @@
       <!-- Offers + Universities side by side -->
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Offers</label>
+          <label class="form-label">
+            <i class="fa-solid fa-tags"></i>
+            Offers
+          </label>
           <p class="form-hint">One offer per line</p>
           <textarea name="offers" [(ngModel)]="form.offers" rows="6"
             placeholder="Scholarship programs&#10;Language courses&#10;Work permits"
             class="form-input form-textarea"></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label">Universities</label>
+          <label class="form-label">
+            <i class="fa-solid fa-building-columns"></i>
+            Universities
+          </label>
           <p class="form-hint">One university per line</p>
           <textarea name="universities" [(ngModel)]="form.universities" rows="6"
             placeholder="University of Paris&#10;Sorbonne University&#10;Sciences Po"
@@ -117,9 +170,15 @@
 
       <!-- Actions -->
       <div class="form-actions">
-        <button type="button" (click)="showList()" class="cancel-btn">Cancel</button>
+        <button type="button" (click)="showList()" class="cancel-btn">
+          <i class="fa-solid fa-times"></i>
+          Cancel
+        </button>
         <button type="submit" [disabled]="isSaving" class="primary-btn">
-          <span *ngIf="!isSaving">{{ viewMode === 'create' ? '+ Create Destination' : '💾 Save Changes' }}</span>
+          <i *ngIf="!isSaving && viewMode === 'create'" class="fa-solid fa-plus"></i>
+          <i *ngIf="!isSaving && viewMode === 'edit'" class="fa-solid fa-save"></i>
+          <i *ngIf="isSaving" class="fa-solid fa-spinner fa-spin"></i>
+          <span *ngIf="!isSaving">{{ viewMode === 'create' ? 'Create Destination' : 'Save Changes' }}</span>
           <span *ngIf="isSaving">Saving...</span>
         </button>
       </div>

@@ -103,4 +103,19 @@ export class UsersComponent implements OnInit {
     };
     return map[role] ?? 'badge-user';
   }
+
+  getRoleIcon(role: UserRole): string {
+    const icons: Record<UserRole, string> = {
+      'ADMIN': 'fas fa-crown',
+      'AGENT': 'fas fa-user-tie',
+      'STUDENT': 'fas fa-user-graduate',
+      'USER': 'fas fa-user',
+      'GUEST': 'fas fa-user-slash'
+    };
+    return icons[role] ?? 'fas fa-user';
+  }
+
+  getSelectedRoleClass(role: UserRole): string {
+    return `role-${role.toLowerCase()}`;
+  }
 }
