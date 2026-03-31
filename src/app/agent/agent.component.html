@@ -3,7 +3,9 @@
   <!-- ── SIDEBAR ── -->
   <aside class="agent-sidebar">
     <div class="sidebar-brand">
-      <div class="brand-icon">👨‍💼</div>
+      <div class="brand-icon">
+        <i class="fa-solid fa-user-tie"></i>
+      </div>
       <div>
         <h3>Agent Portal</h3>
         <p>LinkedU</p>
@@ -35,41 +37,55 @@
             {{ agentProfile?.user?.firstName || '—' }}
             {{ agentProfile?.user?.lastName || '' }}
           </p>
-          <p class="agent-profile-email">{{ agentProfile?.user?.email || '—' }}</p>
+          <p class="agent-profile-email">
+            <i class="fa-solid fa-envelope"></i>
+            {{ agentProfile?.user?.email || '—' }}
+          </p>
           <p class="agent-profile-status">
+            <i class="fa-solid fa-circle"></i>
             {{ agentProfile?.onlineStatus || 'OFFLINE' }}
             <span *ngIf="agentProfile?.availabilityTime" class="agent-availability">
               · {{ agentProfile?.availabilityTime }}
             </span>
           </p>
           <p *ngIf="agentProfile?.address" class="agent-profile-address">
-            📍 {{ agentProfile?.address }}
+            <i class="fa-solid fa-location-dot"></i>
+            {{ agentProfile?.address }}
           </p>
           <p *ngIf="agentProfile?.phoneNumber" class="agent-profile-phone">
-            📞 {{ agentProfile?.phoneNumber }}
+            <i class="fa-solid fa-phone"></i>
+            {{ agentProfile?.phoneNumber }}
           </p>
         </div>
 
         <!-- Edit link -->
-        <a routerLink="/profile/agent" class="agent-edit-profile-btn" title="Edit profile">✏️</a>
+        <a routerLink="/profile/agent" class="agent-edit-profile-btn" title="Edit profile">
+          <i class="fa-solid fa-pen"></i>
+        </a>
       </div>
 
       <!-- No profile yet -->
       <div *ngIf="!isLoadingAgentProfile && !agentProfile" class="agent-no-profile">
         <p>No profile yet.</p>
-        <a routerLink="/profile/agent" class="setup-profile-btn">Set up profile →</a>
+        <a routerLink="/profile/agent" class="setup-profile-btn">
+          Set up profile <i class="fa-solid fa-arrow-right"></i>
+        </a>
       </div>
     </div>
 
     <nav class="sidebar-nav">
       <button (click)="currentView = 'students'; backToStudents()"
         [class.active]="currentView === 'students'" class="nav-btn">
-        👥 My Students
+        <i class="fa-solid fa-users"></i>
+        My Students
         <span class="nav-count" *ngIf="students.length > 0">{{ students.length }}</span>
       </button>
     </nav>
 
-    <button (click)="logout()" class="logout-btn">🚪 Logout</button>
+    <button (click)="logout()" class="logout-btn">
+      <i class="fa-solid fa-sign-out-alt"></i>
+      Logout
+    </button>
   </aside>
 
   <!-- ── MAIN ── -->
@@ -79,18 +95,30 @@
     <div *ngIf="currentView === 'students'">
 
       <div class="page-header">
-        <h2>👥 My Students</h2>
+        <h2>
+          <i class="fa-solid fa-users"></i>
+          My Students
+        </h2>
         <p class="page-sub">Students assigned to you for monitoring</p>
       </div>
 
       <div *ngIf="isLoadingStudents" class="loading-state">
-        <div class="spinner"></div><p>Loading students...</p>
+        <div class="spinner"></div>
+        <p>
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Loading students...
+        </p>
       </div>
 
-      <div *ngIf="studentsError" class="alert alert-error">⚠️ {{ studentsError }}</div>
+      <div *ngIf="studentsError" class="alert alert-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ studentsError }}
+      </div>
 
       <div *ngIf="!isLoadingStudents && students.length === 0" class="empty-state">
-        <div class="empty-icon">👥</div>
+        <div class="empty-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
         <h3>No students assigned yet</h3>
         <p>Contact admin to assign students to your account.</p>
       </div>
@@ -101,10 +129,18 @@
           <div class="student-card-avatar">{{ getInitials(student) }}</div>
           <div class="student-card-info">
             <h4>{{ student.firstName }} {{ student.lastName }}</h4>
-            <p class="student-email">{{ student.email }}</p>
-            <p class="student-username">&#64;{{ student.username }}</p>
+            <p class="student-email">
+              <i class="fa-solid fa-envelope"></i>
+              {{ student.email }}
+            </p>
+            <p class="student-username">
+              <i class="fa-solid fa-at"></i>
+              {{ student.username }}
+            </p>
           </div>
-          <div class="student-card-arrow">→</div>
+          <div class="student-card-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -114,12 +150,18 @@
 
       <!-- Header -->
       <div class="detail-header">
-        <button (click)="backToStudents()" class="back-btn">← Back to Students</button>
+        <button (click)="backToStudents()" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          Back to Students
+        </button>
         <div class="detail-student-info">
           <div class="detail-avatar">{{ getInitials(selectedStudent) }}</div>
           <div>
             <h2>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h2>
-            <p>{{ selectedStudent.email }}</p>
+            <p>
+              <i class="fa-solid fa-envelope"></i>
+              {{ selectedStudent.email }}
+            </p>
           </div>
         </div>
       </div>
@@ -127,60 +169,81 @@
       <!-- Tabs -->
       <div class="detail-tabs">
         <button (click)="setTab('profile')"
-          [class.active]="activeTab === 'profile'" class="tab-btn">👤 Profile</button>
+          [class.active]="activeTab === 'profile'" class="tab-btn">
+          <i class="fa-solid fa-user"></i> Profile
+        </button>
         <button (click)="setTab('documents')"
-          [class.active]="activeTab === 'documents'" class="tab-btn">📄 Documents</button>
+          [class.active]="activeTab === 'documents'" class="tab-btn">
+          <i class="fa-solid fa-file-alt"></i> Documents
+        </button>
         <button (click)="setTab('progress')"
-          [class.active]="activeTab === 'progress'" class="tab-btn">📊 Progress</button>
+          [class.active]="activeTab === 'progress'" class="tab-btn">
+          <i class="fa-solid fa-chart-line"></i> Progress
+        </button>
       </div>
 
       <!-- ── PROFILE TAB ── -->
       <div *ngIf="activeTab === 'profile'">
         <div *ngIf="isLoadingProfile" class="loading-state">
-          <div class="spinner"></div><p>Loading profile...</p>
+          <div class="spinner"></div>
+          <p>
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Loading profile...
+          </p>
         </div>
 
         <div *ngIf="!isLoadingProfile && !studentProfile" class="empty-state">
-          <div class="empty-icon">👤</div>
+          <div class="empty-icon">
+            <i class="fa-solid fa-user"></i>
+          </div>
           <h3>No profile created yet</h3>
           <p>This student hasn't set up their profile.</p>
         </div>
 
         <div *ngIf="!isLoadingProfile && studentProfile" class="profile-view">
 
-          <!-- Profile Hero -->
-          <div class="profile-hero">
-            <div class="hero-avatar">
-              <img *ngIf="getStudentAvatarUrl()" [src]="getStudentAvatarUrl()"
-                alt="avatar" class="hero-img" />
-              <span *ngIf="!getStudentAvatarUrl()">{{ getInitials(selectedStudent) }}</span>
-              <!-- Online status dot on avatar -->
-              <span class="hero-status-dot" [ngClass]="getStudentStatusClass()"></span>
-            </div>
-            <div class="hero-info">
-              <h3>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h3>
-              <p>{{ selectedStudent.email }}</p>
-              <div class="hero-tags">
-                <span class="tag" *ngIf="studentProfile.currentStudyLevel">
-                  {{ studentProfile.currentStudyLevel }}
-                </span>
-                <span class="tag tag-yellow" *ngIf="studentProfile.speciality">
-                  {{ studentProfile.speciality }}
-                </span>
-                <span class="tag tag-status" *ngIf="studentProfile.onlineStatus"
-                  [ngClass]="getStudentStatusClass()">
-                  {{ studentProfile.onlineStatus }}
-                </span>
-              </div>
+        <!-- Profile Hero Section - Fixed version -->
+        <div class="profile-hero">
+          <div class="hero-avatar">
+            <img *ngIf="getStudentAvatarUrl()" [src]="getStudentAvatarUrl()"
+              alt="avatar" class="hero-img" />
+            <span *ngIf="!getStudentAvatarUrl()">{{ getInitials(selectedStudent) }}</span>
+            <!-- Status dot - positioned correctly over the avatar -->
+            <span class="hero-status-dot" [ngClass]="getStudentStatusClass()"></span>
+          </div>
+          <div class="hero-info">
+            <h3>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h3>
+            <p>
+              <i class="fa-solid fa-envelope"></i>
+              {{ selectedStudent.email }}
+            </p>
+            <div class="hero-tags">
+              <span class="tag" *ngIf="studentProfile.currentStudyLevel">
+                <i class="fa-solid fa-graduation-cap"></i>
+                {{ studentProfile.currentStudyLevel }}
+              </span>
+              <span class="tag tag-yellow" *ngIf="studentProfile.speciality">
+                <i class="fa-solid fa-flask"></i>
+                {{ studentProfile.speciality }}
+              </span>
+              <span class="tag tag-status" *ngIf="studentProfile.onlineStatus"
+                [ngClass]="getStudentStatusClass()">
+                <i class="fa-solid fa-circle"></i>
+                {{ studentProfile.onlineStatus }}
+              </span>
             </div>
           </div>
+        </div>
 
           <!-- Info Grid -->
           <div class="info-grid">
 
             <!-- Academic Card -->
             <div class="info-card">
-              <h4 class="card-title">🎓 Academic</h4>
+              <h4 class="card-title">
+                <i class="fa-solid fa-graduation-cap"></i>
+                Academic
+              </h4>
               <div class="card-rows">
                 <div class="card-row">
                   <span class="row-label">Current Level</span>
@@ -213,9 +276,12 @@
               </div>
             </div>
 
-            <!-- Contact & Status Card — NEW fields -->
+            <!-- Contact & Status Card -->
             <div class="info-card">
-              <h4 class="card-title">📞 Contact & Status</h4>
+              <h4 class="card-title">
+                <i class="fa-solid fa-address-card"></i>
+                Contact & Status
+              </h4>
               <div class="card-rows">
                 <div class="card-row">
                   <span class="row-label">Status</span>
@@ -227,19 +293,31 @@
                 </div>
                 <div class="card-row">
                   <span class="row-label">Availability</span>
-                  <span class="row-value">{{ studentProfile.availabilityTime || '—' }}</span>
+                  <span class="row-value">
+                    <i class="fa-regular fa-clock"></i>
+                    {{ studentProfile.availabilityTime || '—' }}
+                  </span>
                 </div>
                 <div class="card-row">
                   <span class="row-label">Address</span>
-                  <span class="row-value">{{ studentProfile.address || '—' }}</span>
+                  <span class="row-value">
+                    <i class="fa-solid fa-location-dot"></i>
+                    {{ studentProfile.address || '—' }}
+                  </span>
                 </div>
                 <div class="card-row">
                   <span class="row-label">Phone</span>
-                  <span class="row-value">{{ studentProfile.phoneNumber || '—' }}</span>
+                  <span class="row-value">
+                    <i class="fa-solid fa-phone"></i>
+                    {{ studentProfile.phoneNumber || '—' }}
+                  </span>
                 </div>
               </div>
 
-              <h4 class="card-title" style="margin-top:1.25rem">🌐 Languages</h4>
+              <h4 class="card-title" style="margin-top:1.25rem">
+                <i class="fa-solid fa-language"></i>
+                Languages
+              </h4>
               <div class="lang-chips" *ngIf="studentProfile.languages">
                 <div *ngFor="let lang of parseLanguages(studentProfile.languages)"
                   class="lang-chip">
@@ -247,9 +325,15 @@
                   <span class="lang-badge">{{ lang.level }}</span>
                 </div>
               </div>
-              <p *ngIf="!studentProfile.languages" class="text-muted">No languages added.</p>
+              <p *ngIf="!studentProfile.languages" class="text-muted">
+                <i class="fa-solid fa-info-circle"></i>
+                No languages added.
+              </p>
 
-              <h4 class="card-title" style="margin-top:1.25rem">📝 Bio</h4>
+              <h4 class="card-title" style="margin-top:1.25rem">
+                <i class="fa-solid fa-pen"></i>
+                Bio
+              </h4>
               <p class="bio-text">{{ studentProfile.bio || 'No bio added.' }}</p>
             </div>
 
@@ -260,15 +344,27 @@
       <!-- ── DOCUMENTS TAB ── -->
       <div *ngIf="activeTab === 'documents'">
 
-        <div *ngIf="verifySuccess" class="alert alert-success">✅ {{ verifySuccess }}</div>
-        <div *ngIf="verifyError" class="alert alert-error">⚠️ {{ verifyError }}</div>
+        <div *ngIf="verifySuccess" class="alert alert-success">
+          <i class="fa-solid fa-check-circle"></i>
+          {{ verifySuccess }}
+        </div>
+        <div *ngIf="verifyError" class="alert alert-error">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ verifyError }}
+        </div>
 
         <div *ngIf="isLoadingDocs" class="loading-state">
-          <div class="spinner"></div><p>Loading documents...</p>
+          <div class="spinner"></div>
+          <p>
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Loading documents...
+          </p>
         </div>
 
         <div *ngIf="!isLoadingDocs && documents.length === 0" class="empty-state">
-          <div class="empty-icon">📄</div>
+          <div class="empty-icon">
+            <i class="fa-solid fa-file-alt"></i>
+          </div>
           <h3>No documents uploaded</h3>
           <p>This student hasn't uploaded any documents yet.</p>
         </div>
@@ -278,15 +374,25 @@
 
             <div class="doc-card-header">
               <div class="doc-type-icon">
-                {{ doc.documentType === 'CV' ? '📋' :
-                   doc.documentType === 'PASSPORT' ? '🛂' : '🪪' }}
+                <i *ngIf="doc.documentType === 'CV'" class="fa-solid fa-file-pdf"></i>
+                <i *ngIf="doc.documentType === 'PASSPORT'" class="fa-solid fa-passport"></i>
+                <i *ngIf="doc.documentType === 'ID_CARD'" class="fa-solid fa-id-card"></i>
               </div>
               <div class="doc-info">
                 <h4>{{ doc.documentType }}</h4>
-                <p class="doc-filename">{{ doc.fileName }}</p>
-                <p class="doc-date">{{ doc.uploadedAt | date:'mediumDate' }}</p>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ doc.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  {{ doc.uploadedAt | date:'mediumDate' }}
+                </p>
               </div>
               <span class="status-badge" [ngClass]="getStatusClass(doc.status)">
+                <i *ngIf="doc.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="doc.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="doc.status === 'PENDING'" class="fa-solid fa-clock"></i>
                 {{ getStatusLabel(doc.status) }}
               </span>
             </div>
@@ -335,12 +441,18 @@
 
             <div class="doc-actions">
               <a [href]="getDocumentDownloadUrl(doc.filePath)"
-                target="_blank" download class="download-btn">⬇️ Download</a>
+                target="_blank" download class="download-btn">
+                <i class="fa-solid fa-download"></i> Download
+              </a>
               <div *ngIf="doc.status === 'PENDING'" class="verify-actions">
                 <button (click)="verifyDocument(doc.id, 'APPROVED')"
-                  [disabled]="isVerifying" class="approve-btn">✅ Approve</button>
+                  [disabled]="isVerifying" class="approve-btn">
+                  <i class="fa-solid fa-check"></i> Approve
+                </button>
                 <button (click)="verifyDocument(doc.id, 'REJECTED')"
-                  [disabled]="isVerifying" class="reject-btn">❌ Reject</button>
+                  [disabled]="isVerifying" class="reject-btn">
+                  <i class="fa-solid fa-times"></i> Reject
+                </button>
               </div>
             </div>
 
@@ -348,17 +460,29 @@
         </div>
       </div>
 
-      <!-- ── PROGRESS TAB ── -->
+      <!-- ── PROGRESS TAB (UPDATED WITH TIMELINE STYLE) ── -->
       <div *ngIf="activeTab === 'progress'">
 
-        <div *ngIf="progressSuccess" class="alert alert-success">✅ {{ progressSuccess }}</div>
-        <div *ngIf="progressError" class="alert alert-error">⚠️ {{ progressError }}</div>
-
-        <div *ngIf="isLoadingProgress" class="loading-state">
-          <div class="spinner"></div><p>Loading progress...</p>
+        <div *ngIf="progressSuccess" class="alert alert-success">
+          <i class="fa-solid fa-check-circle"></i>
+          {{ progressSuccess }}
+        </div>
+        <div *ngIf="progressError" class="alert alert-error">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ progressError }}
         </div>
 
-        <div *ngIf="!isLoadingProgress">
+        <div *ngIf="isLoadingProgress" class="loading-state">
+          <div class="spinner"></div>
+          <p>
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Loading progress...
+          </p>
+        </div>
+
+        <div *ngIf="!isLoadingProgress" class="progress-section">
+
+          <!-- Progress Overview -->
           <div class="progress-overview">
             <div class="progress-bar-wrapper">
               <div class="progress-bar-fill"
@@ -366,38 +490,47 @@
               </div>
             </div>
             <p class="progress-text">
+              <i class="fa-solid fa-check-circle"></i>
               {{ getCompletedCount() }} / {{ allStages.length }} stages completed
             </p>
           </div>
 
-          <div class="stages-list">
-            <div *ngFor="let stage of allStages" class="stage-card"
-              [ngClass]="getStageClass(stage)">
+          <!-- Stages Timeline -->
+          <div class="stages-timeline">
+            <div *ngFor="let stage of allStages; let i = index"
+              class="stage-item" [ngClass]="getStageClass(stage)">
 
-              <div class="stage-left">
-                <div class="stage-icon-big">{{ stageIcons[stage] }}</div>
-                <div>
-                  <h4 class="stage-name">{{ stageLabels[stage] }}</h4>
-                  <span class="stage-current-status">
-                    {{ getStageStatus(stage).replace('_', ' ') }}
-                  </span>
-                </div>
+              <div class="stage-connector" *ngIf="i > 0"></div>
+
+              <div class="stage-circle">
+                <i *ngIf="getStageStatus(stage) === 'COMPLETED'" class="fa-solid fa-check"></i>
+                <i *ngIf="getStageStatus(stage) === 'IN_PROGRESS'" class="fa-solid fa-rotate-right fa-spin"></i>
+                <span *ngIf="getStageStatus(stage) === 'NOT_STARTED'">{{ i + 1 }}</span>
               </div>
 
-              <div class="stage-controls">
-                <button (click)="updateStageStatus(stage, 'NOT_STARTED')"
-                  [disabled]="isUpdatingProgress || getStageStatus(stage) === 'NOT_STARTED'"
-                  class="stage-btn btn-not-started">Not Started</button>
-                <button (click)="updateStageStatus(stage, 'IN_PROGRESS')"
-                  [disabled]="isUpdatingProgress || getStageStatus(stage) === 'IN_PROGRESS'"
-                  class="stage-btn btn-in-progress">In Progress</button>
-                <button (click)="updateStageStatus(stage, 'COMPLETED')"
-                  [disabled]="isUpdatingProgress || getStageStatus(stage) === 'COMPLETED'"
-                  class="stage-btn btn-completed">Completed</button>
+              <div class="stage-content">
+                <div class="stage-icon">
+                  <i [class]="getStageIcon(stage)"></i>
+                </div>
+                <div class="stage-info">
+                  <h4 class="stage-name">{{ getStageLabel(stage) }}</h4>
+                  <div class="stage-status-control">
+                    <select 
+                      [ngModel]="getStageStatus(stage)"
+                      (ngModelChange)="updateStageStatus(stage, $event)"
+                      [disabled]="isUpdatingProgress"
+                      class="stage-select">
+                      <option value="NOT_STARTED">Not Started</option>
+                      <option value="IN_PROGRESS">In Progress</option>
+                      <option value="COMPLETED">Completed</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
             </div>
           </div>
+
         </div>
       </div>
 
