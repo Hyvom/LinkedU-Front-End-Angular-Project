@@ -23,25 +23,33 @@
     <nav class="sidebar-nav">
       <button (click)="setSection('profile')"
         [class.active]="activeSection === 'profile'" class="nav-btn">
-        👤 Profile
+        <i class="fa-solid fa-user"></i>
+        Profile
       </button>
       <button (click)="setSection('documents')"
         [class.active]="activeSection === 'documents'" class="nav-btn">
-        📄 Documents
+        <i class="fa-solid fa-file-alt"></i>
+        Documents
       </button>
       <button (click)="setSection('progress')"
         [class.active]="activeSection === 'progress'" class="nav-btn">
-        📊 My Progress
+        <i class="fa-solid fa-chart-line"></i>
+        My Progress
       </button>
       <a routerLink="/profile" class="nav-btn nav-link-btn">
-        🔗 Full Profile
+        <i class="fa-solid fa-id-card"></i>
+        Full Profile
       </a>
       <button class="nav-btn nav-chat" disabled>
-        💬 Chat <span class="coming-soon">Soon</span>
+        <i class="fa-solid fa-comment-dots"></i>
+        Chat <span class="coming-soon">Soon</span>
       </button>
     </nav>
 
-    <button (click)="logout()" class="logout-btn">🚪 Logout</button>
+    <button (click)="logout()" class="logout-btn">
+      <i class="fa-solid fa-sign-out-alt"></i>
+      Logout
+    </button>
   </aside>
 
   <!-- ── MAIN CONTENT ── -->
@@ -51,14 +59,23 @@
     <div *ngIf="activeSection === 'profile'">
 
       <div *ngIf="isLoadingProfile" class="loading-state">
-        <div class="spinner"></div><p>Loading profile...</p>
+        <div class="spinner"></div>
+        <p>
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Loading profile...
+        </p>
       </div>
 
       <div *ngIf="!isLoadingProfile && !profile" class="empty-state">
-        <div class="empty-icon">👤</div>
+        <div class="empty-icon">
+          <i class="fa-solid fa-user"></i>
+        </div>
         <h3>No profile found</h3>
         <p>Go to your profile page to set up your student profile.</p>
-        <a routerLink="/profile" class="primary-btn">Go to Profile</a>
+        <a routerLink="/profile" class="primary-btn">
+          <i class="fa-solid fa-arrow-right"></i>
+          Go to Profile
+        </a>
       </div>
 
       <div *ngIf="!isLoadingProfile && profile">
@@ -71,15 +88,33 @@
           </div>
           <div class="hero-info">
             <h2>{{ profile.user?.firstName }} {{ profile.user?.lastName }}</h2>
-            <p class="hero-username">&#64;{{ profile.user?.username }}</p>
-            <p class="hero-email">{{ profile.user?.email }}</p>
+            <p class="hero-username">
+              <i class="fa-solid fa-at"></i>
+              {{ profile.user?.username }}
+            </p>
+            <p class="hero-email">
+              <i class="fa-solid fa-envelope"></i>
+              {{ profile.user?.email }}
+            </p>
             <div class="hero-tags">
-              <span class="tag tag-role">{{ userRole }}</span>
-              <span *ngIf="profile.currentStudyLevel" class="tag tag-level">{{ profile.currentStudyLevel }}</span>
-              <span *ngIf="profile.speciality" class="tag tag-spec">{{ profile.speciality }}</span>
+              <span class="tag tag-role">
+                <i class="fa-solid fa-tag"></i>
+                {{ userRole }}
+              </span>
+              <span *ngIf="profile.currentStudyLevel" class="tag tag-level">
+                <i class="fa-solid fa-graduation-cap"></i>
+                {{ profile.currentStudyLevel }}
+              </span>
+              <span *ngIf="profile.speciality" class="tag tag-spec">
+                <i class="fa-solid fa-flask"></i>
+                {{ profile.speciality }}
+              </span>
             </div>
           </div>
-          <a routerLink="/profile" class="edit-profile-btn">✏️ Edit Profile</a>
+          <a routerLink="/profile" class="edit-profile-btn">
+            <i class="fa-solid fa-pen"></i>
+            Edit Profile
+          </a>
         </div>
 
         <!-- Info Grid -->
@@ -87,7 +122,10 @@
 
           <!-- Academic Card -->
           <div class="info-card">
-            <h4 class="card-title">🎓 Academic Info</h4>
+            <h4 class="card-title">
+              <i class="fa-solid fa-graduation-cap"></i>
+              Academic Info
+            </h4>
             <div class="card-grid">
               <div class="card-item">
                 <span class="item-label">Current Level</span>
@@ -114,13 +152,19 @@
 
           <!-- Bio Card -->
           <div class="info-card">
-            <h4 class="card-title">📝 About Me</h4>
+            <h4 class="card-title">
+              <i class="fa-solid fa-address-card"></i>
+              About Me
+            </h4>
             <p class="bio-text">{{ profile.bio || 'No bio added yet.' }}</p>
           </div>
 
           <!-- Languages Card -->
           <div class="info-card">
-            <h4 class="card-title">🌐 Languages</h4>
+            <h4 class="card-title">
+              <i class="fa-solid fa-language"></i>
+              Languages
+            </h4>
             <div class="lang-chips" *ngIf="profile.languages">
               <ng-container *ngFor="let lang of parseLanguages(profile.languages)">
                 <div class="lang-chip">
@@ -129,7 +173,10 @@
                 </div>
               </ng-container>
             </div>
-            <p *ngIf="!profile.languages" class="text-muted">No languages added.</p>
+            <p *ngIf="!profile.languages" class="text-muted">
+              <i class="fa-solid fa-info-circle"></i>
+              No languages added.
+            </p>
           </div>
 
         </div>
@@ -140,33 +187,45 @@
     <div *ngIf="activeSection === 'documents'">
 
       <div class="section-header">
-        <h2>📄 My Documents</h2>
+        <h2>
+          <i class="fa-solid fa-file-alt"></i>
+          My Documents
+        </h2>
         <p class="section-sub">Upload and manage your required documents</p>
       </div>
 
       <!-- Alerts -->
-      <div *ngIf="uploadSuccess" class="alert alert-success">✅ {{ uploadSuccess }}</div>
-      <div *ngIf="uploadError" class="alert alert-error">⚠️ {{ uploadError }}</div>
+      <div *ngIf="uploadSuccess" class="alert alert-success">
+        <i class="fa-solid fa-circle-check"></i>
+        {{ uploadSuccess }}
+      </div>
+      <div *ngIf="uploadError" class="alert alert-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ uploadError }}
+      </div>
 
       <!-- Document Tabs -->
       <div class="doc-tabs">
         <button (click)="activeDocTab = 'cv'; uploadError = ''; uploadSuccess = ''"
           [class.active]="activeDocTab === 'cv'" class="doc-tab">
-          📋 CV
+          <i class="fa-solid fa-file-pdf"></i>
+          CV
           <span *ngIf="getDocumentByType('CV')"
             [ngClass]="getStatusClass(getDocumentByType('CV')!.status)"
             class="tab-status-dot"></span>
         </button>
         <button (click)="activeDocTab = 'passport'; uploadError = ''; uploadSuccess = ''"
           [class.active]="activeDocTab === 'passport'" class="doc-tab">
-          🛂 Passport
+          <i class="fa-solid fa-passport"></i>
+          Passport
           <span *ngIf="getDocumentByType('PASSPORT')"
             [ngClass]="getStatusClass(getDocumentByType('PASSPORT')!.status)"
             class="tab-status-dot"></span>
         </button>
         <button (click)="activeDocTab = 'idcard'; uploadError = ''; uploadSuccess = ''"
           [class.active]="activeDocTab === 'idcard'" class="doc-tab">
-          🪪 ID Card
+          <i class="fa-solid fa-id-card"></i>
+          ID Card
           <span *ngIf="getDocumentByType('ID_CARD')"
             [ngClass]="getStatusClass(getDocumentByType('ID_CARD')!.status)"
             class="tab-status-dot"></span>
@@ -175,7 +234,11 @@
 
       <!-- Loading -->
       <div *ngIf="isLoadingDocs" class="loading-state">
-        <div class="spinner"></div><p>Loading documents...</p>
+        <div class="spinner"></div>
+        <p>
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Loading documents...
+        </p>
       </div>
 
       <div *ngIf="!isLoadingDocs" class="doc-content">
@@ -186,8 +249,14 @@
           <div *ngIf="getDocumentByType('CV')" class="doc-existing">
             <div class="doc-existing-header">
               <div>
-                <p class="doc-filename">📎 {{ getDocumentByType('CV')!.fileName }}</p>
-                <p class="doc-date">Uploaded: {{ getDocumentByType('CV')!.uploadedAt | date:'mediumDate' }}</p>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ getDocumentByType('CV')!.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  Uploaded: {{ getDocumentByType('CV')!.uploadedAt | date:'mediumDate' }}
+                </p>
               </div>
               <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('CV')!.status)">
                 {{ getStatusLabel(getDocumentByType('CV')!.status) }}
@@ -197,13 +266,18 @@
 
           <!-- CV Upload Form -->
           <div class="doc-form-card">
-            <h4>{{ getDocumentByType('CV') ? '🔄 Replace CV' : '⬆️ Upload CV' }}</h4>
+            <h4>
+              <i *ngIf="!getDocumentByType('CV')" class="fa-solid fa-upload"></i>
+              <i *ngIf="getDocumentByType('CV')" class="fa-solid fa-rotate"></i>
+              {{ getDocumentByType('CV') ? 'Replace CV' : 'Upload CV' }}
+            </h4>
             <div class="form-group">
               <label class="form-label">CV File (PDF/DOC) *</label>
               <div class="file-input-wrapper">
                 <input type="file" accept=".pdf,.doc,.docx" (change)="onFileSelected($event, 'cv')" class="file-input" id="cv-file" />
                 <label for="cv-file" class="file-label">
-                  {{ cvFile ? cvFile.name : '📂 Choose file...' }}
+                  <i class="fa-solid fa-folder-open"></i>
+                  {{ cvFile ? cvFile.name : 'Choose file...' }}
                 </label>
               </div>
             </div>
@@ -228,7 +302,9 @@
               </div>
             </div>
             <button (click)="uploadCv()" [disabled]="isUploading" class="upload-btn">
-              {{ isUploading ? 'Uploading...' : '⬆️ Upload CV' }}
+              <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
+              <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isUploading ? 'Uploading...' : 'Upload CV' }}
             </button>
           </div>
         </div>
@@ -238,8 +314,14 @@
           <div *ngIf="getDocumentByType('PASSPORT')" class="doc-existing">
             <div class="doc-existing-header">
               <div>
-                <p class="doc-filename">📎 {{ getDocumentByType('PASSPORT')!.fileName }}</p>
-                <p class="doc-date">Uploaded: {{ getDocumentByType('PASSPORT')!.uploadedAt | date:'mediumDate' }}</p>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ getDocumentByType('PASSPORT')!.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  Uploaded: {{ getDocumentByType('PASSPORT')!.uploadedAt | date:'mediumDate' }}
+                </p>
               </div>
               <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('PASSPORT')!.status)">
                 {{ getStatusLabel(getDocumentByType('PASSPORT')!.status) }}
@@ -248,13 +330,18 @@
           </div>
 
           <div class="doc-form-card">
-            <h4>{{ getDocumentByType('PASSPORT') ? '🔄 Replace Passport' : '⬆️ Upload Passport' }}</h4>
+            <h4>
+              <i *ngIf="!getDocumentByType('PASSPORT')" class="fa-solid fa-upload"></i>
+              <i *ngIf="getDocumentByType('PASSPORT')" class="fa-solid fa-rotate"></i>
+              {{ getDocumentByType('PASSPORT') ? 'Replace Passport' : 'Upload Passport' }}
+            </h4>
             <div class="form-group">
               <label class="form-label">Passport File (PDF/Image) *</label>
               <div class="file-input-wrapper">
                 <input type="file" accept=".pdf,image/*" (change)="onFileSelected($event, 'passport')" class="file-input" id="passport-file" />
                 <label for="passport-file" class="file-label">
-                  {{ passportFile ? passportFile.name : '📂 Choose file...' }}
+                  <i class="fa-solid fa-folder-open"></i>
+                  {{ passportFile ? passportFile.name : 'Choose file...' }}
                 </label>
               </div>
             </div>
@@ -274,7 +361,9 @@
                 placeholder="e.g. Tunisia" class="form-input" />
             </div>
             <button (click)="uploadPassport()" [disabled]="isUploading" class="upload-btn">
-              {{ isUploading ? 'Uploading...' : '⬆️ Upload Passport' }}
+              <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
+              <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isUploading ? 'Uploading...' : 'Upload Passport' }}
             </button>
           </div>
         </div>
@@ -284,8 +373,14 @@
           <div *ngIf="getDocumentByType('ID_CARD')" class="doc-existing">
             <div class="doc-existing-header">
               <div>
-                <p class="doc-filename">📎 {{ getDocumentByType('ID_CARD')!.fileName }}</p>
-                <p class="doc-date">Uploaded: {{ getDocumentByType('ID_CARD')!.uploadedAt | date:'mediumDate' }}</p>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ getDocumentByType('ID_CARD')!.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  Uploaded: {{ getDocumentByType('ID_CARD')!.uploadedAt | date:'mediumDate' }}
+                </p>
               </div>
               <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('ID_CARD')!.status)">
                 {{ getStatusLabel(getDocumentByType('ID_CARD')!.status) }}
@@ -294,13 +389,18 @@
           </div>
 
           <div class="doc-form-card">
-            <h4>{{ getDocumentByType('ID_CARD') ? '🔄 Replace ID Card' : '⬆️ Upload ID Card' }}</h4>
+            <h4>
+              <i *ngIf="!getDocumentByType('ID_CARD')" class="fa-solid fa-upload"></i>
+              <i *ngIf="getDocumentByType('ID_CARD')" class="fa-solid fa-rotate"></i>
+              {{ getDocumentByType('ID_CARD') ? 'Replace ID Card' : 'Upload ID Card' }}
+            </h4>
             <div class="form-group">
               <label class="form-label">ID Card File (PDF/Image) *</label>
               <div class="file-input-wrapper">
                 <input type="file" accept=".pdf,image/*" (change)="onFileSelected($event, 'idcard')" class="file-input" id="idcard-file" />
                 <label for="idcard-file" class="file-label">
-                  {{ idCardFile ? idCardFile.name : '📂 Choose file...' }}
+                  <i class="fa-solid fa-folder-open"></i>
+                  {{ idCardFile ? idCardFile.name : 'Choose file...' }}
                 </label>
               </div>
             </div>
@@ -316,69 +416,83 @@
               </div>
             </div>
             <button (click)="uploadIdCard()" [disabled]="isUploading" class="upload-btn">
-              {{ isUploading ? 'Uploading...' : '⬆️ Upload ID Card' }}
+              <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
+              <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isUploading ? 'Uploading...' : 'Upload ID Card' }}
             </button>
           </div>
         </div>
 
       </div>
     </div>
+<!-- ═══════════ PROGRESS SECTION ═══════════ -->
+<div *ngIf="activeSection === 'progress'">
 
-    <!-- ═══════════ PROGRESS SECTION ═══════════ -->
-    <div *ngIf="activeSection === 'progress'">
+  <div class="section-header">
+    <h2>
+      <i class="fa-solid fa-chart-line"></i>
+      My Progress
+    </h2>
+    <p class="section-sub">Track your study abroad application journey</p>
+  </div>
 
-      <div class="section-header">
-        <h2>📊 My Progress</h2>
-        <p class="section-sub">Track your study abroad application journey</p>
+  <div *ngIf="isLoadingProgress" class="loading-state">
+    <div class="spinner"></div>
+    <p>
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading progress...
+    </p>
+  </div>
+
+  <div *ngIf="!isLoadingProgress">
+
+    <!-- Progress Bar -->
+    <div class="progress-overview">
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill"
+          [style.width]="(getCompletedCount() / allStages.length * 100) + '%'">
+        </div>
       </div>
+      <p class="progress-text">
+        <i class="fa-solid fa-check-circle"></i>
+        {{ getCompletedCount() }} / {{ allStages.length }} stages completed
+      </p>
+    </div>
 
-      <div *ngIf="isLoadingProgress" class="loading-state">
-        <div class="spinner"></div><p>Loading progress...</p>
-      </div>
+    <!-- Stages Timeline -->
+    <div class="stages-timeline">
+      <div *ngFor="let stage of allStages; let i = index"
+        class="stage-item" [ngClass]="getStageClass(stage)">
 
-      <div *ngIf="!isLoadingProgress">
+        <div class="stage-connector" *ngIf="i > 0"></div>
 
-        <!-- Progress Bar -->
-        <div class="progress-overview">
-          <div class="progress-bar-wrapper">
-            <div class="progress-bar-fill"
-              [style.width]="(getCompletedCount() / allStages.length * 100) + '%'">
-            </div>
-          </div>
-          <p class="progress-text">
-            {{ getCompletedCount() }} / {{ allStages.length }} stages completed
-          </p>
+        <div class="stage-circle">
+          <i *ngIf="getStageStatus(stage) === 'COMPLETED'" class="fa-solid fa-check"></i>
+          <i *ngIf="getStageStatus(stage) === 'IN_PROGRESS'" class="fa-solid fa-rotate-right fa-spin"></i>
+          <span *ngIf="getStageStatus(stage) === 'NOT_STARTED'">{{ i + 1 }}</span>
         </div>
 
-        <!-- Stages Timeline -->
-        <div class="stages-timeline">
-          <div *ngFor="let stage of allStages; let i = index"
-            class="stage-item" [ngClass]="getStageClass(stage)">
-
-            <div class="stage-connector" *ngIf="i > 0"></div>
-
-            <div class="stage-circle">
-              <span *ngIf="getStageStatus(stage) === 'COMPLETED'">✓</span>
-              <span *ngIf="getStageStatus(stage) === 'IN_PROGRESS'">⟳</span>
-              <span *ngIf="getStageStatus(stage) === 'NOT_STARTED'">{{ i + 1 }}</span>
-            </div>
-
-            <div class="stage-content">
-              <div class="stage-icon">{{ stageIcons[stage] }}</div>
-              <div class="stage-info">
-                <h4 class="stage-name">{{ stageLabels[stage] }}</h4>
-                <span class="stage-status-label">
-                  {{ getStageStatus(stage) === 'COMPLETED' ? 'Completed' :
-                     getStageStatus(stage) === 'IN_PROGRESS' ? 'In Progress' : 'Not Started' }}
-                </span>
-              </div>
-            </div>
-
+        <div class="stage-content">
+          <div class="stage-icon">
+            <i [class]="getStageIcon(stage)"></i>
+          </div>
+          <div class="stage-info">
+            <h4 class="stage-name">{{ getStageLabel(stage) }}</h4>
+            <span class="stage-status-label">
+              <i *ngIf="getStageStatus(stage) === 'COMPLETED'" class="fa-solid fa-check-circle"></i>
+              <i *ngIf="getStageStatus(stage) === 'IN_PROGRESS'" class="fa-solid fa-hourglass-half"></i>
+              <i *ngIf="getStageStatus(stage) === 'NOT_STARTED'" class="fa-regular fa-circle"></i>
+              {{ getStageStatus(stage) === 'COMPLETED' ? 'Completed' :
+                 getStageStatus(stage) === 'IN_PROGRESS' ? 'In Progress' : 'Not Started' }}
+            </span>
           </div>
         </div>
 
       </div>
     </div>
+
+  </div>
+</div>
 
   </main>
 </div>

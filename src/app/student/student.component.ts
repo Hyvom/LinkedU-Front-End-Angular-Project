@@ -58,31 +58,59 @@ export class StudentProfileComponent implements OnInit {
   idCardForm = { numId: '', birthday: '' };
 
   // ── Progress ──
+  
   progressList: Progress[] = [];
   isLoadingProgress = false;
 
+  // Updated allStages with comprehensive stages
   allStages: ProgressStage[] = [
     'ORIENTATION',
     'DOSSIER_PREPARATION',
-    'INTERVIEW',
-    'DOCUMENT_VERIFICATION',
-    'ADMISSION_CONFIRMATION'
+    'DOCUMENT_COLLECTION',
+    'LANGUAGE_TESTS',
+    'UNIVERSITY_SELECTION',
+    'APPLICATION_SUBMISSION',
+    'INTERVIEW_PREPARATION',
+    'ACCEPTANCE_LETTER',
+    'VISA_APPLICATION',
+    'ACCOMMODATION',
+    'TRAVEL_PLANNING',
+    'PRE_DEPARTURE',
+    'ARRIVAL_SETTLEMENT'
   ];
 
+  // Updated stageLabels with all stages
   stageLabels: Record<ProgressStage, string> = {
-    ORIENTATION: 'Orientation',
+    ORIENTATION: 'Orientation & Planning',
     DOSSIER_PREPARATION: 'Dossier Preparation',
-    INTERVIEW: 'Interview',
-    DOCUMENT_VERIFICATION: 'Document Verification',
-    ADMISSION_CONFIRMATION: 'Admission Confirmation'
+    DOCUMENT_COLLECTION: 'Document Collection',
+    LANGUAGE_TESTS: 'Language Tests (IELTS/TOEFL)',
+    UNIVERSITY_SELECTION: 'University Selection',
+    APPLICATION_SUBMISSION: 'Application Submission',
+    INTERVIEW_PREPARATION: 'Interview Preparation',
+    ACCEPTANCE_LETTER: 'Acceptance Letter',
+    VISA_APPLICATION: 'Visa Application',
+    ACCOMMODATION: 'Accommodation Arrangement',
+    TRAVEL_PLANNING: 'Travel Planning',
+    PRE_DEPARTURE: 'Pre-Departure Preparation',
+    ARRIVAL_SETTLEMENT: 'Arrival & Settlement'
   };
 
+  // Updated stageIcons with FontAwesome classes (will be used in getStageIcon method)
   stageIcons: Record<ProgressStage, string> = {
-    ORIENTATION: '🎯',
-    DOSSIER_PREPARATION: '📁',
-    INTERVIEW: '🎤',
-    DOCUMENT_VERIFICATION: '✅',
-    ADMISSION_CONFIRMATION: '🎓'
+    ORIENTATION: 'fa-solid fa-compass',
+    DOSSIER_PREPARATION: 'fa-solid fa-folder-open',
+    DOCUMENT_COLLECTION: 'fa-solid fa-file-alt',
+    LANGUAGE_TESTS: 'fa-solid fa-language',
+    UNIVERSITY_SELECTION: 'fa-solid fa-university',
+    APPLICATION_SUBMISSION: 'fa-solid fa-paper-plane',
+    INTERVIEW_PREPARATION: 'fa-solid fa-chalkboard-user',
+    ACCEPTANCE_LETTER: 'fa-solid fa-envelope-open-text',
+    VISA_APPLICATION: 'fa-solid fa-passport',
+    ACCOMMODATION: 'fa-solid fa-building',
+    TRAVEL_PLANNING: 'fa-solid fa-plane',
+    PRE_DEPARTURE: 'fa-solid fa-suitcase',
+    ARRIVAL_SETTLEMENT: 'fa-solid fa-home'
   };
 
   constructor(
@@ -133,6 +161,15 @@ export class StudentProfileComponent implements OnInit {
     if (!this.profile?.avatar) return '';
     if (this.profile.avatar.startsWith('http')) return this.profile.avatar;
     return 'http://localhost:8080' + this.profile.avatar;
+  }
+
+  // ── Progress Helper Methods ──
+  getStageIcon(stage: ProgressStage): string {
+    return this.stageIcons[stage] || 'fa-solid fa-circle-info';
+  }
+
+  getStageLabel(stage: ProgressStage): string {
+    return this.stageLabels[stage] || stage;
   }
 
   // ── Documents ──
@@ -266,5 +303,4 @@ export class StudentProfileComponent implements OnInit {
   parseLanguages(json: string): { name: string; level: string; rank: number }[] {
     try { return JSON.parse(json); } catch { return []; }
   }
-  
 }

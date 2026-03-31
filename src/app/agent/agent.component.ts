@@ -60,28 +60,55 @@ export class AgentComponent implements OnInit {
   progressSuccess = '';
   progressError = '';
 
+  // Updated allStages with comprehensive stages
   allStages: ProgressStage[] = [
     'ORIENTATION',
     'DOSSIER_PREPARATION',
-    'INTERVIEW',
-    'DOCUMENT_VERIFICATION',
-    'ADMISSION_CONFIRMATION'
+    'DOCUMENT_COLLECTION',
+    'LANGUAGE_TESTS',
+    'UNIVERSITY_SELECTION',
+    'APPLICATION_SUBMISSION',
+    'INTERVIEW_PREPARATION',
+    'ACCEPTANCE_LETTER',
+    'VISA_APPLICATION',
+    'ACCOMMODATION',
+    'TRAVEL_PLANNING',
+    'PRE_DEPARTURE',
+    'ARRIVAL_SETTLEMENT'
   ];
 
+  // Updated stageLabels with all stages
   stageLabels: Record<ProgressStage, string> = {
-    ORIENTATION: 'Orientation',
+    ORIENTATION: 'Orientation & Planning',
     DOSSIER_PREPARATION: 'Dossier Preparation',
-    INTERVIEW: 'Interview',
-    DOCUMENT_VERIFICATION: 'Document Verification',
-    ADMISSION_CONFIRMATION: 'Admission Confirmation'
+    DOCUMENT_COLLECTION: 'Document Collection',
+    LANGUAGE_TESTS: 'Language Tests (IELTS/TOEFL)',
+    UNIVERSITY_SELECTION: 'University Selection',
+    APPLICATION_SUBMISSION: 'Application Submission',
+    INTERVIEW_PREPARATION: 'Interview Preparation',
+    ACCEPTANCE_LETTER: 'Acceptance Letter',
+    VISA_APPLICATION: 'Visa Application',
+    ACCOMMODATION: 'Accommodation Arrangement',
+    TRAVEL_PLANNING: 'Travel Planning',
+    PRE_DEPARTURE: 'Pre-Departure Preparation',
+    ARRIVAL_SETTLEMENT: 'Arrival & Settlement'
   };
 
+  // Updated stageIcons with FontAwesome classes
   stageIcons: Record<ProgressStage, string> = {
-    ORIENTATION: '🎯',
-    DOSSIER_PREPARATION: '📁',
-    INTERVIEW: '🎤',
-    DOCUMENT_VERIFICATION: '✅',
-    ADMISSION_CONFIRMATION: '🎓'
+    ORIENTATION: 'fa-solid fa-compass',
+    DOSSIER_PREPARATION: 'fa-solid fa-folder-open',
+    DOCUMENT_COLLECTION: 'fa-solid fa-file-alt',
+    LANGUAGE_TESTS: 'fa-solid fa-language',
+    UNIVERSITY_SELECTION: 'fa-solid fa-university',
+    APPLICATION_SUBMISSION: 'fa-solid fa-paper-plane',
+    INTERVIEW_PREPARATION: 'fa-solid fa-chalkboard-user',
+    ACCEPTANCE_LETTER: 'fa-solid fa-envelope-open-text',
+    VISA_APPLICATION: 'fa-solid fa-passport',
+    ACCOMMODATION: 'fa-solid fa-building',
+    TRAVEL_PLANNING: 'fa-solid fa-plane',
+    PRE_DEPARTURE: 'fa-solid fa-suitcase',
+    ARRIVAL_SETTLEMENT: 'fa-solid fa-home'
   };
 
   constructor(
@@ -254,9 +281,18 @@ export class AgentComponent implements OnInit {
   }
 
   getStatusLabel(status: string): string {
-    if (status === 'APPROVED') return '✅ Approved';
-    if (status === 'REJECTED') return '❌ Rejected';
-    return '⏳ Pending';
+    if (status === 'APPROVED') return 'Approved';
+    if (status === 'REJECTED') return 'Rejected';
+    return 'Pending';
+  }
+
+  // ── Progress Helper Methods ──
+  getStageIcon(stage: ProgressStage): string {
+    return this.stageIcons[stage] || 'fa-solid fa-circle-info';
+  }
+
+  getStageLabel(stage: ProgressStage): string {
+    return this.stageLabels[stage] || stage;
   }
 
   // ── Progress ──
@@ -264,8 +300,13 @@ export class AgentComponent implements OnInit {
     if (!this.selectedStudent) return;
     this.isLoadingProgress = true;
     this.agentService.getStudentProgress(this.selectedStudent.id).subscribe({
-      next: (data) => { this.progressList = data; this.isLoadingProgress = false; },
-      error: () => { this.isLoadingProgress = false; }
+      next: (data) => { 
+        this.progressList = data; 
+        this.isLoadingProgress = false;
+      },
+      error: () => { 
+        this.isLoadingProgress = false;
+      }
     });
   }
 
@@ -299,7 +340,7 @@ export class AgentComponent implements OnInit {
     if (existing) {
       this.agentService.updateProgressStatus(existing.id, newStatus).subscribe({
         next: () => {
-          this.progressSuccess = `${this.stageLabels[stage]} updated to ${newStatus.replace('_', ' ')}!`;
+          this.progressSuccess = `${this.getStageLabel(stage)} updated to ${newStatus.replace('_', ' ')}!`;
           this.isUpdatingProgress = false;
           this.loadProgress();
           setTimeout(() => this.progressSuccess = '', 3000);
@@ -314,7 +355,7 @@ export class AgentComponent implements OnInit {
         next: (created) => {
           this.agentService.updateProgressStatus(created.id, newStatus).subscribe({
             next: () => {
-              this.progressSuccess = `${this.stageLabels[stage]} set to ${newStatus.replace('_', ' ')}!`;
+              this.progressSuccess = `${this.getStageLabel(stage)} set to ${newStatus.replace('_', ' ')}!`;
               this.isUpdatingProgress = false;
               this.loadProgress();
               setTimeout(() => this.progressSuccess = '', 3000);

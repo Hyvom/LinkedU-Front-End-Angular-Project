@@ -357,12 +357,21 @@ export interface StudentDocument {
 // ===========================
 // PROGRESS MODELS
 // ===========================
-export type ProgressStage =
-  'ORIENTATION' |
-  'DOSSIER_PREPARATION' |
-  'INTERVIEW' |
-  'DOCUMENT_VERIFICATION' |
-  'ADMISSION_CONFIRMATION';
+// In your shared/models/models.ts file
+export type ProgressStage = 
+  | 'ORIENTATION'
+  | 'DOSSIER_PREPARATION'
+  | 'DOCUMENT_COLLECTION'
+  | 'LANGUAGE_TESTS'
+  | 'UNIVERSITY_SELECTION'
+  | 'APPLICATION_SUBMISSION'
+  | 'INTERVIEW_PREPARATION'
+  | 'ACCEPTANCE_LETTER'
+  | 'VISA_APPLICATION'
+  | 'ACCOMMODATION'
+  | 'TRAVEL_PLANNING'
+  | 'PRE_DEPARTURE'
+  | 'ARRIVAL_SETTLEMENT';
 
 export type ProgressStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
 
