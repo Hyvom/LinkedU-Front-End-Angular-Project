@@ -3,7 +3,10 @@
   <!-- Loading -->
   <div *ngIf="isLoading" class="profile-loading">
     <div class="loading-spinner"></div>
-    <p>Loading profile...</p>
+    <p>
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading profile...
+    </p>
   </div>
 
   <!-- Main Content -->
@@ -31,21 +34,12 @@
           title="Change avatar">
           <input type="file" accept="image/*" (change)="onAvatarSelected($event)"
             [disabled]="isUploadingAvatar" style="display:none" />
-          <svg *ngIf="!isUploadingAvatar" width="14" height="14" fill="none"
-            stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-          <svg *ngIf="isUploadingAvatar" class="spin" width="14" height="14" fill="none"
-            stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
+          <i *ngIf="!isUploadingAvatar" class="fa-solid fa-camera"></i>
+          <i *ngIf="isUploadingAvatar" class="fa-solid fa-spinner fa-spin"></i>
         </label>
 
         <div class="role-badge" [ngClass]="getRoleBadgeClass()">
+          <i class="fa-solid fa-graduation-cap"></i>
           {{ userRole }}
         </div>
       </div>
@@ -54,21 +48,36 @@
         <h2 class="sidebar-name">
           {{ profile?.user?.firstName || '—' }} {{ profile?.user?.lastName || '' }}
         </h2>
-        <p class="sidebar-username">&#64;{{ profile?.user?.username || '—' }}</p>
-        <p class="sidebar-email">{{ profile?.user?.email || '—' }}</p>
+        <p class="sidebar-username">
+          <i class="fa-solid fa-at"></i>
+          {{ profile?.user?.username || '—' }}
+        </p>
+        <p class="sidebar-email">
+          <i class="fa-solid fa-envelope"></i>
+          {{ profile?.user?.email || '—' }}
+        </p>
       </div>
 
       <div class="sidebar-stats">
         <div class="stat-item">
-          <span class="stat-label">Member Since</span>
+          <span class="stat-label">
+            <i class="fa-regular fa-calendar"></i>
+            Member Since
+          </span>
           <span class="stat-value">2024</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Role</span>
+          <span class="stat-label">
+            <i class="fa-solid fa-tag"></i>
+            Role
+          </span>
           <span class="stat-value">{{ userRole }}</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Profile</span>
+          <span class="stat-label">
+            <i class="fa-solid fa-check-circle"></i>
+            Profile
+          </span>
           <span class="stat-value" [class.text-green]="hasProfile" [class.text-gray]="!hasProfile">
             {{ hasProfile ? 'Complete' : 'Incomplete' }}
           </span>
@@ -77,10 +86,12 @@
 
       <!-- Edit Button -->
       <button *ngIf="!isEditing" (click)="startEditing()" class="edit-btn">
-        ✏️ {{ hasProfile ? 'Edit Profile' : 'Create Profile' }}
+        <i class="fa-solid fa-pen"></i>
+        {{ hasProfile ? 'Edit Profile' : 'Create Profile' }}
       </button>
       <button *ngIf="isEditing" (click)="cancelEditing()" class="cancel-btn">
-        ✕ Cancel
+        <i class="fa-solid fa-times"></i>
+        Cancel
       </button>
     </div>
 
@@ -88,15 +99,23 @@
     <div class="profile-main">
 
       <!-- Messages -->
-      <div *ngIf="successMessage" class="alert alert-success">✅ {{ successMessage }}</div>
-      <div *ngIf="errorMessage" class="alert alert-error">⚠️ {{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        <i class="fa-solid fa-circle-check"></i>
+        {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ errorMessage }}
+      </div>
 
       <!-- VIEW MODE -->
       <div *ngIf="!isEditing">
 
         <!-- No profile yet -->
         <div *ngIf="!hasProfile" class="no-profile">
-          <div class="no-profile-icon">👤</div>
+          <div class="no-profile-icon">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
           <h3>No profile yet</h3>
           <p>Click "Create Profile" to set up your student profile.</p>
         </div>
@@ -106,30 +125,49 @@
 
           <!-- Section: About -->
           <div class="profile-section">
-            <h3 class="section-title">About</h3>
+            <h3 class="section-title">
+              <i class="fa-solid fa-address-card"></i>
+              About
+            </h3>
             <p class="bio-text">{{ profile?.bio || 'No bio added yet.' }}</p>
           </div>
+
           <!-- Section: Contact & Status -->
           <div class="profile-section">
-            <h3 class="section-title">Contact & Status</h3>
+            <h3 class="section-title">
+              <i class="fa-solid fa-phone"></i>
+              Contact & Status
+            </h3>
             <div class="info-grid">
               <div class="info-item">
-                <span class="info-label">Status</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-circle"></i>
+                  Status
+                </span>
                 <span class="info-value">
                   <span class="status-dot" [ngClass]="getStatusClass()"></span>
                   {{ profile?.onlineStatus || '—' }}
                 </span>
               </div>
               <div class="info-item">
-                <span class="info-label">Availability</span>
+                <span class="info-label">
+                  <i class="fa-regular fa-clock"></i>
+                  Availability
+                </span>
                 <span class="info-value">{{ profile?.availabilityTime || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Address</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-location-dot"></i>
+                  Address
+                </span>
                 <span class="info-value">{{ profile?.address || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Phone</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-phone"></i>
+                  Phone
+                </span>
                 <span class="info-value">{{ profile?.phoneNumber || '—' }}</span>
               </div>
             </div>
@@ -137,30 +175,51 @@
 
           <!-- Section: Academic -->
           <div class="profile-section">
-            <h3 class="section-title">Academic Info</h3>
+            <h3 class="section-title">
+              <i class="fa-solid fa-graduation-cap"></i>
+              Academic Info
+            </h3>
             <div class="info-grid">
               <div class="info-item">
-                <span class="info-label">Current Level</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-book-open"></i>
+                  Current Level
+                </span>
                 <span class="info-value">{{ profile?.currentStudyLevel || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Wished Level</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-chart-line"></i>
+                  Wished Level
+                </span>
                 <span class="info-value">{{ profile?.wishedStudyLevel || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Speciality</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-flask"></i>
+                  Speciality
+                </span>
                 <span class="info-value">{{ profile?.speciality || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">University Year</span>
+                <span class="info-label">
+                  <i class="fa-regular fa-calendar-alt"></i>
+                  University Year
+                </span>
                 <span class="info-value">{{ profile?.universityYear ? 'Year ' + profile?.universityYear : '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">College Type</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-building"></i>
+                  College Type
+                </span>
                 <span class="info-value">{{ profile?.collegeType || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Budget</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-dollar-sign"></i>
+                  Budget
+                </span>
                 <span class="info-value">{{ profile?.budget ? '$' + profile?.budget : '—' }}</span>
               </div>
             </div>
@@ -168,14 +227,20 @@
 
           <!-- Section: Languages -->
           <div class="profile-section">
-            <h3 class="section-title">Languages</h3>
+            <h3 class="section-title">
+              <i class="fa-solid fa-language"></i>
+              Languages
+            </h3>
             <div class="languages-list" *ngIf="languages.length > 0">
               <div *ngFor="let lang of languages" class="lang-chip">
                 <span class="lang-name">{{ lang.name }}</span>
                 <span class="lang-level">{{ lang.level }}</span>
               </div>
             </div>
-            <p *ngIf="languages.length === 0" class="text-muted">No languages added.</p>
+            <p *ngIf="languages.length === 0" class="text-muted">
+              <i class="fa-solid fa-info-circle"></i>
+              No languages added.
+            </p>
           </div>
 
         </div>
@@ -183,13 +248,19 @@
 
       <!-- EDIT MODE -->
       <div *ngIf="isEditing">
-        <h3 class="form-title">{{ hasProfile ? 'Update Profile' : 'Create Profile' }}</h3>
+        <h3 class="form-title">
+          <i class="fa-solid fa-pen"></i>
+          {{ hasProfile ? 'Update Profile' : 'Create Profile' }}
+        </h3>
 
         <form class="profile-form" (ngSubmit)="onSave()">
 
           <!-- Bio -->
           <div class="form-group">
-            <label class="form-label">Bio</label>
+            <label class="form-label">
+              <i class="fa-solid fa-align-left"></i>
+              Bio
+            </label>
             <textarea name="bio" [(ngModel)]="form.bio" rows="3"
               placeholder="Tell us about yourself..."
               class="form-input form-textarea"></textarea>
@@ -197,14 +268,21 @@
 
           <!-- Date of Birth -->
           <div class="form-group">
-            <label class="form-label">Date of Birth</label>
+            <label class="form-label">
+              <i class="fa-regular fa-calendar"></i>
+              Date of Birth
+            </label>
             <input type="date" name="dateOfBirth" [(ngModel)]="form.dateOfBirth"
               class="form-input" />
           </div>
-          <!-- ── Online Status + Availability ── -->
+
+          <!-- Online Status + Availability -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Online Status</label>
+              <label class="form-label">
+                <i class="fa-solid fa-circle"></i>
+                Online Status
+              </label>
               <select name="onlineStatus" [(ngModel)]="form.onlineStatus"
                 class="form-input form-select">
                 <option [ngValue]="undefined">— Select —</option>
@@ -212,23 +290,32 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Availability Time</label>
+              <label class="form-label">
+                <i class="fa-regular fa-clock"></i>
+                Availability Time
+              </label>
               <input type="text" name="availabilityTime" [(ngModel)]="form.availabilityTime"
                 placeholder="e.g. 9AM – 5PM"
                 class="form-input" />
             </div>
           </div>
 
-          <!-- ── Address + Phone ── -->
+          <!-- Address + Phone -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Address</label>
+              <label class="form-label">
+                <i class="fa-solid fa-location-dot"></i>
+                Address
+              </label>
               <input type="text" name="address" [(ngModel)]="form.address"
                 placeholder="e.g. 12 Rue de Paris, Tunis"
                 class="form-input" />
             </div>
             <div class="form-group">
-              <label class="form-label">Phone Number</label>
+              <label class="form-label">
+                <i class="fa-solid fa-phone"></i>
+                Phone Number
+              </label>
               <input type="text" name="phoneNumber" [(ngModel)]="form.phoneNumber"
                 placeholder="e.g. +216 XX XXX XXX"
                 class="form-input" />
@@ -238,7 +325,10 @@
           <!-- Academic Row -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Current Study Level</label>
+              <label class="form-label">
+                <i class="fa-solid fa-graduation-cap"></i>
+                Current Study Level
+              </label>
               <select name="currentStudyLevel" [(ngModel)]="form.currentStudyLevel"
                 class="form-input form-select">
                 <option [ngValue]="undefined">— Select —</option>
@@ -246,7 +336,10 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Wished Study Level</label>
+              <label class="form-label">
+                <i class="fa-solid fa-chart-line"></i>
+                Wished Study Level
+              </label>
               <select name="wishedStudyLevel" [(ngModel)]="form.wishedStudyLevel"
                 class="form-input form-select">
                 <option [ngValue]="undefined">— Select —</option>
@@ -258,13 +351,19 @@
           <!-- Speciality + Year -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Speciality</label>
+              <label class="form-label">
+                <i class="fa-solid fa-flask"></i>
+                Speciality
+              </label>
               <input type="text" name="speciality" [(ngModel)]="form.speciality"
                 placeholder="e.g. Computer Science"
                 class="form-input" />
             </div>
             <div class="form-group">
-              <label class="form-label">University Year</label>
+              <label class="form-label">
+                <i class="fa-regular fa-calendar-alt"></i>
+                University Year
+              </label>
               <select name="universityYear" [(ngModel)]="form.universityYear"
                 class="form-input form-select">
                 <option [ngValue]="undefined">— Select —</option>
@@ -276,7 +375,10 @@
           <!-- College Type + Budget -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">College Type</label>
+              <label class="form-label">
+                <i class="fa-solid fa-building"></i>
+                College Type
+              </label>
               <select name="collegeType" [(ngModel)]="form.collegeType"
                 class="form-input form-select">
                 <option [ngValue]="undefined">— Select —</option>
@@ -284,7 +386,10 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Budget (USD)</label>
+              <label class="form-label">
+                <i class="fa-solid fa-dollar-sign"></i>
+                Budget (USD)
+              </label>
               <input type="number" name="budget" [(ngModel)]="form.budget"
                 placeholder="e.g. 15000"
                 class="form-input" />
@@ -294,8 +399,14 @@
           <!-- Languages -->
           <div class="form-group">
             <div class="languages-header">
-              <label class="form-label">Languages</label>
-              <button type="button" (click)="addLanguage()" class="add-lang-btn">+ Add</button>
+              <label class="form-label">
+                <i class="fa-solid fa-language"></i>
+                Languages
+              </label>
+              <button type="button" (click)="addLanguage()" class="add-lang-btn">
+                <i class="fa-solid fa-plus"></i>
+                Add
+              </button>
             </div>
             <div *ngFor="let lang of languages; let i = index" class="lang-row">
               <input [(ngModel)]="lang.name" [name]="'lang_name_' + i"
@@ -306,13 +417,18 @@
                 class="form-input form-select lang-select">
                 <option *ngFor="let lvl of languageLevels" [value]="lvl">{{ lvl }}</option>
               </select>
-              <button type="button" (click)="removeLanguage(i)" class="remove-lang-btn">✕</button>
+              <button type="button" (click)="removeLanguage(i)" class="remove-lang-btn">
+                <i class="fa-solid fa-times"></i>
+              </button>
             </div>
           </div>
 
           <!-- Avatar URL -->
           <div class="form-group">
-            <label class="form-label">Avatar URL (optional)</label>
+            <label class="form-label">
+              <i class="fa-solid fa-image"></i>
+              Avatar URL (optional)
+            </label>
             <input type="text" name="avatar" [(ngModel)]="form.avatar"
               placeholder="https://..."
               class="form-input" />
@@ -320,8 +436,13 @@
 
           <!-- Submit -->
           <div class="form-actions">
-            <button type="button" (click)="cancelEditing()" class="cancel-btn">Cancel</button>
+            <button type="button" (click)="cancelEditing()" class="cancel-btn">
+              <i class="fa-solid fa-times"></i>
+              Cancel
+            </button>
             <button type="submit" [disabled]="isSaving" class="save-btn">
+              <i *ngIf="!isSaving" class="fa-solid fa-save"></i>
+              <i *ngIf="isSaving" class="fa-solid fa-spinner fa-spin"></i>
               {{ isSaving ? 'Saving...' : hasProfile ? 'Update Profile' : 'Create Profile' }}
             </button>
           </div>

@@ -2,7 +2,10 @@
 
   <div *ngIf="isLoading" class="profile-loading">
     <div class="loading-spinner"></div>
-    <p>Loading profile...</p>
+    <p>
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading profile...
+    </p>
   </div>
 
   <div *ngIf="!isLoading" class="profile-container">
@@ -24,42 +27,50 @@
         <label class="avatar-upload-btn" [class.disabled]="isUploadingAvatar" title="Change avatar">
           <input type="file" accept="image/*" (change)="onAvatarSelected($event)"
             [disabled]="isUploadingAvatar" style="display:none" />
-          <svg *ngIf="!isUploadingAvatar" width="14" height="14" fill="none"
-            stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-          <svg *ngIf="isUploadingAvatar" class="spin" width="14" height="14" fill="none"
-            stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
+          <i *ngIf="!isUploadingAvatar" class="fa-solid fa-camera"></i>
+          <i *ngIf="isUploadingAvatar" class="fa-solid fa-spinner fa-spin"></i>
         </label>
 
-        <div class="role-badge" [ngClass]="getRoleBadgeClass()">{{ userRole }}</div>
+        <div class="role-badge" [ngClass]="getRoleBadgeClass()">
+          <i class="fa-solid fa-tag"></i>
+          {{ userRole }}
+        </div>
       </div>
 
       <div class="sidebar-info">
         <h2 class="sidebar-name">
           {{ profile?.user?.firstName || '—' }} {{ profile?.user?.lastName || '' }}
         </h2>
-        <p class="sidebar-username">&#64;{{ profile?.user?.username || '—' }}</p>
-        <p class="sidebar-email">{{ profile?.user?.email || '—' }}</p>
+        <p class="sidebar-username">
+          <i class="fa-solid fa-at"></i>
+          {{ profile?.user?.username || '—' }}
+        </p>
+        <p class="sidebar-email">
+          <i class="fa-solid fa-envelope"></i>
+          {{ profile?.user?.email || '—' }}
+        </p>
       </div>
 
       <div class="sidebar-stats">
         <div class="stat-item">
-          <span class="stat-label">Member Since</span>
+          <span class="stat-label">
+            <i class="fa-regular fa-calendar"></i>
+            Member Since
+          </span>
           <span class="stat-value">2024</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Role</span>
+          <span class="stat-label">
+            <i class="fa-solid fa-tag"></i>
+            Role
+          </span>
           <span class="stat-value">{{ userRole }}</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Profile</span>
+          <span class="stat-label">
+            <i class="fa-solid fa-check-circle"></i>
+            Profile
+          </span>
           <span class="stat-value" [class.text-green]="hasProfile" [class.text-gray]="!hasProfile">
             {{ hasProfile ? 'Complete' : 'Incomplete' }}
           </span>
@@ -67,21 +78,33 @@
       </div>
 
       <button *ngIf="!isEditing" (click)="startEditing()" class="edit-btn">
-        ✏️ {{ hasProfile ? 'Edit Profile' : 'Create Profile' }}
+        <i class="fa-solid fa-pen"></i>
+        {{ hasProfile ? 'Edit Profile' : 'Create Profile' }}
       </button>
-      <button *ngIf="isEditing" (click)="cancelEditing()" class="cancel-btn">✕ Cancel</button>
+      <button *ngIf="isEditing" (click)="cancelEditing()" class="cancel-btn">
+        <i class="fa-solid fa-times"></i>
+        Cancel
+      </button>
     </div>
 
     <!-- Right Panel -->
     <div class="profile-main">
 
-      <div *ngIf="successMessage" class="alert alert-success">✅ {{ successMessage }}</div>
-      <div *ngIf="errorMessage" class="alert alert-error">⚠️ {{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        <i class="fa-solid fa-circle-check"></i>
+        {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ errorMessage }}
+      </div>
 
       <!-- VIEW MODE -->
       <div *ngIf="!isEditing">
         <div *ngIf="!hasProfile" class="no-profile">
-          <div class="no-profile-icon">👤</div>
+          <div class="no-profile-icon">
+            <i class="fa-solid fa-user"></i>
+          </div>
           <h3>No profile yet</h3>
           <p>Click "Create Profile" to set up your agent profile.</p>
         </div>
@@ -90,39 +113,63 @@
 
           <!-- About -->
           <div class="profile-section">
-            <h3 class="section-title">About</h3>
+            <h3 class="section-title">
+              <i class="fa-solid fa-address-card"></i>
+              About
+            </h3>
             <p class="bio-text">{{ profile?.bio || 'No bio added yet.' }}</p>
           </div>
 
           <!-- Contact & Status -->
           <div class="profile-section">
-            <h3 class="section-title">Contact & Status</h3>
+            <h3 class="section-title">
+              <i class="fa-solid fa-phone"></i>
+              Contact & Status
+            </h3>
             <div class="info-grid">
               <div class="info-item">
-                <span class="info-label">Status</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-circle"></i>
+                  Status
+                </span>
                 <span class="info-value">
                   <span class="status-dot" [ngClass]="getStatusClass()"></span>
                   {{ profile?.onlineStatus || '—' }}
                 </span>
               </div>
               <div class="info-item">
-                <span class="info-label">Availability</span>
+                <span class="info-label">
+                  <i class="fa-regular fa-clock"></i>
+                  Availability
+                </span>
                 <span class="info-value">{{ profile?.availabilityTime || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Address</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-location-dot"></i>
+                  Address
+                </span>
                 <span class="info-value">{{ profile?.address || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Phone</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-phone"></i>
+                  Phone
+                </span>
                 <span class="info-value">{{ profile?.phoneNumber || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Contact Name</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-user"></i>
+                  Contact Name
+                </span>
                 <span class="info-value">{{ profile?.contactName || '—' }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Contact Email</span>
+                <span class="info-label">
+                  <i class="fa-solid fa-envelope"></i>
+                  Contact Email
+                </span>
                 <span class="info-value">{{ profile?.email || '—' }}</span>
               </div>
             </div>
@@ -133,13 +180,19 @@
 
       <!-- EDIT MODE -->
       <div *ngIf="isEditing">
-        <h3 class="form-title">{{ hasProfile ? 'Update Profile' : 'Create Profile' }}</h3>
+        <h3 class="form-title">
+          <i class="fa-solid fa-pen"></i>
+          {{ hasProfile ? 'Update Profile' : 'Create Profile' }}
+        </h3>
 
         <form class="profile-form" (ngSubmit)="onSave()">
 
           <!-- Bio -->
           <div class="form-group">
-            <label class="form-label">Bio</label>
+            <label class="form-label">
+              <i class="fa-solid fa-align-left"></i>
+              Bio
+            </label>
             <textarea name="bio" [(ngModel)]="form.bio" rows="3"
               placeholder="Tell us about yourself..."
               class="form-input form-textarea"></textarea>
@@ -147,7 +200,10 @@
 
           <!-- Date of Birth -->
           <div class="form-group">
-            <label class="form-label">Date of Birth</label>
+            <label class="form-label">
+              <i class="fa-regular fa-calendar"></i>
+              Date of Birth
+            </label>
             <input type="date" name="dateOfBirth" [(ngModel)]="form.dateOfBirth"
               class="form-input" />
           </div>
@@ -155,7 +211,10 @@
           <!-- Online Status + Availability -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Online Status</label>
+              <label class="form-label">
+                <i class="fa-solid fa-circle"></i>
+                Online Status
+              </label>
               <select name="onlineStatus" [(ngModel)]="form.onlineStatus"
                 class="form-input form-select">
                 <option [ngValue]="undefined">— Select —</option>
@@ -163,7 +222,10 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Availability Time</label>
+              <label class="form-label">
+                <i class="fa-regular fa-clock"></i>
+                Availability Time
+              </label>
               <input type="text" name="availabilityTime" [(ngModel)]="form.availabilityTime"
                 placeholder="e.g. Mon–Fri 9AM–6PM" class="form-input" />
             </div>
@@ -172,12 +234,18 @@
           <!-- Address + Phone -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Address</label>
+              <label class="form-label">
+                <i class="fa-solid fa-location-dot"></i>
+                Address
+              </label>
               <input type="text" name="address" [(ngModel)]="form.address"
                 placeholder="e.g. 12 Rue de Paris, Tunis" class="form-input" />
             </div>
             <div class="form-group">
-              <label class="form-label">Phone Number</label>
+              <label class="form-label">
+                <i class="fa-solid fa-phone"></i>
+                Phone Number
+              </label>
               <input type="text" name="phoneNumber" [(ngModel)]="form.phoneNumber"
                 placeholder="e.g. +216 XX XXX XXX" class="form-input" />
             </div>
@@ -186,12 +254,18 @@
           <!-- Contact Name + Contact Email -->
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Contact Name</label>
+              <label class="form-label">
+                <i class="fa-solid fa-user"></i>
+                Contact Name
+              </label>
               <input type="text" name="contactName" [(ngModel)]="form.contactName"
                 placeholder="e.g. John Doe" class="form-input" />
             </div>
             <div class="form-group">
-              <label class="form-label">Contact Email</label>
+              <label class="form-label">
+                <i class="fa-solid fa-envelope"></i>
+                Contact Email
+              </label>
               <input type="email" name="email" [(ngModel)]="form.email"
                 placeholder="e.g. agent@company.com" class="form-input" />
             </div>
@@ -199,8 +273,13 @@
 
           <!-- Submit -->
           <div class="form-actions">
-            <button type="button" (click)="cancelEditing()" class="cancel-btn">Cancel</button>
+            <button type="button" (click)="cancelEditing()" class="cancel-btn">
+              <i class="fa-solid fa-times"></i>
+              Cancel
+            </button>
             <button type="submit" [disabled]="isSaving" class="save-btn">
+              <i *ngIf="!isSaving" class="fa-solid fa-save"></i>
+              <i *ngIf="isSaving" class="fa-solid fa-spinner fa-spin"></i>
               {{ isSaving ? 'Saving...' : hasProfile ? 'Update Profile' : 'Create Profile' }}
             </button>
           </div>
