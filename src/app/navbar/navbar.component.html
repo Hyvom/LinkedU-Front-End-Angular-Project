@@ -1,0 +1,115 @@
+<nav class="navbar" [class.scrolled]="scrolled()">
+  <div class="navbar__inner">
+
+    <!-- Logo -->
+    <a class="navbar__logo" routerLink="/" (click)="closeMenu()">
+      <img src="assets/Pictures/navbarlogo.png" alt="LinkedU Logo" />
+    </a>
+
+    <!-- Desktop Links -->
+    <ul class="navbar__links">
+      @for (link of publicLinks; track link.path) {
+        <li>
+          <a [routerLink]="link.path" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: link.path === '/' }">
+            <i *ngIf="link.label === 'Home'" class="fa-solid fa-home"></i>
+            <i *ngIf="link.label === 'Destinations'" class="fa-solid fa-globe"></i>
+            <i *ngIf="link.label === 'Services'" class="fa-solid fa-briefcase"></i>
+            <i *ngIf="link.label === 'Blogs'" class="fa-solid fa-blog"></i>
+            <i *ngIf="link.label === 'About Us'" class="fa-solid fa-info-circle"></i>
+            {{ link.label }}
+          </a>
+        </li>
+      }
+      @if (loggedIn) {
+        @for (link of roleLinks; track link.path) {
+          <li>
+            <a [routerLink]="link.path" routerLinkActive="active">
+              <i *ngIf="link.label === 'Admin Panel'" class="fa-solid fa-shield-haltered"></i>
+              <i *ngIf="link.label === 'Agent Panel'" class="fa-solid fa-user-tie"></i>
+              <i *ngIf="link.label === 'Dashboard'" class="fa-solid fa-chart-line"></i>
+              <i *ngIf="link.label === 'My Profile'" class="fa-solid fa-user"></i>
+              <i *ngIf="link.label === 'Chat'" class="fa-solid fa-comment-dots"></i>
+              <i *ngIf="link.label === 'Ticket'" class="fa-solid fa-ticket"></i>
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      }
+    </ul>
+
+    <!-- Auth Buttons (desktop) -->
+    <div class="navbar__auth">
+      @if (!loggedIn) {
+        <a routerLink="/login" class="btn btn--outline">
+          <i class="fa-solid fa-sign-in-alt"></i>
+          Login
+        </a>
+        <a routerLink="/signup" class="btn btn--primary">
+          <i class="fa-solid fa-user-plus"></i>
+          Register
+        </a>
+      } @else {
+        <button class="btn btn--logout" (click)="logout()">
+          <i class="fa-solid fa-sign-out-alt"></i>
+          Logout
+        </button>
+      }
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="navbar__burger" (click)="toggleMenu()" [class.open]="menuOpen()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div class="navbar__drawer" [class.open]="menuOpen()">
+    <ul>
+      @for (link of publicLinks; track link.path) {
+        <li>
+          <a [routerLink]="link.path" routerLinkActive="active" (click)="closeMenu()">
+            <i *ngIf="link.label === 'Home'" class="fa-solid fa-home"></i>
+            <i *ngIf="link.label === 'Destinations'" class="fa-solid fa-globe"></i>
+            <i *ngIf="link.label === 'Services'" class="fa-solid fa-briefcase"></i>
+            <i *ngIf="link.label === 'Blogs'" class="fa-solid fa-blog"></i>
+            <i *ngIf="link.label === 'About Us'" class="fa-solid fa-info-circle"></i>
+            {{ link.label }}
+          </a>
+        </li>
+      }
+      @if (loggedIn) {
+        @for (link of roleLinks; track link.path) {
+          <li>
+            <a [routerLink]="link.path" routerLinkActive="active" (click)="closeMenu()">
+              <i *ngIf="link.label === 'Admin Panel'" class="fa-solid fa-shield-haltered"></i>
+              <i *ngIf="link.label === 'Agent Panel'" class="fa-solid fa-user-tie"></i>
+              <i *ngIf="link.label === 'Dashboard'" class="fa-solid fa-chart-line"></i>
+              <i *ngIf="link.label === 'My Profile'" class="fa-solid fa-user"></i>
+              <i *ngIf="link.label === 'Chat'" class="fa-solid fa-comment-dots"></i>
+              <i *ngIf="link.label === 'Ticket'" class="fa-solid fa-ticket"></i>
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      }
+    </ul>
+    <div class="drawer__auth">
+      @if (!loggedIn) {
+        <a routerLink="/login" class="btn btn--outline" (click)="closeMenu()">
+          <i class="fa-solid fa-sign-in-alt"></i>
+          Login
+        </a>
+        <a routerLink="/signup" class="btn btn--primary" (click)="closeMenu()">
+          <i class="fa-solid fa-user-plus"></i>
+          Register
+        </a>
+      } @else {
+        <button class="btn btn--logout" (click)="logout()">
+          <i class="fa-solid fa-sign-out-alt"></i>
+          Logout
+        </button>
+      }
+    </div>
+  </div>
+</nav>

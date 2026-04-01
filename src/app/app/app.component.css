@@ -1,1 +1,22 @@
-/* Empty stylesheet */
+/* Fix navbar overlapping content */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding-top: 82px; /* Space for fixed navbar */
+}
+
+/* Adjust for different screen sizes */
+@media (max-width: 968px) {
+  body {
+    padding-top: 72px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 68px;
+  }
+}
