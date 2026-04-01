@@ -302,16 +302,6 @@ export interface ChatRoom {
   createdAt: string;
 }
 
-export interface ChatMessage {
-  id: number;
-  roomId: number;
-  senderId: number;
-  senderName: string;
-  content: string;
-  messageType: MessageType;
-  sentAt: string;
-}
-
 export interface ChatParticipant {
   id: number;
   userId: number;
@@ -357,7 +347,6 @@ export interface StudentDocument {
 // ===========================
 // PROGRESS MODELS
 // ===========================
-// In your shared/models/models.ts file
 export type ProgressStage = 
   | 'ORIENTATION'
   | 'DOSSIER_PREPARATION'
@@ -380,4 +369,22 @@ export interface Progress {
   stage: ProgressStage;
   status: ProgressStatus;
   updatedAt: string;
+}
+
+// ===========================
+// CHAT MODELS
+// ===========================
+export interface ChatMessage {
+  id: number;
+  senderId?: number;
+  receiverId?: number;
+  sender?: { id: number; firstName: string; lastName: string; username: string };
+  receiver?: { id: number; firstName: string; lastName: string; username: string };
+  message: string;
+  timestamp: string;
+  seen: boolean;
+}
+
+export interface UnreadCount {
+  count: number;
 }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { AgentService } from '../core/services/agent.service';
+import { ChatService } from '../core/services/chat.service';
 import {
   AssignedStudent,
   DocumentResponseDTO,
@@ -27,6 +28,7 @@ export class AgentComponent implements OnInit {
   // ── Auth ──
   agentId = 0;
   agentName = '';
+  unreadMessagesCount = 0;
 
   // ── Agent's own profile ──
   agentProfile: AgentProfileResponse | null = null;
@@ -114,6 +116,7 @@ export class AgentComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly agentService: AgentService,
+    private readonly chatService: ChatService,
     private readonly router: Router
   ) {}
 
@@ -121,6 +124,26 @@ export class AgentComponent implements OnInit {
     this.agentId = Number(this.authService.getUserId());
     this.loadAgentProfile();
     this.loadStudents();
+    this.loadUnreadMessagesCount();
+    
+    // Refresh unread count every 30 seconds
+    setInterval(() => {
+      this.loadUnreadMessagesCount();
+    }, 30000);
+  }
+
+  // ── Unread Messages ──
+  loadUnreadMessagesCount(): void {
+    if (!this.agentId) return;
+    
+    this.chatService.getUnreadMessages(this.agentId).subscribe({
+      next: (messages) => {
+        this.unreadMessagesCount = messages.length;
+      },
+      error: () => {
+        this.unreadMessagesCount = 0;
+      }
+    });
   }
 
   logout(): void {

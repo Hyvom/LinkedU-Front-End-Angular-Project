@@ -80,6 +80,13 @@
         My Students
         <span class="nav-count" *ngIf="students.length > 0">{{ students.length }}</span>
       </button>
+      <a routerLink="/chat" class="nav-btn chat-nav-btn">
+        <i class="fa-solid fa-comment-dots"></i>
+        Messages
+        <span class="chat-badge" *ngIf="unreadMessagesCount > 0">
+          {{ unreadMessagesCount > 99 ? '99+' : unreadMessagesCount }}
+        </span>
+      </a>
     </nav>
 
     <button (click)="logout()" class="logout-btn">

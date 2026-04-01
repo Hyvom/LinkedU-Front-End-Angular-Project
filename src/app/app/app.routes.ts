@@ -39,6 +39,8 @@ import { AgentProfileComponent } from '../profile/agent-profile.component/agent-
 import { AgentComponent } from '../agent/agent.component';
 import { TicketComponent } from '../ticket/ticket.component';
 
+//Chat
+import { ChatComponent } from '../chat/chat.component';
 
 export const routes: Routes = [
   // ── Public ──────────────────────────────────────────
@@ -73,6 +75,7 @@ export const routes: Routes = [
   { path: 'profile/guest',   component: GuestProfileComponent,  canActivate: [authGuard] },
   { path: 'profile/agent',   component: AgentProfileComponent,  canActivate: [authGuard] },
   { path: 'profile',         canActivate: [profileRedirectGuard], component: StudentProfileComponent },
+  
   // ── Admin only ───────────────────────────────────────
   {
     path: 'admin',
@@ -115,6 +118,13 @@ export const routes: Routes = [
     data: { roles: ['AGENT'] }
   },
 
+  //Chat
+  {
+    path: 'chat',
+    component: ChatComponent,
+    canActivate: [authGuard]
+  },
+  
   {
     path: 'ticket',
     component: TicketComponent,

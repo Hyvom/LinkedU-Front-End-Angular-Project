@@ -6,6 +6,7 @@ import { AuthService } from '../core/services/auth.service';
 import { ProfileService } from '../core/services/profile.service';
 import { DocumentService } from '../core/services/document.service';
 import { ProgressService } from '../core/services/progress.service';
+import { ChatService } from '../core/services/chat.service';
 import {
   StudentProfileResponse,
   StudentDocument,
@@ -32,6 +33,7 @@ export class StudentProfileComponent implements OnInit {
   // ── User ──
   userId = 0;
   userRole = '';
+  unreadMessagesCount = 0;
 
   // ── Profile ──
   profile: StudentProfileResponse | null = null;
@@ -118,6 +120,7 @@ export class StudentProfileComponent implements OnInit {
     private readonly profileService: ProfileService,
     private readonly documentService: DocumentService,
     private readonly progressService: ProgressService,
+    private readonly chatService: ChatService,
     private readonly router: Router
   ) {}
 
@@ -125,8 +128,28 @@ export class StudentProfileComponent implements OnInit {
     const id = this.authService.getUserId();
     this.userId = id ? Number(id) : 0;
     this.userRole = this.authService.getUserRole() || '';
-    console.log('Student userId:', this.userId); // debug
+    console.log('Student userId:', this.userId);
     this.loadProfile();
+    this.loadUnreadMessagesCount();
+    
+    // Refresh unread count every 30 seconds
+    setInterval(() => {
+      this.loadUnreadMessagesCount();
+    }, 30000);
+  }
+
+  // ── Unread Messages ──
+  loadUnreadMessagesCount(): void {
+    if (!this.userId) return;
+    
+    this.chatService.getUnreadMessages(this.userId).subscribe({
+      next: (messages) => {
+        this.unreadMessagesCount = messages.length;
+      },
+      error: () => {
+        this.unreadMessagesCount = 0;
+      }
+    });
   }
 
   // ── Navigation ──
@@ -270,9 +293,9 @@ export class StudentProfileComponent implements OnInit {
   }
 
   getStatusLabel(status: string): string {
-    if (status === 'APPROVED') return '✅ Approved';
-    if (status === 'REJECTED') return '❌ Rejected';
-    return '⏳ Pending';
+    if (status === 'APPROVED') return 'Approved';
+    if (status === 'REJECTED') return 'Rejected';
+    return 'Pending';
   }
 
   // ── Progress ──

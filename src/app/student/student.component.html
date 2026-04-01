@@ -40,11 +40,14 @@
         <i class="fa-solid fa-id-card"></i>
         Full Profile
       </a>
-      <button class="nav-btn nav-chat" disabled>
+      <a routerLink="/chat" class="nav-btn nav-link-btn chat-nav-btn">
         <i class="fa-solid fa-comment-dots"></i>
-        Chat <span class="coming-soon">Soon</span>
-      </button>
-    </nav>
+        Chat With Agent
+        <span class="chat-badge" *ngIf="unreadMessagesCount > 0">
+          {{ unreadMessagesCount > 99 ? '99+' : unreadMessagesCount }}
+        </span>
+      </a>
+</nav>
 
     <button (click)="logout()" class="logout-btn">
       <i class="fa-solid fa-sign-out-alt"></i>

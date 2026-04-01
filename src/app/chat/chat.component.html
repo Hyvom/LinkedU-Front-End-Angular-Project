@@ -1,0 +1,152 @@
+<div class="chat-layout">
+ <div class="chat-container">
+  <!-- ── CONTACTS SIDEBAR ── -->
+  <aside class="contacts-panel">
+
+    <div class="contacts-header">
+      <h3>
+        <i class="fa-solid fa-comment-dots"></i>
+        Messages
+      </h3>
+      <span *ngIf="getTotalUnread() > 0" class="total-unread">{{ getTotalUnread() }}</span>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoadingContacts" class="contacts-loading">
+      <div class="spinner-sm"></div>
+      <p>
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Loading...
+      </p>
+    </div>
+
+    <!-- No contacts -->
+    <div *ngIf="!isLoadingContacts && contacts.length === 0" class="no-contacts">
+      <div class="no-contacts-icon">
+        <i class="fa-solid fa-comments"></i>
+      </div>
+      <p *ngIf="currentUserRole !== 'AGENT'">No agent assigned yet.</p>
+      <p *ngIf="currentUserRole === 'AGENT'">No students assigned.</p>
+    </div>
+
+    <!-- Contacts List -->
+    <div class="contacts-list" *ngIf="!isLoadingContacts && contacts.length > 0">
+      <div *ngFor="let contact of contacts"
+        class="contact-item"
+        [class.active]="selectedContact?.id === contact.id"
+        (click)="selectContact(contact)">
+
+        <div class="contact-avatar">{{ getInitials(contact) }}</div>
+
+        <div class="contact-info">
+          <div class="contact-name-row">
+            <span class="contact-name">{{ contact.firstName }} {{ contact.lastName }}</span>
+            <span *ngIf="contact.unreadCount > 0" class="unread-badge">{{ contact.unreadCount }}</span>
+          </div>
+          <span class="contact-role">
+            <i *ngIf="contact.role === 'AGENT'" class="fa-solid fa-user-tie"></i>
+            <i *ngIf="contact.role === 'STUDENT'" class="fa-solid fa-user-graduate"></i>
+            <i *ngIf="contact.role === 'GUEST'" class="fa-solid fa-user"></i>
+            {{ contact.role }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── CHAT AREA ── -->
+  <div class="chat-area">
+
+    <!-- No contact selected -->
+    <div *ngIf="!selectedContact" class="chat-empty">
+      <div class="chat-empty-icon">
+        <i class="fa-solid fa-comment-dots"></i>
+      </div>
+      <h3>Select a conversation</h3>
+      <p>Choose a contact from the left to start chatting</p>
+    </div>
+
+    <!-- Active conversation -->
+    <div *ngIf="selectedContact" class="chat-active">
+
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="chat-header-avatar">{{ getInitials(selectedContact) }}</div>
+        <div class="chat-header-info">
+          <h4>{{ selectedContact.firstName }} {{ selectedContact.lastName }}</h4>
+          <span class="chat-header-role">
+            <i *ngIf="selectedContact.role === 'AGENT'" class="fa-solid fa-user-tie"></i>
+            <i *ngIf="selectedContact.role === 'STUDENT'" class="fa-solid fa-user-graduate"></i>
+            <i *ngIf="selectedContact.role === 'GUEST'" class="fa-solid fa-user"></i>
+            {{ selectedContact.role }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="messages-area" #messagesContainer>
+
+        <div *ngIf="isLoadingMessages" class="messages-loading">
+          <div class="spinner-sm"></div>
+          <i class="fa-solid fa-spinner fa-spin"></i>
+        </div>
+
+        <div *ngIf="!isLoadingMessages && messages.length === 0" class="messages-empty">
+          <i class="fa-regular fa-comment"></i>
+          <p>No messages yet. Say hello!</p>
+        </div>
+
+        <ng-container *ngFor="let msg of messages; let i = index">
+
+          <!-- Date separator -->
+          <div *ngIf="shouldShowDate(i)" class="date-separator">
+            <span>{{ formatDate(msg.timestamp) }}</span>
+          </div>
+
+          <!-- Message bubble -->
+          <div class="message-row" [class.mine]="isMine(msg)" [class.theirs]="!isMine(msg)">
+            <div *ngIf="!isMine(msg)" class="msg-avatar">
+              {{ getInitials(selectedContact) }}
+            </div>
+            <div class="message-bubble" [class.bubble-mine]="isMine(msg)" [class.bubble-theirs]="!isMine(msg)">
+              <p class="message-text">{{ msg.message }}</p>
+              <div class="message-meta">
+                <span class="message-time">{{ formatTime(msg.timestamp) }}</span>
+                <span *ngIf="isMine(msg)" class="message-seen">
+                  <i *ngIf="msg.seen" class="fa-solid fa-check-double"></i>
+                  <i *ngIf="!msg.seen" class="fa-solid fa-check"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <!-- Scroll anchor -->
+        <div #messagesEnd></div>
+
+      </div>
+
+      <!-- Message Input -->
+      <div class="message-input-area">
+        <textarea
+          [(ngModel)]="newMessage"
+          (keydown)="onKeyDown($event)"
+          placeholder="Type a message... (Enter to send)"
+          rows="1"
+          [disabled]="isSending"
+          class="message-input">
+        </textarea>
+        <button (click)="sendMessage()" [disabled]="!newMessage.trim() || isSending" class="send-btn">
+          <i *ngIf="!isSending" class="fa-solid fa-paper-plane"></i>
+          <i *ngIf="isSending" class="fa-solid fa-spinner fa-spin"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+</div>

@@ -1061,3 +1061,120 @@
     transform: translateY(0);
   }
 }
+
+/* Chat Navigation Button Styles */
+.chat-nav-btn {
+  position: relative;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chat-nav-btn i {
+  width: 24px;
+  color: #d9c682;
+  transition: all 0.3s ease;
+}
+
+.chat-nav-btn:hover {
+  background: rgba(217, 198, 130, 0.1);
+  color: white;
+  transform: translateX(4px);
+}
+
+.chat-nav-btn:hover i {
+  color: #d9c682;
+  transform: scale(1.1);
+}
+
+/* Chat Badge for Unread Messages */
+.chat-badge {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+  animation: pulseBadge 2s infinite;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes pulseBadge {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+  }
+}
+
+/* Optional: Add a subtle indicator when there are new messages */
+.chat-nav-btn.has-new {
+  position: relative;
+}
+
+/* Tooltip for chat button (optional) */
+.chat-nav-btn::before {
+  content: 'Chat with your agent';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1E4F70;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  margin-left: 0.5rem;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-nav-btn:hover::before {
+  opacity: 1;
+  transform: translateY(-50%) translateX(4px);
+}
+
+/* Hide tooltip on mobile */
+@media (max-width: 768px) {
+  .chat-nav-btn::before {
+    display: none;
+  }
+}
+
+/* Responsive adjustments for badge */
+@media (max-width: 768px) {
+  .chat-badge {
+    right: 0.75rem;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    min-width: 18px;
+  }
+  
+  .chat-nav-btn {
+    padding: 0.75rem 0.875rem;
+  }
+}
