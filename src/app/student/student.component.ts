@@ -35,6 +35,9 @@ export class StudentProfileComponent implements OnInit {
   userRole = '';
   unreadMessagesCount = 0;
 
+  //Ticket
+  pendingTicketsCount = 0;
+
   // ── Profile ──
   profile: StudentProfileResponse | null = null;
   isLoadingProfile = true;

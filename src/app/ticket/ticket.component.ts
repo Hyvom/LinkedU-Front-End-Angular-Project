@@ -237,4 +237,15 @@ export class TicketComponent implements OnInit {
       year: 'numeric', hour: '2-digit', minute: '2-digit'
     });
   }
+
+  //-- Status Icons ──
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'PENDING': return 'fa-regular fa-clock';
+      case 'ACCEPTED': return 'fa-solid fa-check-circle';
+      case 'REJECTED': return 'fa-solid fa-times-circle';
+      case 'RESOLVED': return 'fa-solid fa-check-double';
+      default: return 'fa-regular fa-circle-question';
+    }
+  }
 }

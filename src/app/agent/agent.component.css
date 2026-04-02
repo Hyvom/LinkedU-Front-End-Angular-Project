@@ -1735,3 +1735,66 @@
   position: relative;
   text-decoration: none !important;
 }
+
+/* Ticket Navigation Button Styles */
+.ticket-nav-btn {
+  text-decoration: none !important;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ticket-nav-btn i {
+  width: 24px;
+  color: #d9c682;
+  transition: all 0.3s ease;
+}
+
+.ticket-nav-btn:hover {
+  background: rgba(217, 198, 130, 0.1);
+  color: white;
+  transform: translateX(4px);
+}
+
+.ticket-nav-btn:hover i {
+  color: #d9c682;
+  transform: scale(1.1);
+}
+
+/* Active state for ticket button */
+.ticket-nav-btn.active {
+  background: linear-gradient(135deg, rgba(217, 198, 130, 0.2) 0%, rgba(196, 181, 106, 0.1) 100%);
+  color: #d9c682;
+  border-left: 3px solid #d9c682;
+}
+
+.ticket-nav-btn.active i {
+  color: #d9c682;
+}
+
+/* Optional badge for ticket count (if you want to show pending tickets count) */
+.ticket-badge {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}

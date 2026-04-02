@@ -3,27 +3,45 @@
   <!-- ── HEADER ── -->
   <div class="ticket-header">
     <div class="header-left">
-      <h2 *ngIf="viewMode === 'list'">🎫 {{ userRole === 'AGENT' ? 'Student Tickets' : 'My Tickets' }}</h2>
+      <h2 *ngIf="viewMode === 'list'">
+        <i class="fa-solid fa-ticket"></i>
+        {{ userRole === 'AGENT' ? 'Student Tickets' : 'My Tickets' }}
+      </h2>
       <div *ngIf="viewMode === 'create'" class="breadcrumb">
-        <button (click)="showList()" class="back-btn">← Back</button>
-        <h2>📝 Submit New Ticket</h2>
+        <button (click)="showList()" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          Back
+        </button>
+        <h2>
+          <i class="fa-solid fa-pen"></i>
+          Submit New Ticket
+        </h2>
       </div>
     </div>
     <button *ngIf="viewMode === 'list' && userRole !== 'AGENT'" (click)="showCreate()" class="primary-btn">
-      + New Ticket
+      <i class="fa-solid fa-plus"></i>
+      New Ticket
     </button>
   </div>
 
   <!-- ── ALERTS ── -->
-  <div *ngIf="successMessage" class="alert alert-success">✅ {{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="alert alert-error">⚠️ {{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">
+    <i class="fa-solid fa-circle-check"></i>
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-error">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    {{ errorMessage }}
+  </div>
 
   <!-- ═══ CREATE FORM (Student only) ═══ -->
   <div *ngIf="viewMode === 'create'" class="create-form-wrapper">
     <div class="form-card">
 
       <div class="form-card-header">
-        <div class="form-card-icon">🎫</div>
+        <div class="form-card-icon">
+          <i class="fa-solid fa-ticket"></i>
+        </div>
         <div>
           <h3>Submit a Support Ticket</h3>
           <p>Your assigned agent will be notified and will respond shortly.</p>
@@ -33,30 +51,44 @@
       <form (ngSubmit)="submitTicket()" class="ticket-form">
 
         <div class="form-group">
-          <label class="form-label">Subject / Object *</label>
+          <label class="form-label">
+            <i class="fa-solid fa-heading"></i>
+            Subject / Object *
+          </label>
           <input type="text" [(ngModel)]="createForm.object" name="object"
             placeholder="e.g. Visa Application Issue, Document Question..."
             class="form-input" required />
         </div>
 
         <div class="form-group">
-          <label class="form-label">Description *</label>
+          <label class="form-label">
+            <i class="fa-solid fa-align-left"></i>
+            Description *
+          </label>
           <textarea [(ngModel)]="createForm.description" name="description" rows="5"
             placeholder="Describe your issue or question in detail..."
             class="form-input form-textarea" required></textarea>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Your Availability *</label>
+          <label class="form-label">
+            <i class="fa-regular fa-clock"></i>
+            Your Availability *
+          </label>
           <p class="form-hint">When are you available for a meeting?</p>
           <input type="datetime-local" [(ngModel)]="createForm.availabilityDateTime"
             name="availabilityDateTime" class="form-input" required />
         </div>
 
         <div class="form-actions">
-          <button type="button" (click)="showList()" class="cancel-btn">Cancel</button>
+          <button type="button" (click)="showList()" class="cancel-btn">
+            <i class="fa-solid fa-times"></i>
+            Cancel
+          </button>
           <button type="submit" [disabled]="isSubmitting" class="primary-btn">
-            {{ isSubmitting ? 'Submitting...' : '📤 Submit Ticket' }}
+            <i *ngIf="!isSubmitting" class="fa-solid fa-paper-plane"></i>
+            <i *ngIf="isSubmitting" class="fa-solid fa-spinner fa-spin"></i>
+            {{ isSubmitting ? 'Submitting...' : 'Submit Ticket' }}
           </button>
         </div>
 
@@ -69,17 +101,24 @@
 
     <!-- Loading -->
     <div *ngIf="isLoading" class="loading-state">
-      <div class="spinner"></div><p>Loading tickets...</p>
+      <div class="spinner"></div>
+      <p>
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Loading tickets...
+      </p>
     </div>
 
     <!-- Empty -->
     <div *ngIf="!isLoading && tickets.length === 0" class="empty-state">
-      <div class="empty-icon">🎫</div>
+      <div class="empty-icon">
+        <i class="fa-solid fa-ticket"></i>
+      </div>
       <h3>No tickets yet</h3>
       <p *ngIf="userRole !== 'AGENT'">Submit a ticket to get support from your agent.</p>
       <p *ngIf="userRole === 'AGENT'">No pending tickets from your students.</p>
       <button *ngIf="userRole !== 'AGENT'" (click)="showCreate()" class="primary-btn" style="margin-top:1rem">
-        + Submit Ticket
+        <i class="fa-solid fa-plus"></i>
+        Submit Ticket
       </button>
     </div>
 
@@ -93,13 +132,18 @@
           <div class="ticket-title-area">
             <h3 class="ticket-object">{{ ticket.object }}</h3>
             <p class="ticket-meta">
-              <span>📅 {{ formatDateTime(ticket.createdAt) }}</span>
+              <span>
+                <i class="fa-regular fa-calendar"></i>
+                {{ formatDateTime(ticket.createdAt) }}
+              </span>
               <span *ngIf="userRole === 'AGENT' && ticket.student">
-                · 👤 {{ ticket.student?.firstName }} {{ ticket.student?.lastName }}
+                <i class="fa-solid fa-user"></i>
+                {{ ticket.student.firstName }} {{ ticket.student.lastName }}
               </span>
             </p>
           </div>
           <span class="status-badge" [ngClass]="getStatusClass(ticket.status)">
+            <i [class]="getStatusIcon(ticket.status)"></i>
             {{ getStatusLabel(ticket.status) }}
           </span>
         </div>
@@ -109,14 +153,17 @@
           <p class="ticket-description">{{ ticket.description }}</p>
 
           <div class="ticket-availability">
-            🕐 <strong>Availability:</strong> {{ formatDateTime(ticket.availabilityDateTime) }}
+            <i class="fa-regular fa-clock"></i>
+            <strong>Availability:</strong> {{ formatDateTime(ticket.availabilityDateTime) }}
           </div>
         </div>
 
         <!-- ── ACCEPTED ── -->
         <div *ngIf="ticket.status === 'ACCEPTED'" class="ticket-response-card accepted-card">
           <div class="response-card-header">
-            <div class="response-icon accepted-icon">✅</div>
+            <div class="response-icon accepted-icon">
+              <i class="fa-solid fa-check"></i>
+            </div>
             <div>
               <h4>Ticket Accepted!</h4>
               <p>Your agent has scheduled a meeting with you.</p>
@@ -124,14 +171,19 @@
           </div>
           <div *ngIf="ticket.googleMeetLink" class="meet-details">
             <div class="meet-link-row">
-              <span class="meet-label">🔗 Google Meet Link:</span>
+              <span class="meet-label">
+                <i class="fa-solid fa-video"></i>
+                Google Meet Link:
+              </span>
               <a [href]="ticket.googleMeetLink" target="_blank" class="meet-link-btn">
-                🟢 Join Meeting
+                <i class="fa-solid fa-arrow-right"></i>
+                Join Meeting
               </a>
             </div>
             <p class="meet-link-text">{{ ticket.googleMeetLink }}</p>
           </div>
           <div class="response-updated">
+            <i class="fa-regular fa-clock"></i>
             Last updated: {{ formatDateTime(ticket.updatedAt) }}
           </div>
         </div>
@@ -139,17 +191,23 @@
         <!-- ── REJECTED ── -->
         <div *ngIf="ticket.status === 'REJECTED'" class="ticket-response-card rejected-card">
           <div class="response-card-header">
-            <div class="response-icon rejected-icon">❌</div>
+            <div class="response-icon rejected-icon">
+              <i class="fa-solid fa-times"></i>
+            </div>
             <div>
               <h4>Ticket Rejected</h4>
               <p>Your agent has reviewed and rejected this ticket.</p>
             </div>
           </div>
           <div *ngIf="ticket.rejectionReason" class="rejection-reason">
-            <span class="reason-label">Reason:</span>
+            <span class="reason-label">
+              <i class="fa-solid fa-info-circle"></i>
+              Reason:
+            </span>
             <p class="reason-text">{{ ticket.rejectionReason }}</p>
           </div>
           <div class="response-updated">
+            <i class="fa-regular fa-clock"></i>
             Last updated: {{ formatDateTime(ticket.updatedAt) }}
           </div>
         </div>
@@ -159,50 +217,80 @@
 
           <!-- Accept Form -->
           <div *ngIf="acceptingTicketId === ticket.id" class="action-form accept-form">
-            <h4>✅ Accept & Schedule Meeting</h4>
+            <h4>
+              <i class="fa-solid fa-check-circle"></i>
+              Accept & Schedule Meeting
+            </h4>
             <div class="form-group">
-              <label class="form-label">Google Meet Link *</label>
+              <label class="form-label">
+                <i class="fa-solid fa-link"></i>
+                Google Meet Link *
+              </label>
               <input type="url" [(ngModel)]="acceptForm.googleMeetLink"
                 placeholder="https://meet.google.com/xxx-xxxx-xxx"
                 class="form-input" />
             </div>
             <div class="action-form-btns">
-              <button (click)="cancelAction()" class="cancel-btn">Cancel</button>
+              <button (click)="cancelAction()" class="cancel-btn">
+                <i class="fa-solid fa-times"></i>
+                Cancel
+              </button>
               <button (click)="submitAccept(ticket.id)" [disabled]="isSubmitting" class="approve-btn">
-                {{ isSubmitting ? 'Sending...' : '✅ Confirm & Notify Student' }}
+                <i *ngIf="!isSubmitting" class="fa-solid fa-check"></i>
+                <i *ngIf="isSubmitting" class="fa-solid fa-spinner fa-spin"></i>
+                {{ isSubmitting ? 'Sending...' : 'Confirm & Notify Student' }}
               </button>
             </div>
           </div>
 
           <!-- Reject Form -->
           <div *ngIf="rejectingTicketId === ticket.id" class="action-form reject-form">
-            <h4>❌ Reject Ticket</h4>
+            <h4>
+              <i class="fa-solid fa-times-circle"></i>
+              Reject Ticket
+            </h4>
             <div class="form-group">
-              <label class="form-label">Rejection Reason *</label>
+              <label class="form-label">
+                <i class="fa-solid fa-comment"></i>
+                Rejection Reason *
+              </label>
               <textarea [(ngModel)]="rejectForm.reason" rows="3"
                 placeholder="Explain why you're rejecting this ticket..."
                 class="form-input form-textarea"></textarea>
             </div>
             <div class="action-form-btns">
-              <button (click)="cancelAction()" class="cancel-btn">Cancel</button>
+              <button (click)="cancelAction()" class="cancel-btn">
+                <i class="fa-solid fa-times"></i>
+                Cancel
+              </button>
               <button (click)="submitReject(ticket.id)" [disabled]="isSubmitting" class="reject-btn">
-                {{ isSubmitting ? 'Rejecting...' : '❌ Reject Ticket' }}
+                <i *ngIf="!isSubmitting" class="fa-solid fa-times"></i>
+                <i *ngIf="isSubmitting" class="fa-solid fa-spinner fa-spin"></i>
+                {{ isSubmitting ? 'Rejecting...' : 'Reject Ticket' }}
               </button>
             </div>
           </div>
 
           <!-- Response Form -->
           <div *ngIf="respondingTicketId === ticket.id" class="action-form">
-            <h4>💬 Add Response</h4>
+            <h4>
+              <i class="fa-solid fa-reply"></i>
+              Add Response
+            </h4>
             <div class="form-group">
               <textarea [(ngModel)]="responseText" rows="3"
                 placeholder="Write your response to the student..."
                 class="form-input form-textarea"></textarea>
             </div>
             <div class="action-form-btns">
-              <button (click)="cancelAction()" class="cancel-btn">Cancel</button>
+              <button (click)="cancelAction()" class="cancel-btn">
+                <i class="fa-solid fa-times"></i>
+                Cancel
+              </button>
               <button (click)="submitResponse(ticket.id)" [disabled]="isSubmitting" class="primary-btn">
-                {{ isSubmitting ? 'Sending...' : '💬 Send Response' }}
+                <i *ngIf="!isSubmitting" class="fa-solid fa-paper-plane"></i>
+                <i *ngIf="isSubmitting" class="fa-solid fa-spinner fa-spin"></i>
+                {{ isSubmitting ? 'Sending...' : 'Send Response' }}
               </button>
             </div>
           </div>
@@ -210,9 +298,15 @@
           <!-- Action Buttons -->
           <div *ngIf="acceptingTicketId !== ticket.id && rejectingTicketId !== ticket.id && respondingTicketId !== ticket.id"
             class="action-buttons">
-            <button (click)="startAccept(ticket.id)" class="approve-btn">✅ Accept</button>
-            <button (click)="startReject(ticket.id)" class="reject-btn">❌ Reject</button>
-            <button (click)="startResponse(ticket.id)" class="response-btn">💬 Respond</button>
+            <button (click)="startAccept(ticket.id)" class="approve-btn">
+              <i class="fa-solid fa-check"></i> Accept
+            </button>
+            <button (click)="startReject(ticket.id)" class="reject-btn">
+              <i class="fa-solid fa-times"></i> Reject
+            </button>
+            <button (click)="startResponse(ticket.id)" class="response-btn">
+              <i class="fa-solid fa-reply"></i> Respond
+            </button>
           </div>
 
         </div>

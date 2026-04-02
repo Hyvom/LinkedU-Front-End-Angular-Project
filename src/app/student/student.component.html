@@ -40,17 +40,18 @@
         <i class="fa-solid fa-id-card"></i>
         Full Profile
       </a>
-      <a routerLink="/chat" class="nav-btn nav-link-btn chat-nav-btn">
+      <a routerLink="/chat" class="nav-btn chat-nav-btn">
         <i class="fa-solid fa-comment-dots"></i>
         Chat With Agent
         <span class="chat-badge" *ngIf="unreadMessagesCount > 0">
           {{ unreadMessagesCount > 99 ? '99+' : unreadMessagesCount }}
         </span>
       </a>
-      <a routerLink="/ticket" class="nav-btn nav-link-btn">
-        🎫 Support Tickets
+      <a routerLink="/ticket" class="nav-btn ticket-nav-btn">
+        <i class="fa-solid fa-ticket"></i>
+        Tickets
       </a>
-</nav>
+    </nav>
 
     <button (click)="logout()" class="logout-btn">
       <i class="fa-solid fa-sign-out-alt"></i>
