@@ -37,6 +37,8 @@ import { StudentProfileComponent } from '../student/student.component';
 import { GuestProfileComponent } from '../profile/guest-profile.component/guest-profile.component';
 import { AgentProfileComponent } from '../profile/agent-profile.component/agent-profile.component';
 import { AgentComponent } from '../agent/agent.component';
+
+//Ticket
 import { TicketComponent } from '../ticket/ticket.component';
 
 //Chat
@@ -110,7 +112,8 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['STUDENT', 'USER', 'GUEST'] }
   },
-
+  
+  //Agent Dashboard
   {
     path: 'agent',
     component: AgentComponent,
@@ -124,7 +127,8 @@ export const routes: Routes = [
     component: ChatComponent,
     canActivate: [authGuard]
   },
-  
+
+  //Ticket
   {
     path: 'ticket',
     component: TicketComponent,

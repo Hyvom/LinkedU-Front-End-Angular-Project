@@ -1,327 +1,549 @@
-.ticket-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+/* ========================================
+   TICKET COMPONENT
+   ======================================== */
 
-/* Header */
-.ticket-header {
-  max-width: 800px;
-  margin: 0 auto 30px;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #4a5568;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.back-link:hover {
-  color: #3182ce;
-}
-
-/* No Access */
-.no-access {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 60vh;
-}
-
-.no-access-content {
-  text-align: center;
-  background: white;
-  padding: 60px 40px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.no-access-content svg {
-  color: #e53e3e;
-  margin-bottom: 20px;
-}
-
-.no-access-content h2 {
-  color: #2d3748;
-  font-size: 28px;
-  margin-bottom: 12px;
-}
-
-.no-access-content p {
-  color: #718096;
-  margin-bottom: 8px;
-}
-
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #3182ce;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.3s ease;
-  margin-top: 20px;
-}
-
-.btn-primary:hover {
-  background: #2c5282;
-}
-
-/* Ticket Card */
-.ticket-card {
-  max-width: 800px;
+.ticket-page {
+  max-width: 860px;
   margin: 0 auto;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  padding: 2rem 1rem;
 }
 
-.ticket-header-content {
+/* ── Header ── */
+.ticket-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 32px;
-  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 1.5rem;
 }
 
-.logo-section {
+.ticket-header h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.breadcrumb {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1rem;
 }
 
-.logo {
+.back-btn {
+  padding: 0.5rem 1rem;
+  background: #f3f4f6;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover { background: #e5e7eb; }
+
+/* ── Alerts ── */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.alert-success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #22c55e;
+  color: #16a34a;
+}
+
+.alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #ef4444;
+  color: #dc2626;
+}
+
+/* ── Loading / Empty ── */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  gap: 1rem;
+  color: #6b7280;
+}
+
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #1d4ed8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.empty-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+.empty-state h3 { font-weight: 700; color: #111827; margin: 0 0 0.5rem; }
+.empty-state p  { color: #6b7280; font-size: 0.875rem; }
+
+/* ── Create Form ── */
+.create-form-wrapper { max-width: 640px; }
+
+.form-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+
+.form-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.form-card-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.form-card-header h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem;
+}
+
+.form-card-header p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 0.375rem; }
+.form-label { font-size: 0.875rem; font-weight: 600; color: #374151; }
+.form-hint  { font-size: 0.75rem; color: #9ca3af; margin: 0; }
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  color: #111827;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29,78,216,0.08);
+}
+
+.form-textarea { resize: vertical; min-height: 100px; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+/* ── Tickets List ── */
+.tickets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Ticket Card ── */
+.ticket-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1.5px solid #f1f5f9;
+  transition: all 0.2s;
+}
+
+.ticket-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+  border-color: #e0e7ff;
+}
+
+.ticket-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ticket-id-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 3px 10px;
+  border-radius: 99px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.ticket-title-area { flex: 1; }
+
+.ticket-object {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.ticket-meta {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  margin: 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Status Badges ── */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.status-accepted { background: #dcfce7; color: #16a34a; }
+.status-rejected { background: #fee2e2; color: #dc2626; }
+.status-pending  { background: #fef9c3; color: #854d0e; }
+
+/* ── Ticket Body ── */
+.ticket-body { margin-bottom: 1rem; }
+
+.ticket-description {
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.ticket-availability {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: #f8fafc;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* ── Meet Info ── */
+.meet-info { margin-top: 0.75rem; }
+
+.meet-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: 10px;
+  padding: 0.875rem 1.125rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.meet-banner span {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.meet-link-btn {
+  padding: 0.5rem 1.25rem;
+  background: #22c55e;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.meet-link-btn:hover { background: #16a34a; transform: translateY(-1px); }
+
+/* ── Rejection Info ── */
+.rejection-info {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: #dc2626;
+}
+
+/* ── Agent Actions ── */
+.agent-actions { margin-top: 1rem; padding-top: 1rem; border-top: 1.5px solid #f1f5f9; }
+
+.action-buttons {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.action-form {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.action-form h4 {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.accept-form { border: 1.5px solid #86efac; background: #f0fdf4; }
+.reject-form { border: 1.5px solid #fca5a5; background: #fef2f2; }
+
+.action-form-btns {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: flex-end;
+}
+
+/* ── Buttons ── */
+.primary-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 12px rgba(29,78,216,0.25);
+}
+
+.primary-btn:hover {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  transform: translateY(-1px);
+}
+
+.primary-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.cancel-btn {
+  padding: 0.75rem 1.5rem;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover { background: #e5e7eb; }
+
+.approve-btn {
+  padding: 0.625rem 1.25rem;
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1.5px solid #86efac;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.approve-btn:hover:not(:disabled) { background: #bbf7d0; }
+.approve-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.reject-btn {
+  padding: 0.625rem 1.25rem;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1.5px solid #fca5a5;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reject-btn:hover:not(:disabled) { background: #fecaca; }
+.reject-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.response-btn {
+  padding: 0.625rem 1.25rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.response-btn:hover { background: #dbeafe; }
+
+/* ── Animation ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .ticket-card-header { flex-wrap: wrap; }
+  .action-buttons { flex-direction: column; }
+  .meet-banner { flex-direction: column; }
+}
+
+/* ── Ticket Response Cards ── */
+.ticket-response-card {
+  margin-top: 1rem;
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1.5px solid transparent;
+}
+
+.accepted-card {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-color: #86efac;
+}
+
+.rejected-card {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border-color: #fca5a5;
+}
+
+.response-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.response-icon {
   width: 40px;
   height: 40px;
-}
-
-.brand-name {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2d3748;
-}
-
-.ticket-status {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.ticket-status.active {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-/* Ticket Body */
-.ticket-body {
-  padding: 32px;
-}
-
-.ticket-info {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.meeting-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a202c;
-  margin-bottom: 8px;
-}
-
-.ticket-id {
-  color: #718096;
-  font-size: 14px;
-}
-
-/* Meeting Details */
-.meeting-details {
-  background: #f7fafc;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 32px;
-}
-
-.detail-row {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 16px;
-}
-
-.detail-row:last-child {
-  margin-bottom: 0;
-}
-
-.detail-item {
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #4a5568;
-  font-size: 16px;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
 }
 
-.detail-item svg {
-  color: #3182ce;
+.accepted-icon { background: #dcfce7; }
+.rejected-icon { background: #fee2e2; }
+
+.response-card-header h4 {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  margin: 0 0 2px;
 }
 
-.detail-item.full-width {
-  flex: 1;
+.accepted-card .response-card-header h4 { color: #16a34a; }
+.rejected-card .response-card-header h4 { color: #dc2626; }
+
+.response-card-header p {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin: 0;
 }
 
-.description-section {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid #e2e8f0;
+/* Meet Details */
+.meet-details {
+  background: rgba(255,255,255,0.7);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
 }
 
-.description-section h3 {
-  font-size: 16px;
+.meet-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.meet-label {
+  font-size: 0.875rem;
   font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 8px;
+  color: #374151;
 }
 
-.description-section p {
-  color: #718096;
+.meet-link-text {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  word-break: break-all;
+  margin: 0;
+  font-family: monospace;
+}
+
+/* Rejection Reason */
+.rejection-reason {
+  background: rgba(255,255,255,0.7);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.reason-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #dc2626;
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+.reason-text {
+  font-size: 0.9375rem;
+  color: #374151;
   line-height: 1.6;
+  margin: 0;
 }
 
-/* Google Meet Section */
-.meet-section {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  border-radius: 12px;
-  padding: 24px;
-  border: 2px solid #93c5fd;
-}
-
-.meet-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.meet-header svg {
-  color: #2563eb;
-}
-
-.meet-header span {
-  font-size: 20px;
-  font-weight: 700;
-  color: #2563eb;
-}
-
-.meet-link-box {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.meet-link-input {
-  flex: 1;
-  padding: 14px 16px;
-  border: 2px solid #93c5fd;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #2d3748;
-  background: white;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.meet-link-input:focus {
-  border-color: #2563eb;
-}
-
-.btn-copy {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 20px;
-  background: white;
-  border: 2px solid #93c5fd;
-  border-radius: 8px;
-  color: #2563eb;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-copy:hover {
-  background: #2563eb;
-  color: white;
-  border-color: #2563eb;
-}
-
-.btn-join {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  padding: 16px;
-  background: #2563eb;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.btn-join:hover {
-  background: #1d4ed8;
-}
-
-/* Footer */
-.ticket-footer {
-  padding: 20px 32px;
-  background: #f7fafc;
-  border-top: 1px solid #e2e8f0;
-}
-
-.footer-note {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: #718096;
-  font-size: 14px;
-}
-
-.footer-note svg {
-  color: #f59e0b;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .detail-row {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .meet-link-box {
-    flex-direction: column;
-  }
-
-  .ticket-header-content {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-  }
-
-  .meeting-title {
-    font-size: 22px;
-  }
+/* Updated timestamp */
+.response-updated {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-align: right;
 }

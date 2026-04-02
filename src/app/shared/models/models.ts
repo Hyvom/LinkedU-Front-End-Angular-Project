@@ -388,3 +388,36 @@ export interface ChatMessage {
 export interface UnreadCount {
   count: number;
 }
+
+// ===========================
+// TICKET MODELS
+// ===========================
+export type TicketStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
+
+export interface Ticket {
+  id: number;
+  object: string;
+  description: string;
+  availabilityDateTime: string;
+  status: TicketStatus;
+  googleMeetLink?: string;
+  rejectionReason?: string;
+  student?: { id: number; firstName: string; lastName: string; email: string; };
+  agent?: { id: number; firstName: string; lastName: string; email: string; };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateTicketDTO {
+  object: string;
+  description: string;
+  availabilityDateTime: string;
+}
+
+export interface AcceptTicketDTO {
+  googleMeetLink: string;
+}
+
+export interface RejectTicketDTO {
+  reason: string;
+}

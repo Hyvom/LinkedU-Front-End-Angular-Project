@@ -1,167 +1,224 @@
-<main class="relative flex flex-col bg-gray-900 min-h-screen overflow-hidden font-sans text-white">
-  <!-- Background elements -->
-  <div class="absolute inset-0 bg-gradient-to-br from-blue-950 via-blue-900 to-gray-900"></div>
-  <div class="top-0 left-0 absolute opacity-30 w-full h-full pointer-events-none">
-      <div class="top-20 left-10 absolute bg-blue-500 blur-3xl rounded-full w-72 h-72 animate-pulse mix-blend-multiply filter"></div>
-      <div class="right-10 bottom-20 absolute bg-cyan-500 blur-3xl rounded-full w-72 h-72 animate-pulse animation-delay-2 mix-blend-multiply filter"></div>
-      <div class="top-1/2 left-1/2 absolute bg-indigo-500 opacity-20 blur-3xl rounded-full w-96 h-96 -translate-x-1/2 -translate-y-1/2 transform mix-blend-multiply filter"></div>
+<div class="ticket-page">
+
+  <!-- ── HEADER ── -->
+  <div class="ticket-header">
+    <div class="header-left">
+      <h2 *ngIf="viewMode === 'list'">🎫 {{ userRole === 'AGENT' ? 'Student Tickets' : 'My Tickets' }}</h2>
+      <div *ngIf="viewMode === 'create'" class="breadcrumb">
+        <button (click)="showList()" class="back-btn">← Back</button>
+        <h2>📝 Submit New Ticket</h2>
+      </div>
+    </div>
+    <button *ngIf="viewMode === 'list' && userRole !== 'AGENT'" (click)="showCreate()" class="primary-btn">
+      + New Ticket
+    </button>
   </div>
 
-  <!-- Header -->
-  <header class="z-10 relative p-6">
-    <a routerLink="/" class="inline-flex items-center font-medium text-blue-300 hover:text-yellow-400 transition-colors duration-300">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mr-2">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-        <polyline points="16 17 21 12 16 7"/>
-        <line x1="21" y1="12" x2="9" y2="12"/>
-      </svg>
-      Retour à l'accueil
-    </a>
-  </header>
+  <!-- ── ALERTS ── -->
+  <div *ngIf="successMessage" class="alert alert-success">✅ {{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-error">⚠️ {{ errorMessage }}</div>
 
-  <div class="z-10 relative flex flex-1 justify-center items-center p-4">
-    
-    <!-- No Access Message -->
-    <div class="bg-white/10 shadow-2xl backdrop-blur-xl p-8 border border-white/20 rounded-3xl w-full max-w-md text-center" *ngIf="!hasAccess">
-      <div class="flex justify-center items-center bg-red-500/20 mx-auto mb-6 rounded-full ring-4 ring-red-500/10 w-20 h-20 text-red-400">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        </svg>
+  <!-- ═══ CREATE FORM (Student only) ═══ -->
+  <div *ngIf="viewMode === 'create'" class="create-form-wrapper">
+    <div class="form-card">
+
+      <div class="form-card-header">
+        <div class="form-card-icon">🎫</div>
+        <div>
+          <h3>Submit a Support Ticket</h3>
+          <p>Your assigned agent will be notified and will respond shortly.</p>
+        </div>
       </div>
-      <h2 class="mb-4 font-bold text-white text-2xl">Accès Refusé</h2>
-      <p class="mb-8 text-blue-200 leading-relaxed">Vous n'avez pas accès à ce ticket de réunion. Veuillez contacter l'administrateur pour obtenir les droits d'accès.</p>
-      <a routerLink="/admin" class="inline-block bg-gradient-to-r from-blue-600 hover:from-blue-500 to-blue-500 hover:to-blue-400 shadow-blue-500/30 shadow-lg px-8 py-3 rounded-full font-bold text-white hover:scale-105 transition-all transform">
-        Contacter l'Admin
-      </a>
+
+      <form (ngSubmit)="submitTicket()" class="ticket-form">
+
+        <div class="form-group">
+          <label class="form-label">Subject / Object *</label>
+          <input type="text" [(ngModel)]="createForm.object" name="object"
+            placeholder="e.g. Visa Application Issue, Document Question..."
+            class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description *</label>
+          <textarea [(ngModel)]="createForm.description" name="description" rows="5"
+            placeholder="Describe your issue or question in detail..."
+            class="form-input form-textarea" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Availability *</label>
+          <p class="form-hint">When are you available for a meeting?</p>
+          <input type="datetime-local" [(ngModel)]="createForm.availabilityDateTime"
+            name="availabilityDateTime" class="form-input" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="showList()" class="cancel-btn">Cancel</button>
+          <button type="submit" [disabled]="isSubmitting" class="primary-btn">
+            {{ isSubmitting ? 'Submitting...' : '📤 Submit Ticket' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ TICKETS LIST ═══ -->
+  <div *ngIf="viewMode === 'list'">
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div><p>Loading tickets...</p>
     </div>
 
-    <!-- Ticket with Access -->
-    <div class="flex md:flex-row flex-col bg-white shadow-2xl hover:shadow-blue-500/20 rounded-3xl w-full max-w-5xl overflow-hidden transition-all transform" *ngIf="hasAccess">
-      <!-- Left Side (Blue Brand Section) -->
-      <div class="relative flex flex-col justify-between bg-gradient-to-br from-blue-700 to-blue-900 p-8 md:w-2/5 overflow-hidden text-white">
-        <!-- Decorative pattern -->
-        <div class="top-0 left-0 absolute opacity-10 w-full h-full pointer-events-none">
-           <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-             <pattern id="grid" width="8" height="8" patternUnits="userSpaceOnUse">
-               <circle cx="1" cy="1" r="1" fill="white"/>
-             </pattern>
-             <rect width="100%" height="100%" fill="url(#grid)" />
-           </svg>
-        </div>
-        
-        <div class="z-10 relative">
-          <div class="flex items-center gap-3 mb-10">
-            <div class="bg-white shadow-md p-1.5 rounded-lg">
-              <img src="/pics/logo.png" alt="LinkedU Logo" class="w-auto h-8">
-            </div>
-            <span class="font-bold text-white text-xl tracking-wider">LinkedU</span>
+    <!-- Empty -->
+    <div *ngIf="!isLoading && tickets.length === 0" class="empty-state">
+      <div class="empty-icon">🎫</div>
+      <h3>No tickets yet</h3>
+      <p *ngIf="userRole !== 'AGENT'">Submit a ticket to get support from your agent.</p>
+      <p *ngIf="userRole === 'AGENT'">No pending tickets from your students.</p>
+      <button *ngIf="userRole !== 'AGENT'" (click)="showCreate()" class="primary-btn" style="margin-top:1rem">
+        + Submit Ticket
+      </button>
+    </div>
+
+    <!-- Tickets -->
+    <div *ngIf="!isLoading && tickets.length > 0" class="tickets-list">
+      <div *ngFor="let ticket of tickets" class="ticket-card">
+
+        <!-- Card Header -->
+        <div class="ticket-card-header">
+          <div class="ticket-id-badge">#{{ ticket.id }}</div>
+          <div class="ticket-title-area">
+            <h3 class="ticket-object">{{ ticket.object }}</h3>
+            <p class="ticket-meta">
+              <span>📅 {{ formatDateTime(ticket.createdAt) }}</span>
+              <span *ngIf="userRole === 'AGENT' && ticket.student">
+                · 👤 {{ ticket.student?.firstName }} {{ ticket.student?.lastName }}
+              </span>
+            </p>
           </div>
-          
-          <div class="mb-8">
-            <span class="inline-block bg-yellow-400 shadow-lg shadow-yellow-400/20 mb-4 px-3 py-1 rounded-full font-extrabold text-blue-900 text-xs uppercase tracking-wide">Ticket Confirmé</span>
-            <h1 class="mb-2 font-bold text-yellow-400 text-3xl md:text-4xl leading-tight">{{ ticket.meetingTitle }}</h1>
-            <div class="bg-yellow-400 rounded-full w-20 h-1"></div>
+          <span class="status-badge" [ngClass]="getStatusClass(ticket.status)">
+            {{ getStatusLabel(ticket.status) }}
+          </span>
+        </div>
+
+        <!-- Description -->
+        <div class="ticket-body">
+          <p class="ticket-description">{{ ticket.description }}</p>
+
+          <div class="ticket-availability">
+            🕐 <strong>Availability:</strong> {{ formatDateTime(ticket.availabilityDateTime) }}
           </div>
         </div>
 
-        <div class="z-10 relative mt-auto pt-8 border-blue-500/30 border-t">
-          <div class="mb-1 text-blue-200 text-xs uppercase tracking-widest">Ticket ID</div>
-          <div class="font-mono text-yellow-400 text-xl tracking-widest">#{{ ticket.id }}</div>
-        </div>
-      </div>
-
-      <!-- Right Side (Details) -->
-      <div class="flex flex-col bg-white p-8 md:w-3/5 text-gray-800">
-        <div class="gap-8 grid grid-cols-1 md:grid-cols-2 mb-8">
-          <div class="group">
-            <div class="mb-2 font-bold text-gray-400 text-xs uppercase tracking-wide">Date</div>
-            <div class="flex items-center gap-3 font-bold text-gray-900 group-hover:text-blue-600 text-lg transition-colors">
-              <div class="bg-blue-50 p-2 rounded-lg text-blue-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              </div>
-              {{ ticket.meetingDate }}
+        <!-- ── ACCEPTED ── -->
+        <div *ngIf="ticket.status === 'ACCEPTED'" class="ticket-response-card accepted-card">
+          <div class="response-card-header">
+            <div class="response-icon accepted-icon">✅</div>
+            <div>
+              <h4>Ticket Accepted!</h4>
+              <p>Your agent has scheduled a meeting with you.</p>
             </div>
           </div>
-          <div class="group">
-            <div class="mb-2 font-bold text-gray-400 text-xs uppercase tracking-wide">Heure</div>
-            <div class="flex items-center gap-3 font-bold text-gray-900 group-hover:text-blue-600 text-lg transition-colors">
-              <div class="bg-blue-50 p-2 rounded-lg text-blue-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              </div>
-              {{ ticket.meetingTime }}
+          <div *ngIf="ticket.googleMeetLink" class="meet-details">
+            <div class="meet-link-row">
+              <span class="meet-label">🔗 Google Meet Link:</span>
+              <a [href]="ticket.googleMeetLink" target="_blank" class="meet-link-btn">
+                🟢 Join Meeting
+              </a>
             </div>
+            <p class="meet-link-text">{{ ticket.googleMeetLink }}</p>
           </div>
-          <div class="group md:col-span-2">
-            <div class="mb-2 font-bold text-gray-400 text-xs uppercase tracking-wide">Animateur</div>
-            <div class="flex items-center gap-4">
-              <div class="flex justify-center items-center bg-gradient-to-br from-blue-600 to-blue-800 shadow-lg rounded-full ring-4 ring-blue-50 w-12 h-12 font-bold text-white text-2xl group-hover:scale-105 transition-transform duration-300">
-                👩‍💼
-              </div>
-              <div>
-                <div class="font-bold text-gray-900 text-lg">{{ ticket.host }}</div>
-                <div class="font-bold text-blue-600 text-xs uppercase tracking-wider">Conseillère Senior</div>
-              </div>
-            </div>
+          <div class="response-updated">
+            Last updated: {{ formatDateTime(ticket.updatedAt) }}
           </div>
         </div>
 
-        <div class="mb-8">
-          <div class="mb-2 font-bold text-gray-400 text-xs uppercase tracking-wide">Description</div>
-          <p class="bg-gray-50 p-5 border border-gray-100 rounded-xl text-gray-600 text-sm leading-relaxed">
-            {{ ticket.description }}
-          </p>
+        <!-- ── REJECTED ── -->
+        <div *ngIf="ticket.status === 'REJECTED'" class="ticket-response-card rejected-card">
+          <div class="response-card-header">
+            <div class="response-icon rejected-icon">❌</div>
+            <div>
+              <h4>Ticket Rejected</h4>
+              <p>Your agent has reviewed and rejected this ticket.</p>
+            </div>
+          </div>
+          <div *ngIf="ticket.rejectionReason" class="rejection-reason">
+            <span class="reason-label">Reason:</span>
+            <p class="reason-text">{{ ticket.rejectionReason }}</p>
+          </div>
+          <div class="response-updated">
+            Last updated: {{ formatDateTime(ticket.updatedAt) }}
+          </div>
         </div>
 
-        <!-- Google Meet Section -->
-        <div class="relative bg-blue-50 mt-auto p-6 border border-blue-100 rounded-2xl overflow-hidden">
-          <!-- Background decoration -->
-          <div class="top-0 right-0 absolute bg-blue-100 opacity-50 -mt-4 -mr-4 rounded-full w-24 h-24"></div>
-          
-          <div class="z-10 relative flex items-center gap-2 mb-4 font-bold text-blue-900">
-            <div class="bg-white shadow-sm p-1 rounded-md">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M23 7l-7 5 7 5V7z" fill="#00897B"/>
-                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" stroke="#00897B" stroke-width="2"/>
-              </svg>
+        <!-- ── AGENT ACTIONS ── -->
+        <div *ngIf="userRole === 'AGENT' && ticket.status === 'PENDING'" class="agent-actions">
+
+          <!-- Accept Form -->
+          <div *ngIf="acceptingTicketId === ticket.id" class="action-form accept-form">
+            <h4>✅ Accept & Schedule Meeting</h4>
+            <div class="form-group">
+              <label class="form-label">Google Meet Link *</label>
+              <input type="url" [(ngModel)]="acceptForm.googleMeetLink"
+                placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                class="form-input" />
             </div>
-            Lien Google Meet
-          </div>
-          
-          <div class="z-10 relative flex sm:flex-row flex-col gap-3">
-            <div class="group relative flex-1">
-              <input 
-                type="text" 
-                [value]="ticket.googleMeetLink" 
-                readonly 
-                class="bg-white px-4 py-3 pr-10 border border-blue-200 focus:border-blue-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-200 w-full text-gray-600 text-sm transition-all"
-              >
-              <button class="top-1/2 right-2 absolute hover:bg-blue-50 p-1.5 rounded-lg text-gray-400 hover:text-blue-600 transition-all -translate-y-1/2 transform" (click)="copyLink()" title="Copier le lien">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                </svg>
+            <div class="action-form-btns">
+              <button (click)="cancelAction()" class="cancel-btn">Cancel</button>
+              <button (click)="submitAccept(ticket.id)" [disabled]="isSubmitting" class="approve-btn">
+                {{ isSubmitting ? 'Sending...' : '✅ Confirm & Notify Student' }}
               </button>
             </div>
-            <button class="flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-700 shadow-blue-600/30 shadow-lg hover:shadow-blue-600/40 px-6 py-3 rounded-xl font-bold text-white transition-all hover:-translate-y-0.5 transform" (click)="joinMeeting()">
-              Rejoindre
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M15 10l5 5-5 5"/>
-                <path d="M4 4v7a4 4 0 0 0 4 4h12"/>
-              </svg>
-            </button>
           </div>
+
+          <!-- Reject Form -->
+          <div *ngIf="rejectingTicketId === ticket.id" class="action-form reject-form">
+            <h4>❌ Reject Ticket</h4>
+            <div class="form-group">
+              <label class="form-label">Rejection Reason *</label>
+              <textarea [(ngModel)]="rejectForm.reason" rows="3"
+                placeholder="Explain why you're rejecting this ticket..."
+                class="form-input form-textarea"></textarea>
+            </div>
+            <div class="action-form-btns">
+              <button (click)="cancelAction()" class="cancel-btn">Cancel</button>
+              <button (click)="submitReject(ticket.id)" [disabled]="isSubmitting" class="reject-btn">
+                {{ isSubmitting ? 'Rejecting...' : '❌ Reject Ticket' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Response Form -->
+          <div *ngIf="respondingTicketId === ticket.id" class="action-form">
+            <h4>💬 Add Response</h4>
+            <div class="form-group">
+              <textarea [(ngModel)]="responseText" rows="3"
+                placeholder="Write your response to the student..."
+                class="form-input form-textarea"></textarea>
+            </div>
+            <div class="action-form-btns">
+              <button (click)="cancelAction()" class="cancel-btn">Cancel</button>
+              <button (click)="submitResponse(ticket.id)" [disabled]="isSubmitting" class="primary-btn">
+                {{ isSubmitting ? 'Sending...' : '💬 Send Response' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div *ngIf="acceptingTicketId !== ticket.id && rejectingTicketId !== ticket.id && respondingTicketId !== ticket.id"
+            class="action-buttons">
+            <button (click)="startAccept(ticket.id)" class="approve-btn">✅ Accept</button>
+            <button (click)="startReject(ticket.id)" class="reject-btn">❌ Reject</button>
+            <button (click)="startResponse(ticket.id)" class="response-btn">💬 Respond</button>
+          </div>
+
         </div>
 
-        <div class="flex justify-center items-center gap-2 mt-6 text-gray-400 text-xs">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-yellow-500">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="16" x2="12" y2="12"/>
-            <line x1="12" y1="8" x2="12.01" y2="8"/>
-          </svg>
-          Rejoignez la réunion 5 minutes avant l'heure prévue
-        </div>
       </div>
     </div>
   </div>
-</main>
+
+</div>
