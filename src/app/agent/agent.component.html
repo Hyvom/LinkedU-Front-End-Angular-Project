@@ -192,164 +192,159 @@
           <i class="fa-solid fa-chart-line"></i> Progress
         </button>
       </div>
-
       <!-- ── PROFILE TAB ── -->
-      <div *ngIf="activeTab === 'profile'">
-        <div *ngIf="isLoadingProfile" class="loading-state">
-          <div class="spinner"></div>
-          <p>
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            Loading profile...
-          </p>
+<div *ngIf="activeTab === 'profile'">
+  <div *ngIf="isLoadingProfile" class="loading-state">
+    <div class="spinner"></div>
+    <p>
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading profile...
+    </p>
+  </div>
+
+  <div *ngIf="!isLoadingProfile && !studentProfile" class="empty-state">
+    <div class="empty-icon">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <h3>No profile created yet</h3>
+    <p>This student hasn't set up their profile.</p>
+  </div>
+
+  <div *ngIf="!isLoadingProfile && studentProfile" class="profile-view">
+
+    <!-- Profile Hero Section -->
+    <div class="profile-hero">
+      <div class="hero-avatar">
+        <img *ngIf="getStudentAvatarUrl()" [src]="getStudentAvatarUrl()"
+          alt="avatar" class="hero-img" />
+        <span *ngIf="!getStudentAvatarUrl()">{{ getInitials(selectedStudent) }}</span>
+      </div>
+      <div class="hero-info">
+        <h3>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h3>
+        <p>
+          <i class="fa-solid fa-envelope"></i>
+          {{ selectedStudent.email }}
+        </p>
+        <div class="hero-tags">
+          <span class="tag" *ngIf="studentProfile.currentStudyLevel">
+            <i class="fa-solid fa-graduation-cap"></i>
+            {{ studentProfile.currentStudyLevel }}
+          </span>
+          <span class="tag tag-yellow" *ngIf="studentProfile.speciality">
+            <i class="fa-solid fa-flask"></i>
+            {{ studentProfile.speciality }}
+          </span>
+          <span class="tag tag-status" [ngClass]="getStudentStatusClass()">
+            <i class="fa-solid fa-circle"></i>
+            {{ studentProfile.onlineStatus || 'OFFLINE' }}
+          </span>
         </div>
+      </div>
+    </div>
 
-        <div *ngIf="!isLoadingProfile && !studentProfile" class="empty-state">
-          <div class="empty-icon">
-            <i class="fa-solid fa-user"></i>
+    <!-- Info Grid -->
+    <div class="info-grid">
+
+      <!-- Academic Card -->
+      <div class="info-card">
+        <h4 class="card-title">
+          <i class="fa-solid fa-graduation-cap"></i>
+          Academic
+        </h4>
+        <div class="card-rows">
+          <div class="card-row">
+            <span class="row-label">Current Level</span>
+            <span class="row-value">{{ studentProfile.currentStudyLevel || '—' }}</span>
           </div>
-          <h3>No profile created yet</h3>
-          <p>This student hasn't set up their profile.</p>
-        </div>
-
-        <div *ngIf="!isLoadingProfile && studentProfile" class="profile-view">
-
-        <!-- Profile Hero Section - Fixed version -->
-        <div class="profile-hero">
-          <div class="hero-avatar">
-            <img *ngIf="getStudentAvatarUrl()" [src]="getStudentAvatarUrl()"
-              alt="avatar" class="hero-img" />
-            <span *ngIf="!getStudentAvatarUrl()">{{ getInitials(selectedStudent) }}</span>
-            <!-- Status dot - positioned correctly over the avatar -->
-            <span class="hero-status-dot" [ngClass]="getStudentStatusClass()"></span>
+          <div class="card-row">
+            <span class="row-label">Target Level</span>
+            <span class="row-value">{{ studentProfile.wishedStudyLevel || '—' }}</span>
           </div>
-          <div class="hero-info">
-            <h3>{{ selectedStudent.firstName }} {{ selectedStudent.lastName }}</h3>
-            <p>
-              <i class="fa-solid fa-envelope"></i>
-              {{ selectedStudent.email }}
-            </p>
-            <div class="hero-tags">
-              <span class="tag" *ngIf="studentProfile.currentStudyLevel">
-                <i class="fa-solid fa-graduation-cap"></i>
-                {{ studentProfile.currentStudyLevel }}
-              </span>
-              <span class="tag tag-yellow" *ngIf="studentProfile.speciality">
-                <i class="fa-solid fa-flask"></i>
-                {{ studentProfile.speciality }}
-              </span>
-              <span class="tag tag-status" *ngIf="studentProfile.onlineStatus"
-                [ngClass]="getStudentStatusClass()">
-                <i class="fa-solid fa-circle"></i>
-                {{ studentProfile.onlineStatus }}
-              </span>
-            </div>
+          <div class="card-row">
+            <span class="row-label">Speciality</span>
+            <span class="row-value">{{ studentProfile.speciality || '—' }}</span>
           </div>
-        </div>
-
-          <!-- Info Grid -->
-          <div class="info-grid">
-
-            <!-- Academic Card -->
-            <div class="info-card">
-              <h4 class="card-title">
-                <i class="fa-solid fa-graduation-cap"></i>
-                Academic
-              </h4>
-              <div class="card-rows">
-                <div class="card-row">
-                  <span class="row-label">Current Level</span>
-                  <span class="row-value">{{ studentProfile.currentStudyLevel || '—' }}</span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">Target Level</span>
-                  <span class="row-value">{{ studentProfile.wishedStudyLevel || '—' }}</span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">Speciality</span>
-                  <span class="row-value">{{ studentProfile.speciality || '—' }}</span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">University Year</span>
-                  <span class="row-value">
-                    {{ studentProfile.universityYear ? 'Year ' + studentProfile.universityYear : '—' }}
-                  </span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">College Type</span>
-                  <span class="row-value">{{ studentProfile.collegeType || '—' }}</span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">Budget</span>
-                  <span class="row-value">
-                    {{ studentProfile.budget ? '$' + studentProfile.budget : '—' }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Contact & Status Card -->
-            <div class="info-card">
-              <h4 class="card-title">
-                <i class="fa-solid fa-address-card"></i>
-                Contact & Status
-              </h4>
-              <div class="card-rows">
-                <div class="card-row">
-                  <span class="row-label">Status</span>
-                  <span class="row-value">
-                    <span class="status-dot-inline"
-                      [ngClass]="getStudentStatusClass()"></span>
-                    {{ studentProfile.onlineStatus || '—' }}
-                  </span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">Availability</span>
-                  <span class="row-value">
-                    <i class="fa-regular fa-clock"></i>
-                    {{ studentProfile.availabilityTime || '—' }}
-                  </span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">Address</span>
-                  <span class="row-value">
-                    <i class="fa-solid fa-location-dot"></i>
-                    {{ studentProfile.address || '—' }}
-                  </span>
-                </div>
-                <div class="card-row">
-                  <span class="row-label">Phone</span>
-                  <span class="row-value">
-                    <i class="fa-solid fa-phone"></i>
-                    {{ studentProfile.phoneNumber || '—' }}
-                  </span>
-                </div>
-              </div>
-
-              <h4 class="card-title" style="margin-top:1.25rem">
-                <i class="fa-solid fa-language"></i>
-                Languages
-              </h4>
-              <div class="lang-chips" *ngIf="studentProfile.languages">
-                <div *ngFor="let lang of parseLanguages(studentProfile.languages)"
-                  class="lang-chip">
-                  <span class="lang-name">{{ lang.name }}</span>
-                  <span class="lang-badge">{{ lang.level }}</span>
-                </div>
-              </div>
-              <p *ngIf="!studentProfile.languages" class="text-muted">
-                <i class="fa-solid fa-info-circle"></i>
-                No languages added.
-              </p>
-
-              <h4 class="card-title" style="margin-top:1.25rem">
-                <i class="fa-solid fa-pen"></i>
-                Bio
-              </h4>
-              <p class="bio-text">{{ studentProfile.bio || 'No bio added.' }}</p>
-            </div>
-
+          <div class="card-row">
+            <span class="row-label">University Year</span>
+            <span class="row-value">
+              {{ studentProfile.universityYear ? 'Year ' + studentProfile.universityYear : '—' }}
+            </span>
+          </div>
+          <div class="card-row">
+            <span class="row-label">College Type</span>
+            <span class="row-value">{{ studentProfile.collegeType || '—' }}</span>
+          </div>
+          <div class="card-row">
+            <span class="row-label">Budget</span>
+            <span class="row-value">
+              {{ studentProfile.budget ? '$' + studentProfile.budget : '—' }}
+            </span>
           </div>
         </div>
+      </div>
+
+      <!-- Contact & Status Card -->
+      <div class="info-card">
+        <h4 class="card-title">
+          <i class="fa-solid fa-address-card"></i>
+          Contact & Status
+        </h4>
+        <div class="card-rows">
+          <div class="card-row">
+            <span class="row-label">Status</span>
+            <span class="row-value">
+              <span class="status-dot-inline" [ngClass]="getStudentStatusClass()"></span>
+              {{ studentProfile.onlineStatus || '—' }}
+            </span>
+          </div>
+          <div class="card-row">
+            <span class="row-label">Availability</span>
+            <span class="row-value">
+              <i class="fa-regular fa-clock"></i>
+              {{ studentProfile.availabilityTime || '—' }}
+            </span>
+          </div>
+          <div class="card-row">
+            <span class="row-label">Address</span>
+            <span class="row-value">
+              <i class="fa-solid fa-location-dot"></i>
+              {{ studentProfile.address || '—' }}
+            </span>
+          </div>
+          <div class="card-row">
+            <span class="row-label">Phone</span>
+            <span class="row-value">
+              <i class="fa-solid fa-phone"></i>
+              {{ studentProfile.phoneNumber || '—' }}
+            </span>
+          </div>
+        </div>
+
+        <h4 class="card-title" style="margin-top:1.25rem">
+          <i class="fa-solid fa-language"></i>
+          Languages
+        </h4>
+        <div class="lang-chips" *ngIf="studentProfile.languages">
+          <div *ngFor="let lang of parseLanguages(studentProfile.languages)" class="lang-chip">
+            <span class="lang-name">{{ lang.name }}</span>
+            <span class="lang-badge">{{ lang.level }}</span>
+          </div>
+        </div>
+        <p *ngIf="!studentProfile.languages" class="text-muted">
+          <i class="fa-solid fa-info-circle"></i>
+          No languages added.
+        </p>
+
+        <h4 class="card-title" style="margin-top:1.25rem">
+          <i class="fa-solid fa-pen"></i>
+          Bio
+        </h4>
+        <p class="bio-text">{{ studentProfile.bio || 'No bio added.' }}</p>
+      </div>
+
+    </div>
+  </div>
+</div>
       </div>
 
       <!-- ── DOCUMENTS TAB ── -->
@@ -544,7 +539,5 @@
 
         </div>
       </div>
-
-    </div>
   </main>
 </div>
