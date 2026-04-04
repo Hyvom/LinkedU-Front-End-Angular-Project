@@ -46,7 +46,7 @@ export interface RegisterResponse {
 // ===========================
 // USER / ROLES
 // ===========================
-export type UserRole = 'ADMIN' | 'USER' | 'GUEST' | 'STUDENT' | 'AGENT';
+export type UserRole = 'ADMIN' | 'USER' | 'GUEST' | 'STUDENT' | 'AGENT' | 'LANGUAGE_TEACHER';
 
 export interface User {
   id: number;
@@ -251,10 +251,25 @@ export interface Destination {
 export interface Quiz {
   id: number;
   title: string;
+  description?: string;
+  language?: string;
+  createdAt?: string;
+}
+
+export interface CreateQuizPayload {
+  title: string;
   description: string;
-  timeLimit: number;
-  totalQuestions: number;
-  isActive: boolean;
+  language: string;
+}
+
+export interface QuestionFormPayload {
+  quizId: number;
+  questionText: string;
+  optionA: string;
+  optionB: string;
+  optionC: string;
+  optionD: string;
+  correctOption: string;
 }
 
 export interface QuizOption {
@@ -267,10 +282,23 @@ export interface QuizOption {
 export interface QuizQuestion {
   id: number;
   questionText: string;
-  questionType: 'MCQ' | 'TRUE_FALSE' | 'SHORT_ANSWER';
-  points: number;
-  orderIndex: number;
-  options: QuizOption[];
+  optionA?: string;
+  optionB?: string;
+  optionC?: string;
+  optionD?: string;
+  correctOption?: string;
+}
+
+export interface QuizAnswerSubmission {
+  questionId: number;
+  selectedOption: string;
+}
+
+export interface QuizSubmitResponse {
+  quizAttemptId: number;
+  score: number;
+  passed: boolean;
+  message: string;
 }
 
 export interface QuizAttempt {

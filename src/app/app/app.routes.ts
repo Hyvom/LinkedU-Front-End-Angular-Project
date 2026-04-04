@@ -37,6 +37,7 @@ import { StudentProfileComponent } from '../student/student.component';
 import { GuestProfileComponent } from '../profile/guest-profile.component/guest-profile.component';
 import { AgentProfileComponent } from '../profile/agent-profile.component/agent-profile.component';
 import { AgentComponent } from '../agent/agent.component';
+import { LanguageTeacherComponent } from '../language-teacher/language-teacher.component';
 
 //Ticket
 import { TicketComponent } from '../ticket/ticket.component';
@@ -83,7 +84,7 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ADMIN', 'AGENT'] },
+    data: { roles: ['ADMIN'] },
     children: [
       { path: '', redirectTo: 'product-keys', pathMatch: 'full' },
       {
@@ -101,6 +102,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('../admin/destinations/destinations-admin.component/destinations-admin.component')
             .then(m => m.DestinationsAdminComponent)
+      },
+      {
+        path: 'quizzes',
+        loadComponent: () =>
+          import('../admin/quizzes.component/quizzes.component')
+            .then(m => m.QuizzesComponent)
       }
     ]
   },
@@ -119,6 +126,13 @@ export const routes: Routes = [
     component: AgentComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['AGENT'] }
+  },
+
+  {
+    path: 'teacher',
+    component: LanguageTeacherComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['LANGUAGE_TEACHER'] }
   },
 
   //Chat

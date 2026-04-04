@@ -7,15 +7,19 @@ import { ProfileService } from '../core/services/profile.service';
 import { DocumentService } from '../core/services/document.service';
 import { ProgressService } from '../core/services/progress.service';
 import { ChatService } from '../core/services/chat.service';
+import { QuizService } from '../core/services/quiz.service';
 import {
   StudentProfileResponse,
   StudentDocument,
   Progress,
   ProgressStage,
-  ProgressStatus
+  ProgressStatus,
+  Quiz,
+  QuizAnswerSubmission,
+  QuizQuestion
 } from '../shared/models/models';
 
-type ActiveSection = 'profile' | 'documents' | 'progress';
+type ActiveSection = 'profile' | 'documents' | 'progress' | 'quizzes';
 type DocumentTab = 'cv' | 'passport' | 'idcard';
 
 @Component({
@@ -66,6 +70,18 @@ export class StudentProfileComponent implements OnInit {
   
   progressList: Progress[] = [];
   isLoadingProgress = false;
+
+  // ── Quizzes ──
+  assignedQuizzes: Quiz[] = [];
+  selectedQuiz: Quiz | null = null;
+  selectedQuizQuestions: QuizQuestion[] = [];
+  isLoadingQuizzes = false;
+  quizError = '';
+  currentQuestionIndex = 0;
+  selectedAnswers: Record<number, string> = {};
+  reviewMode = false;
+  submittingQuiz = false;
+  quizResult: { score: number; passed: boolean; message: string } | null = null;
 
   // Updated allStages with comprehensive stages
   allStages: ProgressStage[] = [
@@ -124,6 +140,7 @@ export class StudentProfileComponent implements OnInit {
     private readonly documentService: DocumentService,
     private readonly progressService: ProgressService,
     private readonly chatService: ChatService,
+    private readonly quizService: QuizService,
     private readonly router: Router
   ) {}
 
@@ -161,6 +178,124 @@ export class StudentProfileComponent implements OnInit {
     // Always reload when switching to documents or progress
     if (section === 'documents') this.loadDocuments();
     if (section === 'progress') this.loadProgress();
+    if (section === 'quizzes') this.loadAssignedQuizzes();
+  }
+
+  loadAssignedQuizzes(): void {
+    this.isLoadingQuizzes = true;
+    this.quizError = '';
+    this.quizService.getAssignedQuizzes(this.userId).subscribe({
+      next: (quizzes) => {
+        this.assignedQuizzes = quizzes;
+        this.isLoadingQuizzes = false;
+      },
+      error: () => {
+        this.isLoadingQuizzes = false;
+        this.quizError = 'Failed to load assigned quizzes.';
+      }
+    });
+  }
+
+  openQuiz(quiz: Quiz): void {
+    this.selectedQuiz = quiz;
+    this.currentQuestionIndex = 0;
+    this.selectedAnswers = {};
+    this.reviewMode = false;
+    this.quizResult = null;
+    this.quizService.getQuizQuestionsForStudent(quiz.id, this.userId).subscribe({
+      next: (questions) => {
+        this.selectedQuizQuestions = questions;
+      },
+      error: () => {
+        this.selectedQuizQuestions = [];
+        this.quizError = 'Could not load quiz questions.';
+      }
+    });
+  }
+
+  nextQuestion(): void {
+    if (this.currentQuestionIndex < this.selectedQuizQuestions.length - 1) {
+      this.currentQuestionIndex++;
+    }
+  }
+
+  prevQuestion(): void {
+    if (this.currentQuestionIndex > 0) {
+      this.currentQuestionIndex--;
+    }
+  }
+
+  jumpToQuestion(index: number): void {
+    if (index >= 0 && index < this.selectedQuizQuestions.length) {
+      this.currentQuestionIndex = index;
+      this.reviewMode = false;
+    }
+  }
+
+  chooseAnswer(questionId: number, option: string): void {
+    this.selectedAnswers[questionId] = option;
+  }
+
+  getSelectedAnswer(questionId: number): string {
+    return this.selectedAnswers[questionId] || '';
+  }
+
+  getAnsweredCount(): number {
+    return this.selectedQuizQuestions.filter(question => !!this.selectedAnswers[question.id]).length;
+  }
+
+  getProgressPercent(): number {
+    if (!this.selectedQuizQuestions.length) {
+      return 0;
+    }
+    return Math.round((this.getAnsweredCount() / this.selectedQuizQuestions.length) * 100);
+  }
+
+  canSubmitQuiz(): boolean {
+    if (!this.selectedQuizQuestions.length) return false;
+    return this.selectedQuizQuestions.every(question => !!this.selectedAnswers[question.id]);
+  }
+
+  enterReviewMode(): void {
+    if (!this.canSubmitQuiz()) {
+      this.quizError = 'Please answer all questions before reviewing.';
+      return;
+    }
+    this.quizError = '';
+    this.reviewMode = true;
+  }
+
+  backToQuiz(): void {
+    this.reviewMode = false;
+  }
+
+  submitQuiz(): void {
+    if (!this.selectedQuiz || !this.canSubmitQuiz()) {
+      this.quizError = 'Please answer all questions before submitting.';
+      return;
+    }
+
+    const answers: QuizAnswerSubmission[] = this.selectedQuizQuestions.map(question => ({
+      questionId: question.id,
+      selectedOption: this.selectedAnswers[question.id]
+    }));
+
+    this.submittingQuiz = true;
+    this.quizError = '';
+    this.quizService.submitQuiz(this.userId, this.selectedQuiz.id, answers).subscribe({
+      next: (result) => {
+        this.quizResult = {
+          score: result.score,
+          passed: result.passed,
+          message: result.message
+        };
+        this.submittingQuiz = false;
+      },
+      error: () => {
+        this.submittingQuiz = false;
+        this.quizError = 'Quiz submission failed.';
+      }
+    });
   }
 
   logout(): void {

@@ -1,0 +1,253 @@
+.teacher-layout {
+  padding: 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+  background:
+    radial-gradient(circle at top right, rgba(217, 198, 130, 0.16), transparent 28%),
+    linear-gradient(180deg, #08112f 0%, #0b153f 28%, #f8fafc 28%, #f8fafc 100%);
+  min-height: 100vh;
+}
+
+.teacher-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(8, 17, 47, 0.92);
+  color: white;
+  box-shadow: 0 12px 30px rgba(8, 17, 47, 0.28);
+}
+
+.teacher-header h1 {
+  margin: 0 0 6px;
+}
+
+.teacher-header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.logout-btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d9c682 0%, #c4b56a 100%);
+  color: #0b153f;
+  font-weight: 800;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hero-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #0b153f 0%, #0f1b52 100%);
+  color: white;
+  box-shadow: 0 14px 36px rgba(8, 17, 47, 0.2);
+  margin-bottom: 16px;
+}
+
+.hero-kicker {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(217, 198, 130, 0.16);
+  color: #d9c682;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero-strip h3 {
+  margin: 8px 0 4px;
+}
+
+.hero-strip p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.hero-pill {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #d9c682;
+  font-weight: 800;
+}
+
+.steps {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.steps button {
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.82);
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.steps button.active {
+  border-color: #d9c682;
+  background: linear-gradient(135deg, #d9c682 0%, #c4b56a 100%);
+  color: #0b153f;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #0f172a;
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.count-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #0b153f;
+  color: #d9c682;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+}
+
+.question-form-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.hint {
+  margin-top: -2px;
+  margin-bottom: 12px;
+  color: #475569;
+}
+
+.wizard-note {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+textarea,
+input,
+select,
+button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+}
+
+button {
+  cursor: pointer;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #0b153f 0%, #0f1b52 100%);
+  color: #ffffff;
+  border-color: #0b153f;
+}
+
+button.secondary {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.quiz-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quiz-item {
+  width: auto;
+  min-width: 190px;
+  text-align: left;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.quiz-item.active {
+  border-color: #d9c682;
+  background: linear-gradient(135deg, rgba(217, 198, 130, 0.18), rgba(11, 21, 63, 0.04));
+}
+
+.question-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #ffffff;
+}
+
+.correct {
+  color: #065f46;
+  font-weight: 600;
+}
+
+.msg {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.msg.success {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.msg.error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+@media (max-width: 768px) {
+  .grid-3,
+  .question-form-stack {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-strip,
+  .card-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .steps {
+    flex-wrap: wrap;
+  }
+}

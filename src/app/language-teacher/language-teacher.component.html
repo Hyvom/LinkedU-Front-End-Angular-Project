@@ -1,0 +1,116 @@
+<div class="teacher-layout">
+  <header class="teacher-header">
+    <div>
+      <h1>Language Teacher Quiz Builder</h1>
+      <p>Build quizzes as a multi-step flow: create quiz, add questions, then finish.</p>
+    </div>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </header>
+
+  <div class="hero-strip" *ngIf="createdQuiz">
+    <div>
+      <span class="hero-kicker">Active quiz</span>
+      <h3>{{ createdQuiz.title }}</h3>
+      <p>{{ createdQuiz.language || 'N/A' }} - {{ createdQuestionsCount }} question(s)</p>
+    </div>
+    <div class="hero-pill">Step {{ currentStep }} / 3</div>
+  </div>
+
+  <div class="steps">
+    <button [class.active]="currentStep === 1" (click)="goToStep(1)">1. Quiz</button>
+    <button [class.active]="currentStep === 2" [disabled]="!selectedQuizId" (click)="goToStep(2)">2. Questions</button>
+    <button [class.active]="currentStep === 3" [disabled]="!selectedQuizId" (click)="goToStep(3)">3. Finish</button>
+  </div>
+
+  <p class="msg success" *ngIf="successMsg">{{ successMsg }}</p>
+  <p class="msg error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+  <section class="card" *ngIf="currentStep === 1">
+    <h2>Create Quiz</h2>
+    <div class="grid-3">
+      <input type="text" [(ngModel)]="quizForm.title" placeholder="Quiz title" />
+      <select [(ngModel)]="quizForm.language">
+        <option value="" disabled>Select language</option>
+        <option *ngFor="let language of languageOptions" [value]="language">{{ language }}</option>
+      </select>
+      <button (click)="createQuiz()" [disabled]="savingQuiz">{{ savingQuiz ? 'Creating...' : 'Create & Continue' }}</button>
+    </div>
+    <textarea [(ngModel)]="quizForm.description" placeholder="Short description for students"></textarea>
+  </section>
+
+  <section class="card" *ngIf="currentStep === 2 && selectedQuizId">
+    <h2>Add Question {{ questionCursor }}</h2>
+    <p class="hint">
+      Quiz: <strong>{{ createdQuiz?.title }}</strong>
+      ({{ createdQuiz?.language || 'N/A' }})
+    </p>
+    <div class="question-form-stack">
+      <textarea [(ngModel)]="questionForm.questionText" placeholder="Write the question"></textarea>
+      <input type="text" [(ngModel)]="questionForm.optionA" placeholder="Option A" />
+      <input type="text" [(ngModel)]="questionForm.optionB" placeholder="Option B" />
+      <input type="text" [(ngModel)]="questionForm.optionC" placeholder="Option C" />
+      <input type="text" [(ngModel)]="questionForm.optionD" placeholder="Option D" />
+      <select [(ngModel)]="questionForm.correctOption">
+        <option value="A">Correct: A</option>
+        <option value="B">Correct: B</option>
+        <option value="C">Correct: C</option>
+        <option value="D">Correct: D</option>
+      </select>
+    </div>
+    <div class="actions-row">
+      <button class="secondary" (click)="addQuestionAndContinue()" [disabled]="savingQuestion">
+        {{ savingQuestion ? 'Saving...' : 'Save & Next Question' }}
+      </button>
+      <button class="primary" (click)="addQuestionAndFinish()" [disabled]="savingQuestion">
+        {{ savingQuestion ? 'Saving...' : 'Save & Finish Quiz' }}
+      </button>
+    </div>
+    <p class="wizard-note">Choose the correct answer for every question before moving on.</p>
+  </section>
+
+  <section class="card" *ngIf="currentStep === 3">
+    <h2>Quiz Ready</h2>
+    <p>
+      <strong>{{ createdQuiz?.title }}</strong> is ready with
+      <strong>{{ createdQuestionsCount }}</strong> question(s).
+    </p>
+    <div class="actions-row">
+      <button class="secondary" (click)="goToStep(2)">Add More Questions</button>
+      <button class="primary" (click)="startNewQuizFlow()">Start New Quiz</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-header-row">
+      <h2>Your Existing Quizzes</h2>
+      <span class="count-badge">{{ quizzes.length }} total</span>
+    </div>
+    <p *ngIf="loading">Loading quizzes...</p>
+    <div class="quiz-list" *ngIf="!loading">
+      <button
+        class="quiz-item"
+        *ngFor="let quiz of quizzes"
+        [class.active]="quiz.id === selectedQuizId"
+        (click)="selectQuiz(quiz.id)">
+        <strong>{{ quiz.title }}</strong>
+        <span>{{ quiz.language || 'N/A' }}</span>
+      </button>
+      <p *ngIf="quizzes.length === 0">No quizzes yet.</p>
+    </div>
+  </section>
+
+  <section class="card" *ngIf="selectedQuizId">
+    <h2>Questions In Selected Quiz</h2>
+    <div *ngFor="let q of selectedQuizQuestions" class="question-item">
+      <p><strong>{{ q.questionText }}</strong></p>
+      <ul>
+        <li>A: {{ q.optionA }}</li>
+        <li>B: {{ q.optionB }}</li>
+        <li>C: {{ q.optionC }}</li>
+        <li>D: {{ q.optionD }}</li>
+      </ul>
+      <span class="correct">Correct: {{ q.correctOption }}</span>
+    </div>
+    <p *ngIf="selectedQuizQuestions.length === 0">No questions yet for this quiz.</p>
+  </section>
+</div>

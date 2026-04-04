@@ -28,7 +28,7 @@ export class UsersComponent implements OnInit {
   selectedAgentMap: { [studentId: number]: number } = {};
   assigningAgent: number | null = null;
 
-  readonly roles: UserRole[] = ['ADMIN', 'USER', 'GUEST', 'STUDENT', 'AGENT'];
+  readonly roles: UserRole[] = ['ADMIN', 'USER', 'GUEST', 'STUDENT', 'AGENT', 'LANGUAGE_TEACHER'];
 
   constructor(private adminService: AdminService) {}
 
@@ -99,7 +99,8 @@ export class UsersComponent implements OnInit {
       AGENT: 'badge-agent',
       STUDENT: 'badge-student',
       USER: 'badge-user',
-      GUEST: 'badge-guest'
+      GUEST: 'badge-guest',
+      LANGUAGE_TEACHER: 'badge-language-teacher'
     };
     return map[role] ?? 'badge-user';
   }
@@ -110,7 +111,8 @@ export class UsersComponent implements OnInit {
       'AGENT': 'fas fa-user-tie',
       'STUDENT': 'fas fa-user-graduate',
       'USER': 'fas fa-user',
-      'GUEST': 'fas fa-user-slash'
+      'GUEST': 'fas fa-user-slash',
+      'LANGUAGE_TEACHER': 'fas fa-chalkboard-teacher'
     };
     return icons[role] ?? 'fas fa-user';
   }

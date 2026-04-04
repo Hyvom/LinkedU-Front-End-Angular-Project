@@ -36,6 +36,11 @@
         <i class="fa-solid fa-chart-line"></i>
         My Progress
       </button>
+      <button (click)="setSection('quizzes')"
+        [class.active]="activeSection === 'quizzes'" class="nav-btn">
+        <i class="fa-solid fa-list-check"></i>
+        My Quizzes
+      </button>
       <a routerLink="/profile" class="nav-btn nav-link-btn">
         <i class="fa-solid fa-id-card"></i>
         Full Profile
@@ -186,6 +191,115 @@
             </p>
           </div>
 
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ QUIZZES SECTION ═══════════ -->
+    <div *ngIf="activeSection === 'quizzes'">
+      <div class="section-header">
+        <h2>
+          <i class="fa-solid fa-list-check"></i>
+          Assigned Quizzes
+        </h2>
+        <p class="section-sub">View your assigned quizzes and review questions.</p>
+      </div>
+
+      <div *ngIf="quizError" class="alert alert-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ quizError }}
+      </div>
+
+      <div *ngIf="isLoadingQuizzes" class="loading-state">
+        <div class="spinner"></div>
+        <p>
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Loading quizzes...
+        </p>
+      </div>
+
+      <div class="quiz-grid" *ngIf="!isLoadingQuizzes">
+        <button class="quiz-card" *ngFor="let quiz of assignedQuizzes" (click)="openQuiz(quiz)">
+          <h4>{{ quiz.title }}</h4>
+          <p>{{ quiz.description || 'No description provided.' }}</p>
+          <span class="quiz-lang">{{ quiz.language || 'General' }}</span>
+        </button>
+        <p *ngIf="assignedQuizzes.length === 0" class="text-muted">No assigned quizzes yet.</p>
+      </div>
+
+      <div class="quiz-preview" *ngIf="selectedQuiz">
+        <h3>{{ selectedQuiz.title }}</h3>
+        <div class="quiz-progress">
+          <div class="quiz-progress-header">
+            <span>Progress</span>
+            <span>{{ getAnsweredCount() }}/{{ selectedQuizQuestions.length }} answered</span>
+          </div>
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" [style.width.%]="getProgressPercent()"></div>
+          </div>
+        </div>
+
+        <div class="quiz-mode-toggle" *ngIf="selectedQuizQuestions.length > 0">
+          <button (click)="backToQuiz()" [class.active]="!reviewMode">Answer</button>
+          <button (click)="enterReviewMode()" [class.active]="reviewMode">Review</button>
+        </div>
+
+        <p class="text-muted" *ngIf="!reviewMode">Question {{ currentQuestionIndex + 1 }} / {{ selectedQuizQuestions.length }}</p>
+
+        <div *ngIf="selectedQuizQuestions.length > 0 && !reviewMode" class="question-box">
+          <h4>{{ selectedQuizQuestions[currentQuestionIndex].questionText }}</h4>
+          <div class="answer-grid">
+            <button
+              class="answer-btn"
+              [class.active]="getSelectedAnswer(selectedQuizQuestions[currentQuestionIndex].id) === 'A'"
+              (click)="chooseAnswer(selectedQuizQuestions[currentQuestionIndex].id, 'A')">
+              A. {{ selectedQuizQuestions[currentQuestionIndex].optionA }}
+            </button>
+            <button
+              class="answer-btn"
+              [class.active]="getSelectedAnswer(selectedQuizQuestions[currentQuestionIndex].id) === 'B'"
+              (click)="chooseAnswer(selectedQuizQuestions[currentQuestionIndex].id, 'B')">
+              B. {{ selectedQuizQuestions[currentQuestionIndex].optionB }}
+            </button>
+            <button
+              class="answer-btn"
+              [class.active]="getSelectedAnswer(selectedQuizQuestions[currentQuestionIndex].id) === 'C'"
+              (click)="chooseAnswer(selectedQuizQuestions[currentQuestionIndex].id, 'C')">
+              C. {{ selectedQuizQuestions[currentQuestionIndex].optionC }}
+            </button>
+            <button
+              class="answer-btn"
+              [class.active]="getSelectedAnswer(selectedQuizQuestions[currentQuestionIndex].id) === 'D'"
+              (click)="chooseAnswer(selectedQuizQuestions[currentQuestionIndex].id, 'D')">
+              D. {{ selectedQuizQuestions[currentQuestionIndex].optionD }}
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="selectedQuizQuestions.length > 0 && reviewMode" class="review-panel">
+          <div class="review-item" *ngFor="let question of selectedQuizQuestions; let i = index">
+            <div class="review-item-header">
+              <strong>Q{{ i + 1 }}.</strong>
+              <button class="review-edit-btn" (click)="jumpToQuestion(i)">Edit</button>
+            </div>
+            <p>{{ question.questionText }}</p>
+            <div class="review-answer">Your answer: {{ getSelectedAnswer(question.id) || 'Not answered' }}</div>
+          </div>
+        </div>
+
+        <div class="question-nav" *ngIf="selectedQuizQuestions.length > 0">
+          <button (click)="prevQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
+          <button (click)="nextQuestion()" [disabled]="currentQuestionIndex === selectedQuizQuestions.length - 1">Next</button>
+          <button (click)="enterReviewMode()" [disabled]="!canSubmitQuiz()">Review Answers</button>
+          <button (click)="submitQuiz()" [disabled]="!canSubmitQuiz() || submittingQuiz">
+            {{ submittingQuiz ? 'Submitting...' : 'Finish Quiz' }}
+          </button>
+        </div>
+
+        <div class="quiz-result" *ngIf="quizResult">
+          <h4>{{ quizResult.passed ? 'Passed' : 'Not Passed' }}</h4>
+          <p>{{ quizResult.message }}</p>
+          <p class="score">Score: {{ quizResult.score | number:'1.0-0' }}%</p>
         </div>
       </div>
     </div>

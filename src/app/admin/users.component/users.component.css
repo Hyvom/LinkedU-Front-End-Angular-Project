@@ -206,6 +206,7 @@ th:nth-child(6), td:nth-child(6) { width: 10%; } /* Action */
 .badge-student { background: linear-gradient(135deg, #2c6e98, #1E4F70); color: white; }
 .badge-user { background: linear-gradient(135deg, #e8e9e4, #d9c682); color: #00072D; }
 .badge-guest { background: linear-gradient(135deg, #9ca3af, #6b7280); color: white; }
+.badge-language-teacher { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; }
 .badge-enabled { background: linear-gradient(135deg, #4caf50, #2e7d32); color: white; }
 .badge-disabled { background: linear-gradient(135deg, #ef5350, #c62828); color: white; }
 
@@ -250,6 +251,9 @@ select.role-user {
 }
 select.role-agent {
   border-color: #d9c682;
+}
+select.role-language_teacher {
+  border-color: #7c3aed;
 }
 
 .btn-assign, .btn-assign-agent {

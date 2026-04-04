@@ -32,6 +32,9 @@ export const profileRedirectGuard: CanActivateFn = () => {
   if (role === 'ADMIN') {
     return router.createUrlTree(['/admin']);
   }
+  if (role === 'LANGUAGE_TEACHER') {
+    return router.createUrlTree(['/teacher']);
+  }
 
   // Unknown role → login
   return router.createUrlTree(['/login']);

@@ -47,6 +47,8 @@ export class LoginComponent {
           this.router.navigateByUrl('/admin');
         } else if (role === 'AGENT') {
           this.router.navigateByUrl('/agent');
+        } else if (role === 'LANGUAGE_TEACHER') {
+          this.router.navigateByUrl('/teacher');
         } else if (role === 'STUDENT') {
           this.router.navigateByUrl('/student');
         } else if (role === 'GUEST' || role === 'USER') {
