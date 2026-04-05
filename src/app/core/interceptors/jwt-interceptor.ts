@@ -18,6 +18,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  if (req.url.startsWith('http://localhost:8080/api/chatbot/')) {
+    return next(req);
+  }
+
   const token = localStorage.getItem('token');
   if (token) {
     const cloned = req.clone({
