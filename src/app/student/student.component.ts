@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
@@ -8,6 +8,7 @@ import { DocumentService } from '../core/services/document.service';
 import { ProgressService } from '../core/services/progress.service';
 import { ChatService } from '../core/services/chat.service';
 import { QuizService } from '../core/services/quiz.service';
+import { RecommendationService } from '../core/services/recommendation.service';
 import {
   StudentProfileResponse,
   StudentDocument,
@@ -19,7 +20,7 @@ import {
   QuizQuestion
 } from '../shared/models/models';
 
-type ActiveSection = 'profile' | 'documents' | 'progress' | 'quizzes';
+type ActiveSection = 'profile' | 'documents' | 'progress' | 'quizzes' | 'recommendations';
 type DocumentTab = 'cv' | 'passport' | 'idcard';
 
 @Component({
@@ -72,6 +73,21 @@ export class StudentProfileComponent implements OnInit {
   isLoadingProgress = false;
 
   // ── Quizzes ──
+
+  // ── Recommendations ──
+  recommendations: any[] = [];
+  isLoadingRecommendations = false;
+  
+  // Form object for the ML model inputs
+  recommendationForm = {
+    country: '',
+    major: '',
+    language: '',
+    skills: '',
+    moyenne: '' as string | number
+  };
+
+  recommendationMeta: any = null;
   assignedQuizzes: Quiz[] = [];
   selectedQuiz: Quiz | null = null;
   selectedQuizQuestions: QuizQuestion[] = [];
@@ -141,7 +157,9 @@ export class StudentProfileComponent implements OnInit {
     private readonly progressService: ProgressService,
     private readonly chatService: ChatService,
     private readonly quizService: QuizService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly recommendationService: RecommendationService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
   ngOnInit(): void {
@@ -152,10 +170,12 @@ export class StudentProfileComponent implements OnInit {
     this.loadProfile();
     this.loadUnreadMessagesCount();
     
-    // Refresh unread count every 30 seconds
-    setInterval(() => {
-      this.loadUnreadMessagesCount();
-    }, 30000);
+    // Refresh unread count every 30 seconds only in the browser to avoid SSR hangs
+    if (isPlatformBrowser(this.platformId)) {
+      setInterval(() => {
+        this.loadUnreadMessagesCount();
+      }, 30000);
+    }
   }
 
   // ── Unread Messages ──
@@ -174,11 +194,66 @@ export class StudentProfileComponent implements OnInit {
 
   // ── Navigation ──
   setSection(section: ActiveSection): void {
+    // If we're already in this section, don't re-trigger initial loads
+    if (this.activeSection === section && section !== 'recommendations') return;
+    
     this.activeSection = section;
-    // Always reload when switching to documents or progress
+
     if (section === 'documents') this.loadDocuments();
     if (section === 'progress') this.loadProgress();
     if (section === 'quizzes') this.loadAssignedQuizzes();
+    if (section === 'recommendations' && this.recommendations.length === 0) {
+      this.initRecommendationForm();
+      this.loadRecommendations();
+    }
+  }
+
+  initRecommendationForm(): void {
+    // Set sensible default values first, ensuring they are never empty
+    this.recommendationForm = {
+      country: 'Any', // Default country
+      major: 'Any Field', // Default major
+      language: 'English', // Default language
+      skills: 'Problem Solving, Communication, Teamwork', // Default skills
+      moyenne: 15 // Default average grade (e.g., out of 20), ensuring it's a number
+    };
+
+    // If profile exists, override with actual profile data
+    if (this.profile) {
+      // Ensure profile properties are not null/undefined before assigning
+      // Use logical OR (||) to fall back to default if profile property is empty or null
+      // For languages, parse and join, or use default
+      const langs = this.parseLanguages(this.profile.languages || '[]');
+      const languageNames = langs.map(l => l.name).join(', ');
+
+      this.recommendationForm.country = this.profile.address || this.recommendationForm.country;
+      this.recommendationForm.major = this.profile.speciality || this.recommendationForm.major;
+      this.recommendationForm.language = languageNames || this.recommendationForm.language;
+      // Assuming skills and moyenne are not directly in profile yet, keep defaults
+      // If they were, you would update them here:
+      // this.recommendationForm.skills = this.profile.skills || this.recommendationForm.skills;
+      // this.recommendationForm.moyenne = this.profile.moyenne || this.recommendationForm.moyenne;
+    }
+    console.log('Recommendation form initialized:', this.recommendationForm);
+  }
+
+  loadRecommendations(): void {
+    // Prevent multiple concurrent requests
+    if (this.isLoadingRecommendations) return;
+    
+    console.log('Sending recommendation request to ML backend...', this.recommendationForm);
+    
+    this.isLoadingRecommendations = true;
+
+    this.recommendationService.getRecommendations(this.recommendationForm).subscribe({
+      next: (data: any) => {
+        console.log('ML Response Data:', data); // IMPORTANT: Check this in your browser console!
+        this.recommendations = data.recommendations;
+        this.recommendationMeta = data.meta;
+        this.isLoadingRecommendations = false;
+      },
+      error: () => { this.isLoadingRecommendations = false; }
+    });
   }
 
   loadAssignedQuizzes(): void {

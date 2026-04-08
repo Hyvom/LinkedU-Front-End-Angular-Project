@@ -41,6 +41,11 @@
         <i class="fa-solid fa-list-check"></i>
         My Quizzes
       </button>
+      <button (click)="setSection('recommendations')"
+        [class.active]="activeSection === 'recommendations'" class="nav-btn">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        AI Recommendations
+      </button>
       <a routerLink="/profile" class="nav-btn nav-link-btn">
         <i class="fa-solid fa-id-card"></i>
         Full Profile
@@ -614,6 +619,96 @@
 
   </div>
 </div>
+
+    <!-- ═══════════ RECOMMENDATIONS SECTION ═══════════ -->
+    <div *ngIf="activeSection === 'recommendations'">
+      <div class="section-header">
+        <h2>
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          AI University Recommendations
+        </h2>
+        <p class="section-sub">Get personalized university suggestions based on your profile using our ML model.</p>
+        <p class="text-muted" style="margin-top: 0.5rem;">
+          <i class="fa-solid fa-info-circle"></i>
+          Your profile data is used to pre-fill the form. Adjust the criteria below to refine your recommendations.
+        </p>
+      </div>
+
+      <!-- ML Formulaire -->
+      <div class="recommendation-form-card">
+        <h2 class="form-title">
+          <i class="fa-solid fa-filter" style="margin-right: 0.5rem; color: var(--primary-color);"></i>
+          Recommendation Criteria
+        </h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="country-input">Preferred Country</label>
+            <input type="text" id="country-input" [(ngModel)]="recommendationForm.country" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="major-input">Field of Study (Major)</label>
+            <input type="text" id="major-input" [(ngModel)]="recommendationForm.major" class="form-input" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="language-input">Languages Spoken</label>
+            <input type="text" id="language-input" [(ngModel)]="recommendationForm.language" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="moyenne-input">Average Grade (Moyenne)</label>
+            <input type="number" id="moyenne-input" [(ngModel)]="recommendationForm.moyenne" class="form-input" min="0" max="20" step="0.1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="skills-input">Key Skills</label>
+          <textarea id="skills-input" [(ngModel)]="recommendationForm.skills" rows="2" class="form-input form-textarea"></textarea>
+        </div>
+        <button (click)="loadRecommendations()" [disabled]="isLoadingRecommendations" class="generate-btn">
+          <i *ngIf="!isLoadingRecommendations" class="fa-solid fa-arrows-rotate"></i>
+          <i *ngIf="isLoadingRecommendations" class="fa-solid fa-spinner fa-spin"></i>
+          {{ isLoadingRecommendations ? 'Analyzing Profile...' : 'Generate Recommendations' }}
+        </button>
+      </div>
+
+      <!-- Results -->
+      <!-- Loading State for Results -->
+      <div *ngIf="isLoadingRecommendations" class="loading-state">
+        <div class="spinner"></div>
+        <p>Our ML model is finding the best matches for you...</p>
+      </div>
+      <div *ngIf="!isLoadingRecommendations && recommendations.length > 0" class="recommendations-results">
+        <h3 class="results-title">
+          <i class="fa-solid fa-lightbulb" style="margin-right: 0.5rem; color: var(--accent-color);"></i>
+          Top University Matches ({{ recommendations.length }} results)
+        </h3>
+        <div class="recommendation-grid">
+          <div class="recommendation-card" *ngFor="let rec of recommendations">
+            <div class="card-header">
+              <i class="fa-solid fa-university"></i>
+              <h4 class="card-title">{{ rec.University || rec.name || rec.University_Name || 'Unknown University' }}</h4>
+            </div>
+            <p class="card-location"><i class="fa-solid fa-location-dot"></i> {{ rec.Country || rec.country || 'N/A' }}</p>
+            <div class="card-tags" *ngIf="rec.Major || rec.major || rec.Language || rec.language">
+              <span class="tag-badge major-tag" *ngIf="rec.Major || rec.major">{{ rec.Major || rec.major }}</span>
+              <span class="tag-badge lang-tag" *ngIf="rec.Language || rec.language">{{ rec.Language || rec.language }}</span>
+            </div>
+            <div class="match-score">
+              <span class="score-label">Match Confidence</span>
+              <div class="score-value">{{ (rec.Score || rec.score) ? (((rec.Score || rec.score) <= 1 ? (rec.Score || rec.score) * 100 : (rec.Score || rec.score)) | number:'1.0-0') + '%' : 'N/A' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoadingRecommendations && recommendations.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <h3>No recommendations yet</h3>
+        <p>Adjust your criteria above and click 'Generate Recommendations' to see matching universities.</p>
+      </div>
+    </div>
 
   </main>
 </div>
