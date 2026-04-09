@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Interactive World Map - LinkedU Destinations</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, minimal-ui">
+    <!-- Favicon - using your custom icon -->
+    <link rel="icon" type="image/x-icon" href="assets/icon/linkedU.png">
+    <link rel="shortcut icon" href="assets/icon/linkedU.png" type="image/x-icon">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        padding: 0;
+        margin: 0;
+        background: linear-gradient(135deg, #00072D 0%, #0A0F2A 100%);
+        overflow: hidden;
+      }
+
+      /* Navbar styling to match the main site */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: linear-gradient(135deg, #00072D 0%, #0A0F2A 100%);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(217, 198, 130, 0.2);
+        padding: 1rem 2rem;
+      }
+
+      .navbar__inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .navbar__logo img {
+        height: 50px;
+        width: auto;
+      }
+
+      .navbar__logo:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+      }
+
+      .back-btn {
+        background: linear-gradient(135deg, #d9c682 0%, #c4b56a 100%);
+        color: #1E4F70;
+        padding: 0.7rem 1.5rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(217, 198, 130, 0.3);
+      }
+
+      #chartdiv {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        margin-top: 0;
+      }
+
+      /* Custom Hover Card Styles */
+      .hover-card {
+        position: fixed;
+        background: white;
+        border-radius: 20px;
+        padding: 0;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        z-index: 2000;
+        display: none;
+        overflow: hidden;
+        width: 300px;
+        transition: all 0.2s ease;
+        border: 1px solid #d9c682;
+        pointer-events: auto;
+      }
+
+      .hover-card.show {
+        display: block;
+        animation: fadeInUp 0.25s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hover-card-image {
+        width: 100%;
+        height: 170px;
+        object-fit: cover;
+      }
+
+      .hover-card-content {
+        padding: 1rem 1.25rem;
+      }
+
+      .hover-card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1E4F70;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .hover-card-text {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+      }
+
+      .hover-card-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #d9c682 0%, #c4b56a 100%);
+        color: #1E4F70;
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .hover-card-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(217, 198, 130, 0.3);
+      }
+
+      /* Loading overlay */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #00072D 0%, #0A0F2A 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        transition: opacity 0.5s ease;
+      }
+
+      .loading-content {
+        text-align: center;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(217, 198, 130, 0.2);
+        border-top-color: #d9c682;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .loading-content p {
+        color: white;
+        font-size: 1rem;
+      }
+
+      /* Highlight effect for clickable countries */
+      .clickable-country {
+        cursor: pointer;
+        transition: filter 0.2s ease;
+      }
+
+      .clickable-country:hover {
+        filter: brightness(1.1);
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar__inner">
+        <a class="navbar__logo" href="/">
+          <img src="\assets\Pictures\navbarlogo.png" alt="LinkedU Logo" />
+        </a>
+        <a href="/destinations" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          Back to Destinations
+        </a>
+      </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <p>Loading interactive map...</p>
+      </div>
+    </div>
+
+    <!-- Hover Card Element -->
+    <div id="hoverCard" class="hover-card">
+      <img id="cardImage" class="hover-card-image" src="" alt="">
+      <div class="hover-card-content">
+        <h3 id="cardTitle" class="hover-card-title"></h3>
+        <p id="cardDescription" class="hover-card-text"></p>
+        <a id="cardLink" class="hover-card-btn" href="#">
+          <i class="fa-solid fa-arrow-right"></i>
+          Savoir Plus
+        </a>
+      </div>
+    </div>
+
+    <div id="chartdiv"></div>
+
+    <script src="https://cdn.amcharts.com/lib/editor/map/5/viewer.js"></script>
+    <script>
+      // Country data with images and descriptions
+      const countryData = {
+        "TR": {
+          name: "Turquie",
+          route: "/destinations/pays/turkiye",
+          image: "/pics/c5.jpg",
+          description: "Étudier en Turquie offre un mélange unique de cultures orientales et occidentales. Universités modernes et accueil chaleureux."
+        },
+        "RO": {
+          name: "Roumanie",
+          route: "/destinations/pays/romanie",
+          image: "/pics/c2.jpg",
+          description: "La Roumanie offre une éducation de qualité à prix abordable. Des universités prestigieuses et une culture riche à découvrir."
+        },
+        "MT": {
+          name: "Malte",
+          route: "/destinations/pays/malte",
+          image: "/pics/c12.jpg",
+          description: "Malte, un paradis méditerranéen pour vos études. Climat agréable, anglais courant et formations reconnues."
+        },
+        "IT": {
+          name: "Italie",
+          route: "/destinations/pays/italie",
+          image: "/pics/c4.jpg",
+          description: "L'Italie, berceau de la Renaissance. Art, gastronomie et universités prestigieuses pour une expérience unique."
+        },
+        "GE": {
+          name: "Géorgie",
+          route: "/destinations/pays/georgie",
+          image: "/pics/c11.jpg",
+          description: "La Géorgie, destination émergente pour les études. Accueil chaleureux, coût de vie abordable et formations de qualité."
+        },
+        "FR": {
+          name: "France",
+          route: "/destinations/pays/france",
+          image: "/pics/c1.jpg",
+          description: "La France, pays de l'excellence académique. Des universités renommées et un art de vivre incomparable."
+        },
+        "ES": {
+          name: "Espagne",
+          route: "/destinations/pays/espagne",
+          image: "/pics/c6.jpg",
+          description: "L'Espagne, soleil et qualité de vie. Des études dynamiques dans un cadre méditerranéen exceptionnel."
+        },
+        "DE": {
+          name: "Allemagne",
+          route: "/destinations/pays/allemagne",
+          image: "/pics/c8.jpg",
+          description: "L'Allemagne, leader européen de la recherche. Formations gratuites ou à faible coût et excellente employabilité."
+        },
+        "CN": {
+          name: "Chine",
+          route: "/destinations/pays/chine",
+          image: "/pics/c9.jpg",
+          description: "La Chine, puissance économique mondiale. Une expérience unique au cœur de l'Asie avec des formations d'excellence."
+        },
+        "CH": {
+          name: "Suisse",
+          route: "/destinations/pays/suisse",
+          image: "/pics/c10.jpg",
+          description: "La Suisse, qualité et précision. Des écoles réputées dans le tourisme, l'hôtellerie et la finance."
+        },
+        "BE": {
+          name: "Belgique",
+          route: "/destinations/pays/belgique",
+          image: "/pics/c7.jpg",
+          description: "La Belgique, cœur de l'Europe. Multilingue et dynamique, parfaite pour des études internationales."
+        },
+        "AE": {
+          name: "Dubaï",
+          route: "/destinations/pays/dubai",
+          image: "/pics/c3.jpg",
+          description: "Dubaï, ville du futur. Des campus internationaux et des opportunités professionnelles exceptionnelles."
+        }
+      };
+
+      // Country codes to look for in the map
+      const targetCountries = ["TR", "RO", "MT", "IT", "GE", "FR", "ES", "DE", "CN", "CH", "BE", "AE"];
+
+      // Hide loading overlay when map is ready
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const overlay = document.getElementById('loadingOverlay');
+          if (overlay) {
+            overlay.style.opacity = '0';
+            setTimeout(function() {
+              overlay.style.display = 'none';
+            }, 500);
+          }
+        }, 1500);
+      });
+
+      // Hover card handling
+      const hoverCard = document.getElementById('hoverCard');
+      let currentTimeout = null;
+      let currentCountry = null;
+
+      function showCard(event, countryId) {
+        const data = countryData[countryId];
+        if (!data) return;
+
+        // Clear any pending hide timeout
+        if (currentTimeout) {
+          clearTimeout(currentTimeout);
+          currentTimeout = null;
+        }
+
+        // Update card content
+        document.getElementById('cardImage').src = data.image;
+        document.getElementById('cardTitle').innerHTML = `<i class="fa-solid fa-location-dot" style="color: #d9c682;"></i> ${data.name}`;
+        document.getElementById('cardDescription').textContent = data.description;
+        document.getElementById('cardLink').href = data.route;
+
+        // Position card
+        const x = event.clientX + 15;
+        const y = event.clientY + 15;
+        
+        // Make sure card stays within viewport
+        const cardWidth = 300;
+        const cardHeight = 350;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        
+        let finalX = x;
+        let finalY = y;
+        
+        if (x + cardWidth > windowWidth) {
+          finalX = event.clientX - cardWidth - 15;
+        }
+        if (y + cardHeight > windowHeight) {
+          finalY = event.clientY - cardHeight - 15;
+        }
+        
+        hoverCard.style.left = finalX + 'px';
+        hoverCard.style.top = finalY + 'px';
+        hoverCard.classList.add('show');
+        currentCountry = countryId;
+      }
+
+      function hideCard() {
+        currentTimeout = setTimeout(function() {
+          hoverCard.classList.remove('show');
+          currentCountry = null;
+        }, 300);
+      }
+
+      // Function to add hover handlers to map elements
+      function addMapInteractions() {
+        // Try to find all SVG elements that might represent countries
+        const svgElements = document.querySelectorAll('svg path, svg polygon, svg g');
+        
+        targetCountries.forEach(countryId => {
+          // Try multiple selector strategies
+          const selectors = [
+            `path[data-id="${countryId}"]`,
+            `path[id="${countryId}"]`,
+            `g[data-id="${countryId}"]`,
+            `*[data-country="${countryId}"]`,
+            `path[title*="${countryData[countryId]?.name}"]`,
+            `*[class*="${countryId.toLowerCase()}"]`
+          ];
+          
+          let element = null;
+          for (const selector of selectors) {
+            element = document.querySelector(selector);
+            if (element) break;
+          }
+          
+          // Also try to find by searching through all paths
+          if (!element) {
+            const allPaths = document.querySelectorAll('path');
+            for (const path of allPaths) {
+              const fill = path.getAttribute('fill');
+              if (fill === '#ebc92a' || fill === 'rgb(235, 201, 42)') {
+                // This is a highlighted country
+                element = path;
+                // Store the country ID as a data attribute
+                if (element && !element.hasAttribute('data-country-id')) {
+                  element.setAttribute('data-country-id', countryId);
+                }
+                break;
+              }
+            }
+          }
+          
+          if (element) {
+            element.classList.add('clickable-country');
+            element.setAttribute('data-country-id', countryId);
+            
+            element.addEventListener('mouseenter', function(e) {
+              showCard(e, countryId);
+            });
+            
+            element.addEventListener('mouseleave', function() {
+              hideCard();
+            });
+            
+            element.addEventListener('mousemove', function(e) {
+              if (currentCountry === countryId && hoverCard.classList.contains('show')) {
+                const x = e.clientX + 15;
+                const y = e.clientY + 15;
+                const cardWidth = 300;
+                const cardHeight = 350;
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                
+                let finalX = x;
+                let finalY = y;
+                
+                if (x + cardWidth > windowWidth) {
+                  finalX = e.clientX - cardWidth - 15;
+                }
+                if (y + cardHeight > windowHeight) {
+                  finalY = e.clientY - cardHeight - 15;
+                }
+                
+                hoverCard.style.left = finalX + 'px';
+                hoverCard.style.top = finalY + 'px';
+              }
+            });
+            
+            element.addEventListener('click', function() {
+              window.location.href = countryData[countryId].route;
+            });
+            
+            console.log(`✅ Found and linked country: ${countryData[countryId].name}`);
+          } else {
+            console.log(`❌ Could not find country: ${countryData[countryId].name} (${countryId})`);
+          }
+        });
+      }
+
+      // Create the map
+      am5viewer.create("chartdiv", {
+        "settings": {
+          "editor": {
+            "themeTags": [
+              "dark"
+            ],
+            "userData": {
+              "projection": "geoMercator",
+              "geodata": "worldLow"
+            },
+            "polygonFill": {
+              "type": "Color",
+              "value": "#05164e"
+            },
+            "polygonFillOpacity": 0.7490196078431373,
+            "polygonStroke": {
+              "type": "Color",
+              "value": "#f8f8f8"
+            },
+            "polygonStrokeOpacity": 0.4117647058823529,
+            "polygonStrokeWidth": 1,
+            "fillColor": {
+              "type": "Color",
+              "value": "#ebc92a"
+            }
+          },
+          "editor.map": {
+            "minZoomLevel": 0.8,
+            "projection": "geoMercator",
+            "panX": "rotateX",
+            "zoomControl": {
+              "type": "ZoomControl",
+              "settings": {
+                "visible": true,
+                "position": "absolute",
+                "layout": {
+                  "type": "VerticalLayout"
+                },
+                "themeTags": [
+                  "zoomtools"
+                ],
+                "layer": 30
+              }
+            },
+            "background": {
+              "type": "Rectangle",
+              "settings": {
+                "fill": {
+                  "type": "Color",
+                  "value": "#00072D"
+                },
+                "fillOpacity": 1,
+                "width": 1704,
+                "height": 878,
+                "x": 0,
+                "y": 0,
+                "fillPattern": {
+                  "type": "GrainPattern",
+                  "settings": {
+                    "maxOpacity": 0.08,
+                    "density": 0.2,
+                    "colors": [
+                      {
+                        "type": "Color",
+                        "value": "#d9c682"
+                      }
+                    ]
+                  }
+                },
+                "isMeasured": false
+              }
+            },
+            "themeTags": [
+              "map"
+            ],
+            "translateX": 802.7024388757765,
+            "translateY": 642.2546693732247
+          },
+          "editor.pointTemplate": {
+            "toggleKey": "active",
+            "centerX": {
+              "type": "Percent",
+              "value": 50
+            },
+            "centerY": {
+              "type": "Percent",
+              "value": 50
+            },
+            "tooltipText": "{name}"
+          },
+          "editor.bubbleTemplate": {
+            "toggleKey": "active",
+            "tooltipText": "{name}: {value}"
+          },
+          "editor.pixelTemplate": {
+            "tooltipText": "{name}",
+            "toggleKey": "active"
+          },
+          "editor.linePointTemplate": {
+            "toggleKey": "active",
+            "centerX": {
+              "type": "Percent",
+              "value": 50
+            },
+            "centerY": {
+              "type": "Percent",
+              "value": 50
+            },
+            "tooltipText": "{name}"
+          },
+          "editor.labelTemplate": {
+            "toggleKey": "active",
+            "tooltipText": "{name}"
+          },
+          "editor.polygonSeries": {
+            "valueField": "value",
+            "calculateAggregates": true,
+            "id": "polygonseries",
+            "exclude": [
+              "AQ"
+            ],
+            "geometryField": "geometry",
+            "geometryTypeField": "geometryType",
+            "idField": "id"
+          },
+          "editor.lineSeries": {
+            "layer": 30,
+            "id": "lineseries",
+            "lineTypeField": "lineType",
+            "geometryField": "geometry",
+            "geometryTypeField": "geometryType",
+            "idField": "id"
+          },
+          "editor.pointSeries": {
+            "fixedField": "fixed",
+            "id": "pointseries",
+            "longitudeField": "longitude",
+            "latitudeField": "latitude",
+            "geometryField": "geometry",
+            "geometryTypeField": "geometryType",
+            "idField": "id"
+          },
+          "editor.labelSeries": {
+            "fixedField": "fixed",
+            "id": "labelseries",
+            "longitudeField": "longitude",
+            "latitudeField": "latitude",
+            "geometryField": "geometry",
+            "geometryTypeField": "geometryType",
+            "idField": "id"
+          },
+          "editor.bubbleSeries": {
+            "calculateAggregates": true,
+            "valueField": "value",
+            "polygonIdField": "id",
+            "id": "bubbleseries",
+            "longitudeField": "longitude",
+            "latitudeField": "latitude",
+            "geometryField": "geometry",
+            "geometryTypeField": "geometryType",
+            "idField": "id"
+          },
+          "editor.gridSeries": {
+            "themeTags": [
+              "grid"
+            ],
+            "affectsBounds": false,
+            "lineTypeField": "lineType",
+            "geometryField": "geometry",
+            "geometryTypeField": "geometryType",
+            "idField": "id",
+            "clipExtent": true
+          },
+          "editor.backgroundSeries": {
+            "visible": false,
+            "themeTags": [
+              "polygon",
+              "background"
+            ],
+            "affectsBounds": false,
+            "geometryField": "geometry",
+            "geometryTypeField": "geometryType",
+            "idField": "id"
+          },
+          "editor.backgroundSeries.mapPolygons.template": {
+            "forceInactive": true
+          },
+          "editor.gridSeries.mapLines.template": {
+            "forceInactive": true
+          }
+        },
+        "data": {
+          "editor.polygonSeries": [
+            {
+              "id": "TR",
+              "name": "Turquie",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "RO",
+              "name": "Roumanie",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "MT",
+              "name": "Malte",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "IT",
+              "name": "Italie",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "GE",
+              "name": "Géorgie",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "FR",
+              "name": "France",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "ES",
+              "name": "Espagne",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "DE",
+              "name": "Allemagne",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "CN",
+              "name": "Chine",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "CH",
+              "name": "Suisse",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "BE",
+              "name": "Belgique",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            },
+            {
+              "id": "AE",
+              "name": "Dubaï",
+              "settings": {
+                "type": "Template",
+                "settings": {
+                  "fill": {
+                    "type": "Color",
+                    "value": "#ebc92a"
+                  }
+                }
+              },
+              "__parse": true
+            }
+          ],
+          "editor.lineSeries": [],
+          "editor.pointSeries": [],
+          "editor.labelSeries": [],
+          "editor.bubbleSeries": [],
+          "editor.gridSeries": []
+        }
+      });
+
+      // Add interactions after map is fully loaded
+      setTimeout(function() {
+        addMapInteractions();
+      }, 2000);
+      
+      // Also try again after 5 seconds in case map takes longer to render
+      setTimeout(function() {
+        addMapInteractions();
+      }, 5000);
+    </script>
+  </body>
+</html>

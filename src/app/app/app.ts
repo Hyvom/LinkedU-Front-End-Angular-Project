@@ -1,11 +1,11 @@
 import { Component, signal, HostListener, OnInit } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.html',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive]
+  imports: [RouterOutlet]
 })
 export class App implements OnInit {
   isLoggedIn = signal<boolean>(false);

@@ -1,22 +1,17 @@
-/* Fix navbar overlapping content */
-html, body {
+/* Add to your global styles to fix navbar spacing */
+body {
   margin: 0;
   padding: 0;
 }
 
-body {
-  padding-top: 82px; /* Space for fixed navbar */
+/* Since navbar is sticky, we don't need extra padding */
+main, .main-content {
+  padding-top: 0;
 }
 
-/* Adjust for different screen sizes */
-@media (max-width: 968px) {
-  body {
-    padding-top: 72px;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    padding-top: 68px;
-  }
+/* The navbar itself handles its own spacing */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 
-
 interface NavLink {
   label: string;
   path: string;
@@ -36,6 +35,7 @@ export class NavbarComponent implements OnInit {
       }
     });
   }
+  
   publicLinks: NavLink[] = [
     { label: 'Home',         path: '/' },
     { label: 'Destinations', path: '/destinations' },
@@ -56,34 +56,34 @@ export class NavbarComponent implements OnInit {
   }
 
   private buildRoleLinks(role: string | null): NavLink[] {
-      switch (role) {
-        case 'ADMIN':
-          return [{ label: 'Admin Panel', path: '/admin' }];
-        case 'AGENT':
-          return [
-            { label: 'Agent Panel', path: '/agent' }
-          ];
-        case 'STUDENT':
-          return [
-            { label: 'Dashboard',  path: '/student' },
-            { label: 'My Profile', path: '/profile/student' },
-            { label: 'Chat',       path: '/chat' },
-            { label: 'Ticket',     path: '/ticket' }
-          ];
-        case 'GUEST':
-          return [
-            { label: 'My Profile', path: '/profile/guest' },
-            { label: 'Chat',       path: '/chat' }
-          ];
-        case 'USER':
-          return [
-            { label: 'My Profile', path: '/profile' },
-            { label: 'Chat',       path: '/chat' }
-          ];
-        default:
-          return [];
-      }
+    switch (role) {
+      case 'ADMIN':
+        return [{ label: 'Admin Panel', path: '/admin' }];
+      case 'AGENT':
+        return [
+          { label: 'Agent Panel', path: '/agent' }
+        ];
+      case 'STUDENT':
+        return [
+          { label: 'Dashboard',  path: '/student' },
+          { label: 'My Profile', path: '/profile/student' },
+          { label: 'Chat',       path: '/chat' },
+          { label: 'Ticket',     path: '/ticket' }
+        ];
+      case 'GUEST':
+        return [
+          { label: 'My Profile', path: '/profile/guest' },
+          { label: 'Chat',       path: '/chat' }
+        ];
+      case 'USER':
+        return [
+          { label: 'My Profile', path: '/profile' },
+          { label: 'Chat',       path: '/chat' }
+        ];
+      default:
+        return [];
     }
+  }
 
   @HostListener('window:scroll')
   onScroll(): void {

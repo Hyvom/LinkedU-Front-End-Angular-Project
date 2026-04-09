@@ -21,19 +21,45 @@
           </a>
         </li>
       }
+      
       @if (loggedIn) {
-        @for (link of roleLinks; track link.path) {
-          <li>
-            <a [routerLink]="link.path" routerLinkActive="active">
-              <i *ngIf="link.label === 'Admin Panel'" class="fa-solid fa-shield-haltered"></i>
-              <i *ngIf="link.label === 'Agent Panel'" class="fa-solid fa-user-tie"></i>
-              <i *ngIf="link.label === 'Dashboard'" class="fa-solid fa-chart-line"></i>
-              <i *ngIf="link.label === 'My Profile'" class="fa-solid fa-user"></i>
-              <i *ngIf="link.label === 'Chat'" class="fa-solid fa-comment-dots"></i>
-              <i *ngIf="link.label === 'Ticket'" class="fa-solid fa-ticket"></i>
-              {{ link.label }}
+        <!-- For STUDENT role, group dashboard links in dropdown -->
+        @if (role === 'STUDENT') {
+          <li class="dropdown">
+            <a class="dropdown-trigger">
+              <i class="fa-solid fa-grip"></i>
+              Student Panel
+              <i class="fa-solid fa-chevron-down dropdown-icon"></i>
             </a>
+            <ul class="dropdown-menu">
+              @for (link of roleLinks; track link.path) {
+                <li>
+                  <a [routerLink]="link.path" routerLinkActive="active" (click)="$event.stopPropagation()">
+                    <i *ngIf="link.label === 'Dashboard'" class="fa-solid fa-chart-line"></i>
+                    <i *ngIf="link.label === 'My Profile'" class="fa-solid fa-user"></i>
+                    <i *ngIf="link.label === 'Chat'" class="fa-solid fa-comment-dots"></i>
+                    <i *ngIf="link.label === 'Ticket'" class="fa-solid fa-ticket"></i>
+                    {{ link.label }}
+                  </a>
+                </li>
+              }
+            </ul>
           </li>
+        } @else {
+          <!-- For ADMIN, AGENT, GUEST, USER roles -->
+          @for (link of roleLinks; track link.path) {
+            <li>
+              <a [routerLink]="link.path" routerLinkActive="active">
+                <i *ngIf="link.label === 'Admin Panel'" class="fa-solid fa-shield-haltered"></i>
+                <i *ngIf="link.label === 'Agent Panel'" class="fa-solid fa-user-tie"></i>
+                <i *ngIf="link.label === 'Dashboard'" class="fa-solid fa-chart-line"></i>
+                <i *ngIf="link.label === 'My Profile'" class="fa-solid fa-user"></i>
+                <i *ngIf="link.label === 'Chat'" class="fa-solid fa-comment-dots"></i>
+                <i *ngIf="link.label === 'Ticket'" class="fa-solid fa-ticket"></i>
+                {{ link.label }}
+              </a>
+            </li>
+          }
         }
       }
     </ul>
