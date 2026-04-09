@@ -76,7 +76,7 @@ export interface AssignedStudent {
 
 export interface DocumentResponseDTO {
   id: number;
-  documentType: string;
+  documentType: DocumentType;
   fileName: string;
   filePath: string;
   status: string;
@@ -92,6 +92,21 @@ export interface DocumentResponseDTO {
   // ID Card
   numId?: string;
   birthday?: string;
+  // Diploma
+  degree?: string;
+  institution?: string;
+  graduationYear?: string;
+  fieldOfStudy?: string;
+  // Transcript
+  academicYear?: string;
+  average?: string;
+  // Cover Letter
+  targetUniversity?: string;
+  targetProgram?: string;
+  content?: string;
+  // Other
+  documentTitle?: string;
+  notes?: string;
 }
 
 // ===========================
@@ -350,26 +365,41 @@ export interface ChatNotification {
 // DOCUMENT MODELS
 // ===========================
 export type DocumentStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
-export type DocumentType = 'CV' | 'PASSPORT' | 'ID_CARD';
+export type DocumentType = 'CV' | 'PASSPORT' | 'ID_CARD' | 'DIPLOMA' | 'TRANSCRIPT' | 'COVER_LETTER' | 'OTHER';
 
 export interface StudentDocument {
   id: number;
   documentType: DocumentType;
   fileName: string;
   filePath: string;
-  status: DocumentStatus;
+  status: string;
   uploadedAt: string;
-  // CV fields
+  // CV
   summary?: string;
   experience?: string;
   skills?: string;
-  // Passport fields
+  // Passport
   issueDate?: string;
   expiryDate?: string;
   issuingCountry?: string;
-  // ID Card fields
+  // ID Card
   numId?: string;
   birthday?: string;
+  // Diploma
+  degree?: string;
+  institution?: string;
+  graduationYear?: string;
+  fieldOfStudy?: string;
+  // Transcript
+  academicYear?: string;
+  average?: string;
+  // Cover Letter
+  targetUniversity?: string;
+  targetProgram?: string;
+  content?: string;
+  // Other
+  documentTitle?: string;
+  notes?: string;
 }
 
 // ===========================

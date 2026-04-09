@@ -21,7 +21,7 @@ import {
 } from '../shared/models/models';
 
 type ActiveSection = 'profile' | 'documents' | 'progress' | 'quizzes' | 'recommendations';
-type DocumentTab = 'cv' | 'passport' | 'idcard';
+type DocumentTab = 'cv' | 'passport' | 'idcard' | 'diploma' | 'transcript' | 'coverletter' | 'other';
 
 @Component({
   selector: 'app-student',
@@ -66,6 +66,22 @@ export class StudentProfileComponent implements OnInit {
   // ID Card Form
   idCardFile: File | null = null;
   idCardForm = { numId: '', birthday: '' };
+
+  // Diploma Form
+  diplomaFile: File | null = null;
+  diplomaForm = { degree: '', institution: '', graduationYear: '', fieldOfStudy: '' };
+
+  // Transcript Form
+  transcriptFile: File | null = null;
+  transcriptForm = { institution: '', academicYear: '', average: '' };
+
+  // Cover Letter Form
+  coverLetterFile: File | null = null;
+  coverLetterForm = { targetUniversity: '', targetProgram: '', content: '' };
+
+  // Other Document Form
+  otherFile: File | null = null;
+  otherForm = { documentTitle: '', notes: '' };
 
   // ── Progress ──
   
@@ -428,6 +444,10 @@ export class StudentProfileComponent implements OnInit {
     if (type === 'cv') this.cvFile = file;
     if (type === 'passport') this.passportFile = file;
     if (type === 'idcard') this.idCardFile = file;
+    if (type === 'diploma') this.diplomaFile = file;
+    if (type === 'transcript') this.transcriptFile = file;
+    if (type === 'coverletter') this.coverLetterFile = file;
+    if (type === 'other') this.otherFile = file;
   }
 
   uploadCv(): void {
@@ -490,6 +510,99 @@ export class StudentProfileComponent implements OnInit {
         this.isUploading = false;
         this.idCardFile = null;
         this.idCardForm = { numId: '', birthday: '' };
+        this.loadDocuments();
+      },
+      error: (err: { error?: { message?: string } }) => {
+        this.uploadError = err?.error?.message || 'Upload failed.';
+        this.isUploading = false;
+      }
+    });
+  }
+  
+  uploadDiploma(): void {
+    if (!this.diplomaFile) { this.uploadError = 'Please select a file.'; return; }
+    this.isUploading = true;
+    this.uploadError = '';
+    this.uploadSuccess = '';
+    this.documentService.uploadDiploma(
+      this.userId, this.diplomaFile,
+      this.diplomaForm.degree, this.diplomaForm.institution,
+      this.diplomaForm.graduationYear, this.diplomaForm.fieldOfStudy
+    ).subscribe({
+      next: () => {
+        this.uploadSuccess = 'Diploma uploaded successfully!';
+        this.isUploading = false;
+        this.diplomaFile = null;
+        this.diplomaForm = { degree: '', institution: '', graduationYear: '', fieldOfStudy: '' };
+        this.loadDocuments();
+      },
+      error: (err: { error?: { message?: string } }) => {
+        this.uploadError = err?.error?.message || 'Upload failed.';
+        this.isUploading = false;
+      }
+    });
+  }
+
+  uploadTranscript(): void {
+    if (!this.transcriptFile) { this.uploadError = 'Please select a file.'; return; }
+    this.isUploading = true;
+    this.uploadError = '';
+    this.uploadSuccess = '';
+    this.documentService.uploadTranscript(
+      this.userId, this.transcriptFile,
+      this.transcriptForm.institution, this.transcriptForm.academicYear, this.transcriptForm.average
+    ).subscribe({
+      next: () => {
+        this.uploadSuccess = 'Transcript uploaded successfully!';
+        this.isUploading = false;
+        this.transcriptFile = null;
+        this.transcriptForm = { institution: '', academicYear: '', average: '' };
+        this.loadDocuments();
+      },
+      error: (err: { error?: { message?: string } }) => {
+        this.uploadError = err?.error?.message || 'Upload failed.';
+        this.isUploading = false;
+      }
+    });
+  }
+
+  uploadCoverLetter(): void {
+    if (!this.coverLetterFile) { this.uploadError = 'Please select a file.'; return; }
+    this.isUploading = true;
+    this.uploadError = '';
+    this.uploadSuccess = '';
+    this.documentService.uploadCoverLetter(
+      this.userId, this.coverLetterFile,
+      this.coverLetterForm.targetUniversity, this.coverLetterForm.targetProgram, this.coverLetterForm.content
+    ).subscribe({
+      next: () => {
+        this.uploadSuccess = 'Cover letter uploaded successfully!';
+        this.isUploading = false;
+        this.coverLetterFile = null;
+        this.coverLetterForm = { targetUniversity: '', targetProgram: '', content: '' };
+        this.loadDocuments();
+      },
+      error: (err: { error?: { message?: string } }) => {
+        this.uploadError = err?.error?.message || 'Upload failed.';
+        this.isUploading = false;
+      }
+    });
+  }
+
+  uploadOtherDoc(): void {
+    if (!this.otherFile) { this.uploadError = 'Please select a file.'; return; }
+    this.isUploading = true;
+    this.uploadError = '';
+    this.uploadSuccess = '';
+    this.documentService.uploadOther(
+      this.userId, this.otherFile,
+      this.otherForm.documentTitle, this.otherForm.notes
+    ).subscribe({
+      next: () => {
+        this.uploadSuccess = 'Document uploaded successfully!';
+        this.isUploading = false;
+        this.otherFile = null;
+        this.otherForm = { documentTitle: '', notes: '' };
         this.loadDocuments();
       },
       error: (err: { error?: { message?: string } }) => {

@@ -308,7 +308,6 @@
         </div>
       </div>
     </div>
-
     <!-- ═══════════ DOCUMENTS SECTION ═══════════ -->
     <div *ngIf="activeSection === 'documents'">
 
@@ -356,6 +355,38 @@
             [ngClass]="getStatusClass(getDocumentByType('ID_CARD')!.status)"
             class="tab-status-dot"></span>
         </button>
+        <button (click)="activeDocTab = 'diploma'; uploadError = ''; uploadSuccess = ''"
+          [class.active]="activeDocTab === 'diploma'" class="doc-tab">
+          <i class="fa-solid fa-graduation-cap"></i>
+          Diploma
+          <span *ngIf="getDocumentByType('DIPLOMA')"
+            [ngClass]="getStatusClass(getDocumentByType('DIPLOMA')!.status)"
+            class="tab-status-dot"></span>
+        </button>
+        <button (click)="activeDocTab = 'transcript'; uploadError = ''; uploadSuccess = ''"
+          [class.active]="activeDocTab === 'transcript'" class="doc-tab">
+          <i class="fa-solid fa-scroll"></i>
+          Transcript
+          <span *ngIf="getDocumentByType('TRANSCRIPT')"
+            [ngClass]="getStatusClass(getDocumentByType('TRANSCRIPT')!.status)"
+            class="tab-status-dot"></span>
+        </button>
+        <button (click)="activeDocTab = 'coverletter'; uploadError = ''; uploadSuccess = ''"
+          [class.active]="activeDocTab === 'coverletter'" class="doc-tab">
+          <i class="fa-solid fa-envelope-open-text"></i>
+          Cover Letter
+          <span *ngIf="getDocumentByType('COVER_LETTER')"
+            [ngClass]="getStatusClass(getDocumentByType('COVER_LETTER')!.status)"
+            class="tab-status-dot"></span>
+        </button>
+        <button (click)="activeDocTab = 'other'; uploadError = ''; uploadSuccess = ''"
+          [class.active]="activeDocTab === 'other'" class="doc-tab">
+          <i class="fa-solid fa-folder-open"></i>
+          Other
+          <span *ngIf="getDocumentByType('OTHER')"
+            [ngClass]="getStatusClass(getDocumentByType('OTHER')!.status)"
+            class="tab-status-dot"></span>
+        </button>
       </div>
 
       <!-- Loading -->
@@ -371,7 +402,6 @@
 
         <!-- ── CV TAB ── -->
         <div *ngIf="activeDocTab === 'cv'">
-          <!-- Existing CV -->
           <div *ngIf="getDocumentByType('CV')" class="doc-existing">
             <div class="doc-existing-header">
               <div>
@@ -385,12 +415,14 @@
                 </p>
               </div>
               <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('CV')!.status)">
+                <i *ngIf="getDocumentByType('CV')!.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="getDocumentByType('CV')!.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="getDocumentByType('CV')!.status === 'PENDING'" class="fa-solid fa-clock"></i>
                 {{ getStatusLabel(getDocumentByType('CV')!.status) }}
               </span>
             </div>
           </div>
 
-          <!-- CV Upload Form -->
           <div class="doc-form-card">
             <h4>
               <i *ngIf="!getDocumentByType('CV')" class="fa-solid fa-upload"></i>
@@ -450,6 +482,9 @@
                 </p>
               </div>
               <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('PASSPORT')!.status)">
+                <i *ngIf="getDocumentByType('PASSPORT')!.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="getDocumentByType('PASSPORT')!.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="getDocumentByType('PASSPORT')!.status === 'PENDING'" class="fa-solid fa-clock"></i>
                 {{ getStatusLabel(getDocumentByType('PASSPORT')!.status) }}
               </span>
             </div>
@@ -509,6 +544,9 @@
                 </p>
               </div>
               <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('ID_CARD')!.status)">
+                <i *ngIf="getDocumentByType('ID_CARD')!.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="getDocumentByType('ID_CARD')!.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="getDocumentByType('ID_CARD')!.status === 'PENDING'" class="fa-solid fa-clock"></i>
                 {{ getStatusLabel(getDocumentByType('ID_CARD')!.status) }}
               </span>
             </div>
@@ -545,6 +583,254 @@
               <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
               <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
               {{ isUploading ? 'Uploading...' : 'Upload ID Card' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ── DIPLOMA TAB ── -->
+        <div *ngIf="activeDocTab === 'diploma'">
+          <div *ngIf="getDocumentByType('DIPLOMA')" class="doc-existing">
+            <div class="doc-existing-header">
+              <div>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ getDocumentByType('DIPLOMA')!.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  Uploaded: {{ getDocumentByType('DIPLOMA')!.uploadedAt | date:'mediumDate' }}
+                </p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('DIPLOMA')!.status)">
+                <i *ngIf="getDocumentByType('DIPLOMA')!.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="getDocumentByType('DIPLOMA')!.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="getDocumentByType('DIPLOMA')!.status === 'PENDING'" class="fa-solid fa-clock"></i>
+                {{ getStatusLabel(getDocumentByType('DIPLOMA')!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="doc-form-card">
+            <h4>
+              <i *ngIf="!getDocumentByType('DIPLOMA')" class="fa-solid fa-upload"></i>
+              <i *ngIf="getDocumentByType('DIPLOMA')" class="fa-solid fa-rotate"></i>
+              {{ getDocumentByType('DIPLOMA') ? 'Replace Diploma' : 'Upload Diploma' }}
+            </h4>
+            <div class="form-group">
+              <label class="form-label">Diploma File (PDF) *</label>
+              <div class="file-input-wrapper">
+                <input type="file" accept=".pdf,image/*" (change)="onFileSelected($event, 'diploma')" class="file-input" id="diploma-file" />
+                <label for="diploma-file" class="file-label">
+                  <i class="fa-solid fa-folder-open"></i>
+                  {{ diplomaFile ? diplomaFile.name : 'Choose file...' }}
+                </label>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Degree</label>
+                <input type="text" [(ngModel)]="diplomaForm.degree" placeholder="e.g. Bachelor of Science" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Field of Study</label>
+                <input type="text" [(ngModel)]="diplomaForm.fieldOfStudy" placeholder="e.g. Computer Science" class="form-input" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Institution</label>
+                <input type="text" [(ngModel)]="diplomaForm.institution" placeholder="University name" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Graduation Year</label>
+                <input type="text" [(ngModel)]="diplomaForm.graduationYear" placeholder="e.g. 2024" class="form-input" />
+              </div>
+            </div>
+            <button (click)="uploadDiploma()" [disabled]="isUploading" class="upload-btn">
+              <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
+              <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isUploading ? 'Uploading...' : 'Upload Diploma' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ── TRANSCRIPT TAB ── -->
+        <div *ngIf="activeDocTab === 'transcript'">
+          <div *ngIf="getDocumentByType('TRANSCRIPT')" class="doc-existing">
+            <div class="doc-existing-header">
+              <div>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ getDocumentByType('TRANSCRIPT')!.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  Uploaded: {{ getDocumentByType('TRANSCRIPT')!.uploadedAt | date:'mediumDate' }}
+                </p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('TRANSCRIPT')!.status)">
+                <i *ngIf="getDocumentByType('TRANSCRIPT')!.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="getDocumentByType('TRANSCRIPT')!.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="getDocumentByType('TRANSCRIPT')!.status === 'PENDING'" class="fa-solid fa-clock"></i>
+                {{ getStatusLabel(getDocumentByType('TRANSCRIPT')!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="doc-form-card">
+            <h4>
+              <i *ngIf="!getDocumentByType('TRANSCRIPT')" class="fa-solid fa-upload"></i>
+              <i *ngIf="getDocumentByType('TRANSCRIPT')" class="fa-solid fa-rotate"></i>
+              {{ getDocumentByType('TRANSCRIPT') ? 'Replace Transcript' : 'Upload Transcript' }}
+            </h4>
+            <div class="form-group">
+              <label class="form-label">Transcript File (PDF) *</label>
+              <div class="file-input-wrapper">
+                <input type="file" accept=".pdf,image/*" (change)="onFileSelected($event, 'transcript')" class="file-input" id="transcript-file" />
+                <label for="transcript-file" class="file-label">
+                  <i class="fa-solid fa-folder-open"></i>
+                  {{ transcriptFile ? transcriptFile.name : 'Choose file...' }}
+                </label>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Institution</label>
+                <input type="text" [(ngModel)]="transcriptForm.institution" placeholder="University name" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Academic Year</label>
+                <input type="text" [(ngModel)]="transcriptForm.academicYear" placeholder="e.g. 2023-2024" class="form-input" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Average / GPA</label>
+              <input type="text" [(ngModel)]="transcriptForm.average" placeholder="e.g. 15.5/20 or 3.8/4.0" class="form-input" />
+            </div>
+            <button (click)="uploadTranscript()" [disabled]="isUploading" class="upload-btn">
+              <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
+              <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isUploading ? 'Uploading...' : 'Upload Transcript' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ── COVER LETTER TAB ── -->
+        <div *ngIf="activeDocTab === 'coverletter'">
+          <div *ngIf="getDocumentByType('COVER_LETTER')" class="doc-existing">
+            <div class="doc-existing-header">
+              <div>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ getDocumentByType('COVER_LETTER')!.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  Uploaded: {{ getDocumentByType('COVER_LETTER')!.uploadedAt | date:'mediumDate' }}
+                </p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('COVER_LETTER')!.status)">
+                <i *ngIf="getDocumentByType('COVER_LETTER')!.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="getDocumentByType('COVER_LETTER')!.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="getDocumentByType('COVER_LETTER')!.status === 'PENDING'" class="fa-solid fa-clock"></i>
+                {{ getStatusLabel(getDocumentByType('COVER_LETTER')!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="doc-form-card">
+            <h4>
+              <i *ngIf="!getDocumentByType('COVER_LETTER')" class="fa-solid fa-upload"></i>
+              <i *ngIf="getDocumentByType('COVER_LETTER')" class="fa-solid fa-rotate"></i>
+              {{ getDocumentByType('COVER_LETTER') ? 'Replace Cover Letter' : 'Upload Cover Letter' }}
+            </h4>
+            <div class="form-group">
+              <label class="form-label">Cover Letter File (PDF) *</label>
+              <div class="file-input-wrapper">
+                <input type="file" accept=".pdf,.doc,.docx" (change)="onFileSelected($event, 'coverletter')" class="file-input" id="coverletter-file" />
+                <label for="coverletter-file" class="file-label">
+                  <i class="fa-solid fa-folder-open"></i>
+                  {{ coverLetterFile ? coverLetterFile.name : 'Choose file...' }}
+                </label>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Target University</label>
+                <input type="text" [(ngModel)]="coverLetterForm.targetUniversity" placeholder="e.g. University of Paris" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Target Program</label>
+                <input type="text" [(ngModel)]="coverLetterForm.targetProgram" placeholder="e.g. MSc Data Science" class="form-input" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Letter Content (optional)</label>
+              <textarea [(ngModel)]="coverLetterForm.content" rows="4"
+                placeholder="Paste your cover letter text here (optional)..."
+                class="form-input form-textarea"></textarea>
+            </div>
+            <button (click)="uploadCoverLetter()" [disabled]="isUploading" class="upload-btn">
+              <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
+              <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isUploading ? 'Uploading...' : 'Upload Cover Letter' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ── OTHER DOCUMENTS TAB ── -->
+        <div *ngIf="activeDocTab === 'other'">
+          <div *ngIf="getDocumentByType('OTHER')" class="doc-existing">
+            <div class="doc-existing-header">
+              <div>
+                <p class="doc-filename">
+                  <i class="fa-solid fa-paperclip"></i>
+                  {{ getDocumentByType('OTHER')!.fileName }}
+                </p>
+                <p class="doc-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  Uploaded: {{ getDocumentByType('OTHER')!.uploadedAt | date:'mediumDate' }}
+                </p>
+              </div>
+              <span class="status-badge" [ngClass]="getStatusClass(getDocumentByType('OTHER')!.status)">
+                <i *ngIf="getDocumentByType('OTHER')!.status === 'APPROVED'" class="fa-solid fa-check-circle"></i>
+                <i *ngIf="getDocumentByType('OTHER')!.status === 'REJECTED'" class="fa-solid fa-times-circle"></i>
+                <i *ngIf="getDocumentByType('OTHER')!.status === 'PENDING'" class="fa-solid fa-clock"></i>
+                {{ getStatusLabel(getDocumentByType('OTHER')!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="doc-form-card">
+            <h4>
+              <i *ngIf="!getDocumentByType('OTHER')" class="fa-solid fa-upload"></i>
+              <i *ngIf="getDocumentByType('OTHER')" class="fa-solid fa-rotate"></i>
+              {{ getDocumentByType('OTHER') ? 'Replace Document' : 'Upload Other Document' }}
+            </h4>
+            <div class="form-group">
+              <label class="form-label">File *</label>
+              <div class="file-input-wrapper">
+                <input type="file" accept=".pdf,.doc,.docx,image/*" (change)="onFileSelected($event, 'other')" class="file-input" id="other-file" />
+                <label for="other-file" class="file-label">
+                  <i class="fa-solid fa-folder-open"></i>
+                  {{ otherFile ? otherFile.name : 'Choose file...' }}
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Document Title *</label>
+              <input type="text" [(ngModel)]="otherForm.documentTitle" placeholder="e.g. Reference Letter, Certificate..." class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notes (optional)</label>
+              <textarea [(ngModel)]="otherForm.notes" rows="3"
+                placeholder="Any additional information about this document..."
+                class="form-input form-textarea"></textarea>
+            </div>
+            <button (click)="uploadOtherDoc()" [disabled]="isUploading" class="upload-btn">
+              <i *ngIf="!isUploading" class="fa-solid fa-cloud-upload-alt"></i>
+              <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isUploading ? 'Uploading...' : 'Upload Document' }}
             </button>
           </div>
         </div>

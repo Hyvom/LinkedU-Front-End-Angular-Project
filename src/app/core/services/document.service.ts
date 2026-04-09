@@ -41,4 +41,45 @@ export class DocumentService {
     form.append('birthday', birthday);
     return this.http.post<StudentDocument>(`${this.api}/id-card`, form);
   }
+
+  uploadDiploma(studentId: number, file: File, degree: string, institution: string, graduationYear: string, fieldOfStudy: string): Observable<any> {
+    const form = new FormData();
+    form.append('studentId', String(studentId));
+    form.append('file', file);
+    form.append('degree', degree);
+    form.append('institution', institution);
+    form.append('graduationYear', graduationYear);
+    form.append('fieldOfStudy', fieldOfStudy);
+    return this.http.post(`${this.api}/diploma`, form);
+  }
+
+  uploadTranscript(studentId: number, file: File, institution: string, academicYear: string, average: string): Observable<any> {
+    const form = new FormData();
+    form.append('studentId', String(studentId));
+    form.append('file', file);
+    form.append('institution', institution);
+    form.append('academicYear', academicYear);
+    form.append('average', average);
+    return this.http.post(`${this.api}/transcript`, form);
+  }
+
+  uploadCoverLetter(studentId: number, file: File, targetUniversity: string, targetProgram: string, content: string): Observable<any> {
+    const form = new FormData();
+    form.append('studentId', String(studentId));
+    form.append('file', file);
+    form.append('targetUniversity', targetUniversity);
+    form.append('targetProgram', targetProgram);
+    form.append('content', content);
+    return this.http.post(`${this.api}/cover-letter`, form);
+  }
+
+  uploadOther(studentId: number, file: File, documentTitle: string, notes: string): Observable<any> {
+    const form = new FormData();
+    form.append('studentId', String(studentId));
+    form.append('file', file);
+    form.append('documentTitle', documentTitle);
+    form.append('notes', notes);
+    return this.http.post(`${this.api}/other`, form);
+  }
+
 }
