@@ -215,6 +215,11 @@
         {{ quizError }}
       </div>
 
+      <div *ngIf="timeExpiredMessage" class="alert alert-error" style="margin-top: 10px;">
+        <i class="fa-solid fa-hourglass-end"></i>
+        {{ timeExpiredMessage }}
+      </div>
+
       <div *ngIf="isLoadingQuizzes" class="loading-state">
         <div class="spinner"></div>
         <p>
@@ -227,13 +232,56 @@
         <button class="quiz-card" *ngFor="let quiz of assignedQuizzes" (click)="openQuiz(quiz)">
           <h4>{{ quiz.title }}</h4>
           <p>{{ quiz.description || 'No description provided.' }}</p>
+          <div class="quiz-time-badge" *ngIf="hasValidTiming(quiz)" style="margin: 8px 0; font-size: 0.8rem; color: #666;">
+            <i class="fa-regular fa-clock"></i> {{ getQuizStartTime(quiz) | date:'shortTime' }} - {{ getQuizEndTime(quiz) | date:'shortTime' }}
+            <div style="font-size: 0.7rem;">{{ getQuizStartTime(quiz) | date:'mediumDate' }}</div>
+          </div>
           <span class="quiz-lang">{{ quiz.language || 'General' }}</span>
         </button>
         <p *ngIf="assignedQuizzes.length === 0" class="text-muted">No assigned quizzes yet.</p>
       </div>
 
       <div class="quiz-preview" *ngIf="selectedQuiz">
-        <h3>{{ selectedQuiz.title }}</h3>
+        <!-- Status Overlay -->
+        <div class="quiz-timing-notice" *ngIf="getQuizStatus(selectedQuiz) !== 'Active'" style="padding: 2rem; text-align: center; background: #f8f9fa; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #dee2e6;">
+          <i class="fa-solid fa-lock" style="font-size: 2rem; color: #6c757d; margin-bottom: 1rem;"></i>
+          <h3 *ngIf="getQuizStatus(selectedQuiz) === 'Upcoming'">Quiz Not Started Yet</h3>
+          <h3 *ngIf="getQuizStatus(selectedQuiz) === 'Expired'">Quiz Has Ended</h3>
+          <p>This quiz is only available between:<br>
+            <strong>{{ getQuizStartTime(selectedQuiz) | date:'medium' }}</strong> and 
+            <strong>{{ getQuizEndTime(selectedQuiz) | date:'medium' }}</strong>
+          </p>
+        </div>
+
+        <!-- Quiz Content (Only show if Active) -->
+        <div *ngIf="getQuizStatus(selectedQuiz) === 'Active'" style="display: flex; gap: 24px; align-items: flex-start;">
+          
+          <!-- Left Sidebar: Quiz Timing & Status -->
+          <aside style="flex: 0 0 240px; background: #0A0F2A; border: 1px solid rgba(217, 198, 130, 0.3); border-radius: 16px; padding: 20px; position: sticky; top: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+            <h4 style="color: #d9c682; margin: 0 0 15px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid rgba(217,198,130,0.2); padding-bottom: 10px;">
+              <i class="fa-solid fa-hourglass-half"></i> Quiz Schedule
+            </h4>
+            
+            <div style="margin-bottom: 15px;">
+              <p style="font-size: 0.7rem; color: #94a3b8; margin: 0 0 4px; font-weight: 600;">STARTS</p>
+              <p style="font-weight: 600; color: #f8fafc; margin: 0; font-size: 0.85rem;">{{ hasValidTiming(selectedQuiz) ? (getQuizStartTime(selectedQuiz) | date:'medium') : 'Not Set' }}</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <p style="font-size: 0.7rem; color: #94a3b8; margin: 0 0 4px; font-weight: 600;">DEADLINE</p>
+              <p style="font-weight: 600; color: #ef4444; margin: 0; font-size: 0.85rem;">{{ hasValidTiming(selectedQuiz) ? (getQuizEndTime(selectedQuiz) | date:'medium') : 'Not Set' }}</p>
+            </div>
+
+            <div style="padding: 15px; background: rgba(217, 198, 130, 0.1); border-radius: 12px; border: 1px solid rgba(217, 198, 130, 0.2); text-align: center;">
+              <p style="font-size: 0.65rem; color: #d9c682; margin: 0 0 5px; font-weight: 800; text-transform: uppercase;">Time Left</p>
+              <p style="font-size: 1.8rem; font-weight: 800; color: #d9c682; margin: 0; line-height: 1;">{{ remainingTime || '--:--' }}</p>
+            </div>
+          </aside>
+
+          <!-- Main Quiz Content Area -->
+          <div style="flex: 1;">
+            <h3>{{ selectedQuiz.title }}</h3>
+
         <div class="quiz-progress">
           <div class="quiz-progress-header">
             <span>Progress</span>
@@ -306,6 +354,8 @@
           <p>{{ quizResult.message }}</p>
           <p class="score">Score: {{ quizResult.score | number:'1.0-0' }}%</p>
         </div>
+      </div>
+      </div>
       </div>
     </div>
     <!-- ═══════════ DOCUMENTS SECTION ═══════════ -->

@@ -17,6 +17,8 @@ export class QuizService {
         title: payload.title,
         description: payload.description,
         language: payload.language,
+        startTime: payload.startTime || '',
+        endTime: payload.endTime || '',
         createdById: createdById.toString()
       }
     });
@@ -36,7 +38,9 @@ export class QuizService {
         adminId: adminId.toString(),
         title: payload.title,
         description: payload.description,
-        language: payload.language
+        language: payload.language,
+        startTime: payload.startTime || '',
+        endTime: payload.endTime || ''
       }
     });
   }
@@ -71,11 +75,12 @@ export class QuizService {
     });
   }
 
-  submitQuiz(studentId: number, quizId: number, answers: QuizAnswerSubmission[]): Observable<QuizSubmitResponse> {
+  submitQuiz(studentId: number, quizId: number, answers: QuizAnswerSubmission[], auto = false): Observable<QuizSubmitResponse> {
     return this.http.post<QuizSubmitResponse>(`${this.apiBase}/student-quiz/submit`, answers, {
       params: {
         studentId: studentId.toString(),
-        quizId: quizId.toString()
+        quizId: quizId.toString(),
+        auto: auto ? 'true' : 'false'
       }
     });
   }

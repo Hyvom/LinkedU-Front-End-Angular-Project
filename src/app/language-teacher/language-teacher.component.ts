@@ -29,10 +29,10 @@ export class LanguageTeacherComponent implements OnInit {
 
   currentStep: 1 | 2 | 3 = 1;
   teacherId = 0;
-  quizzes: Quiz[] = [];
+  quizzes: (Quiz & { startTime?: string; endTime?: string })[] = [];
   selectedQuizId: number | null = null;
   selectedQuizQuestions: QuizQuestion[] = [];
-  createdQuiz: Quiz | null = null;
+  createdQuiz: (Quiz & { startTime?: string; endTime?: string }) | null = null;
   createdQuestionsCount = 0;
   questionCursor = 1;
 
@@ -42,10 +42,12 @@ export class LanguageTeacherComponent implements OnInit {
   errorMsg = '';
   successMsg = '';
 
-  quizForm: CreateQuizPayload = {
+  quizForm: CreateQuizPayload & { startTime?: string; endTime?: string } = {
     title: '',
     description: '',
-    language: ''
+    language: '',
+    startTime: '',
+    endTime: ''
   };
 
   questionForm: QuestionFormPayload = {
@@ -78,7 +80,7 @@ export class LanguageTeacherComponent implements OnInit {
     this.loading = true;
     this.errorMsg = '';
     this.quizService.getTeacherQuizzes(this.teacherId).subscribe({
-      next: (quizzes) => {
+      next: (quizzes: any) => {
         this.quizzes = quizzes;
         this.loading = false;
       },
@@ -90,8 +92,16 @@ export class LanguageTeacherComponent implements OnInit {
   }
 
   createQuiz(): void {
-    if (!this.quizForm.title.trim() || !this.quizForm.language.trim()) {
-      this.errorMsg = 'Quiz title and language are required.';
+    if (!this.quizForm.title.trim() || !this.quizForm.language.trim() || !this.quizForm.startTime || !this.quizForm.endTime) {
+      this.errorMsg = 'Quiz title, language, start time, and end time are required.';
+      return;
+    }
+
+    const start = new Date(this.quizForm.startTime);
+    const end = new Date(this.quizForm.endTime);
+
+    if (end <= start) {
+      this.errorMsg = 'End time must be after start time.';
       return;
     }
 
@@ -100,7 +110,7 @@ export class LanguageTeacherComponent implements OnInit {
     this.successMsg = '';
 
     this.quizService.createQuiz(this.quizForm, this.teacherId).subscribe({
-      next: (quiz) => {
+      next: (quiz: any) => {
         this.savingQuiz = false;
         this.createdQuiz = quiz;
         this.selectedQuizId = quiz.id;
@@ -207,7 +217,13 @@ export class LanguageTeacherComponent implements OnInit {
     this.selectedQuizQuestions = [];
     this.createdQuestionsCount = 0;
     this.questionCursor = 1;
-    this.quizForm = { title: '', description: '', language: '' };
+    this.quizForm = { 
+      title: '', 
+      description: '', 
+      language: '',
+      startTime: '',
+      endTime: ''
+    };
     this.questionForm = {
       quizId: 0,
       questionText: '',
@@ -224,6 +240,55 @@ export class LanguageTeacherComponent implements OnInit {
       return;
     }
     this.currentStep = step;
+  }
+
+  /**
+   * Robustly extracts a start date from a quiz object using various common naming conventions.
+   */
+  private getQuizStartDate(quiz: any): Date {
+    const val = quiz?.startTime || quiz?.start_time || quiz?.startDate || quiz?.start || 
+                quiz?.startsAt || quiz?.starts_at || quiz?.startingDate || quiz?.openingDate;
+    return this.parseDate(val);
+  }
+
+  /**
+   * Robustly extracts an end date from a quiz object using various common naming conventions.
+   */
+  private getQuizEndDate(quiz: any): Date {
+    const val = quiz?.endTime || quiz?.end_time || quiz?.endDate || quiz?.end || 
+                quiz?.endsAt || quiz?.ends_at || quiz?.deadline || quiz?.endingDate || quiz?.closingDate;
+    return this.parseDate(val);
+  }
+
+  private parseDate(dateInput: any): Date {
+    if (dateInput === null || dateInput === undefined || dateInput === '') return new Date(0);
+    if (dateInput instanceof Date) return dateInput;
+    if (Array.isArray(dateInput)) {
+      if (dateInput.length < 3) return new Date(0);
+      return new Date(dateInput[0], (dateInput[1] || 1) - 1, dateInput[2], dateInput[3] || 0, dateInput[4] || 0);
+    }
+    let d = new Date(dateInput);
+    if (isNaN(d.getTime()) && typeof dateInput === 'string') {
+      const isoStr = dateInput.replace(' ', 'T');
+      d = new Date(isoStr);
+    }
+    return isNaN(d.getTime()) ? new Date(0) : d;
+  }
+
+  hasValidTiming(quiz: any): boolean {
+    if (!quiz) return false;
+    return this.getQuizStartDate(quiz).getTime() > 0 && this.getQuizEndDate(quiz).getTime() > 0;
+  }
+
+  getQuizStatus(quiz: any): 'Upcoming' | 'Active' | 'Expired' {
+    if (!this.hasValidTiming(quiz)) return 'Active';
+    
+    const now = new Date().getTime();
+    const start = this.getQuizStartDate(quiz).getTime();
+    const end = this.getQuizEndDate(quiz).getTime();
+    if (now < start) return 'Upcoming';
+    if (now > end) return 'Expired';
+    return 'Active';
   }
 
   logout(): void {

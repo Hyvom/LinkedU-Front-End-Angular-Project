@@ -11,7 +11,12 @@
     <div>
       <span class="hero-kicker">Active quiz</span>
       <h3>{{ createdQuiz.title }}</h3>
-      <p>{{ createdQuiz.language || 'N/A' }} - {{ createdQuestionsCount }} question(s)</p>
+      <p>
+        {{ createdQuiz.language || 'N/A' }} - {{ createdQuestionsCount }} question(s)
+        <span *ngIf="createdQuiz.endTime" style="margin-left: 10px; font-weight: 500;">
+          (Ends: {{ createdQuiz.endTime | date:'medium' }})
+        </span>
+      </p>
     </div>
     <div class="hero-pill">Step {{ currentStep }} / 3</div>
   </div>
@@ -33,6 +38,16 @@
         <option value="" disabled>Select language</option>
         <option *ngFor="let language of languageOptions" [value]="language">{{ language }}</option>
       </select>
+    </div>
+    <div class="grid-3" style="margin-top: 1rem; align-items: flex-end;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <label style="font-size: 0.85rem; color: #555; font-weight: bold;">Start Time</label>
+        <input type="datetime-local" [(ngModel)]="quizForm.startTime" />
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <label style="font-size: 0.85rem; color: #555; font-weight: bold;">End Time</label>
+        <input type="datetime-local" [(ngModel)]="quizForm.endTime" />
+      </div>
       <button (click)="createQuiz()" [disabled]="savingQuiz">{{ savingQuiz ? 'Creating...' : 'Create & Continue' }}</button>
     </div>
     <textarea [(ngModel)]="quizForm.description" placeholder="Short description for students"></textarea>
@@ -79,8 +94,7 @@
       <button class="primary" (click)="startNewQuizFlow()">Start New Quiz</button>
     </div>
   </section>
-
-  <section class="card">
+<section class="card">
     <div class="card-header-row">
       <h2>Your Existing Quizzes</h2>
       <span class="count-badge">{{ quizzes.length }} total</span>
@@ -93,7 +107,14 @@
         [class.active]="quiz.id === selectedQuizId"
         (click)="selectQuiz(quiz.id)">
         <strong>{{ quiz.title }}</strong>
-        <span>{{ quiz.language || 'N/A' }}</span>
+        <span>
+          {{ quiz.language || 'N/A' }}
+          <small *ngIf="$any(quiz).startTime || $any(quiz).start_time" style="display: block; margin-top: 4px; font-size: 0.75rem; color: #666;">
+            Status: <strong [style.color]="getQuizStatus(quiz) === 'Active' ? '#28a745' : '#d9534f'">{{ getQuizStatus(quiz) }}</strong>
+            <br>
+            Window: {{ ($any(quiz).startTime || $any(quiz).start_time) | date:'short' }} - {{ ($any(quiz).endTime || $any(quiz).end_time) | date:'short' }}
+          </small>
+        </span>
       </button>
       <p *ngIf="quizzes.length === 0">No quizzes yet.</p>
     </div>

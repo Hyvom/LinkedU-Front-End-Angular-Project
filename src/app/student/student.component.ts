@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -30,7 +30,7 @@ type DocumentTab = 'cv' | 'passport' | 'idcard' | 'diploma' | 'transcript' | 'co
   templateUrl: './student.component.html',
   styleUrl: './student.component.css'
 })
-export class StudentProfileComponent implements OnInit {
+export class StudentProfileComponent implements OnInit, OnDestroy {
 
   // ── Navigation ──
   activeSection: ActiveSection = 'profile';
@@ -104,8 +104,8 @@ export class StudentProfileComponent implements OnInit {
   };
 
   recommendationMeta: any = null;
-  assignedQuizzes: Quiz[] = [];
-  selectedQuiz: Quiz | null = null;
+  assignedQuizzes: (Quiz & { startTime?: string; endTime?: string })[] = [];
+  selectedQuiz: (Quiz & { startTime?: string; endTime?: string }) | null = null;
   selectedQuizQuestions: QuizQuestion[] = [];
   isLoadingQuizzes = false;
   quizError = '';
@@ -114,6 +114,9 @@ export class StudentProfileComponent implements OnInit {
   reviewMode = false;
   submittingQuiz = false;
   quizResult: { score: number; passed: boolean; message: string } | null = null;
+  remainingTime = '';
+  timeExpiredMessage = '';
+  private quizTimer: any;
 
   // Updated allStages with comprehensive stages
   allStages: ProgressStage[] = [
@@ -277,7 +280,7 @@ export class StudentProfileComponent implements OnInit {
     this.quizError = '';
     this.quizService.getAssignedQuizzes(this.userId).subscribe({
       next: (quizzes) => {
-        this.assignedQuizzes = quizzes;
+        this.assignedQuizzes = quizzes as any;
         this.isLoadingQuizzes = false;
       },
       error: () => {
@@ -287,12 +290,15 @@ export class StudentProfileComponent implements OnInit {
     });
   }
 
-  openQuiz(quiz: Quiz): void {
+  openQuiz(quiz: (Quiz & { startTime?: string; endTime?: string })): void {
+    console.log('Opening Quiz Data:', quiz); // Debug to check property names (e.g., startTime vs start_time)
     this.selectedQuiz = quiz;
     this.currentQuestionIndex = 0;
     this.selectedAnswers = {};
     this.reviewMode = false;
     this.quizResult = null;
+    this.timeExpiredMessage = '';
+    this.startQuizTimer(quiz);
     this.quizService.getQuizQuestionsForStudent(quiz.id, this.userId).subscribe({
       next: (questions) => {
         this.selectedQuizQuestions = questions;
@@ -302,6 +308,43 @@ export class StudentProfileComponent implements OnInit {
         this.quizError = 'Could not load quiz questions.';
       }
     });
+  }
+
+  startQuizTimer(quiz: any): void {
+    if (this.quizTimer) clearInterval(this.quizTimer);
+    if (!this.hasValidTiming(quiz)) {
+      this.remainingTime = '';
+      this.timeExpiredMessage = '';
+      return;
+    }
+    
+    const updateTimer = () => {
+      const now = new Date().getTime();
+      const start = this.getQuizStartTime(quiz).getTime();
+      const end = this.getQuizEndTime(quiz).getTime();
+
+      if (now < start) {
+        this.remainingTime = 'Starting Soon';
+      } else if (now >= end) {
+        this.remainingTime = 'EXPIRED';
+        clearInterval(this.quizTimer);
+        if (!this.quizResult && !this.submittingQuiz) {
+          const endedAt = this.getQuizEndTime(quiz);
+          const endedAtText = endedAt.getTime() > 0 ? endedAt.toLocaleString() : 'the deadline';
+          this.timeExpiredMessage = `Time ended at ${endedAtText}. Your quiz is being submitted automatically.`;
+          this.submitQuiz(true);
+          alert(this.timeExpiredMessage);
+        }
+      } else {
+        const diff = end - now;
+        const m = Math.floor(diff / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        this.remainingTime = `${m}:${s.toString().padStart(2, '0')}`;
+      }
+    };
+
+    updateTimer(); // Initial call to avoid 1s delay
+    this.quizTimer = setInterval(updateTimer, 1000);
   }
 
   nextQuestion(): void {
@@ -360,8 +403,8 @@ export class StudentProfileComponent implements OnInit {
     this.reviewMode = false;
   }
 
-  submitQuiz(): void {
-    if (!this.selectedQuiz || !this.canSubmitQuiz()) {
+  submitQuiz(isAuto = false): void {
+    if (!this.selectedQuiz || (!isAuto && !this.canSubmitQuiz())) {
       this.quizError = 'Please answer all questions before submitting.';
       return;
     }
@@ -373,13 +416,16 @@ export class StudentProfileComponent implements OnInit {
 
     this.submittingQuiz = true;
     this.quizError = '';
-    this.quizService.submitQuiz(this.userId, this.selectedQuiz.id, answers).subscribe({
+    this.quizService.submitQuiz(this.userId, this.selectedQuiz.id, answers, isAuto).subscribe({
       next: (result) => {
         this.quizResult = {
           score: result.score,
           passed: result.passed,
           message: result.message
         };
+        if (isAuto && this.timeExpiredMessage) {
+          this.quizError = this.timeExpiredMessage;
+        }
         this.submittingQuiz = false;
       },
       error: () => {
@@ -649,7 +695,77 @@ export class StudentProfileComponent implements OnInit {
     return this.allStages.filter(s => this.getStageStatus(s) === 'COMPLETED').length;
   }
 
+  getQuizStartTime(quiz: any): Date {
+    const val = quiz?.startTime || quiz?.start_time || quiz?.startDate || quiz?.start || 
+                quiz?.startsAt || quiz?.starts_at || quiz?.startingDate || quiz?.openingDate;
+    return this.parseDate(val);
+  }
+
+  getQuizEndTime(quiz: any): Date {
+    const val = quiz?.endTime || quiz?.end_time || quiz?.endDate || quiz?.end || 
+                quiz?.endsAt || quiz?.ends_at || quiz?.deadline || quiz?.endingDate || quiz?.closingDate;
+    return this.parseDate(val);
+  }
+
+  hasValidTiming(quiz: any): boolean {
+    if (!quiz) return false;
+    // Extract values with fallbacks for potential naming variations from backend
+    const startVal = this.getQuizStartTime(quiz);
+    const endVal = this.getQuizEndTime(quiz);
+    
+    const start = startVal.getTime();
+    const end = endVal.getTime();
+    return start > 0 && end > 0;
+  }
+
+  parseDate(dateInput: any): Date {
+    // If input is null, undefined, or empty string, return a zero date
+    if (dateInput === null || dateInput === undefined || dateInput === '') return new Date(0);
+    
+    // If it's already a Date object
+    if (dateInput instanceof Date) return dateInput;
+
+    // Handle case where backend might return date as an array [yyyy, mm, dd, hh, mm]
+    // Some Java/Spring Boot backends return LocalDateTime as an array
+    if (Array.isArray(dateInput)) {
+      if (dateInput.length < 3) return new Date(0);
+      return new Date(
+        dateInput[0],
+        (dateInput[1] || 1) - 1,
+        dateInput[2],
+        dateInput[3] || 0,
+        dateInput[4] || 0
+      );
+    }
+
+    // Try direct parsing
+    let d = new Date(dateInput);
+    
+    // If direct parsing fails and it's a string, try fixing common ISO issues
+    if (isNaN(d.getTime()) && typeof dateInput === 'string') {
+      // Replace space with T (e.g., "2024-04-13 18:00" -> "2024-04-13T18:00")
+      const isoStr = dateInput.replace(' ', 'T');
+      d = new Date(isoStr);
+    }
+
+    return isNaN(d.getTime()) ? new Date(0) : d;
+  }
+
+  getQuizStatus(quiz: any): 'Upcoming' | 'Active' | 'Expired' {
+    if (!this.hasValidTiming(quiz)) return 'Active';
+    const now = new Date().getTime();
+    const start = this.getQuizStartTime(quiz).getTime();
+    const end = this.getQuizEndTime(quiz).getTime();
+    if (now < start) return 'Upcoming';
+    if (now >= end) return 'Expired';
+    return 'Active';
+  }
+
   parseLanguages(json: string): { name: string; level: string; rank: number }[] {
     try { return JSON.parse(json); } catch { return []; }
+  }
+
+  ngOnDestroy(): void {
+    if (this.quizTimer) clearInterval(this.quizTimer);
   }
 }
