@@ -401,7 +401,18 @@ export interface StudentDocument {
   documentTitle?: string;
   notes?: string;
 }
-
+// ===========================
+// CV ANALYSIS MODELS
+// ===========================
+export interface CvAnalysis {
+  score: number;
+  strengths: string[];
+  weaknesses: string[];
+  advice: string[];
+  summary: string;
+  fileName: string;
+  documentId: number;
+}
 // ===========================
 // PROGRESS MODELS
 // ===========================

@@ -1927,3 +1927,231 @@
     opacity: 0.6;
   }
 }
+
+/* ========== AI CV ANALYSIS STYLES ========== */
+
+/* AI Analysis Card */
+.ai-analysis-card {
+  background: linear-gradient(135deg, #F4F5F0 0%, #e8e9e4 100%);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  border: 1px solid rgba(217, 198, 130, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ai-analysis-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Header Section */
+.ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ai-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ai-title i {
+  font-size: 1.8rem;
+  color: #6366f1;
+}
+
+.ai-title h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1E4F70;
+}
+
+/* Score Circle */
+.score-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(#6366f1 0deg, #e5e7eb 0deg);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.score-circle span {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #6366f1;
+  background: white;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Summary Section */
+.ai-summary {
+  background: white;
+  border-left: 4px solid #6366f1;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* Analysis Sections (Strengths, Weaknesses, Advice) */
+.analysis-section {
+  margin-bottom: 1.25rem;
+}
+
+.analysis-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.section-header i {
+  font-size: 1.1rem;
+}
+
+.section-header h5 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Strengths */
+.strengths .section-header i,
+.strengths .section-header h5 {
+  color: #10b981;
+}
+
+/* Weaknesses */
+.weaknesses .section-header i,
+.weaknesses .section-header h5 {
+  color: #ef4444;
+}
+
+/* Advice */
+.advice .section-header i,
+.advice .section-header h5 {
+  color: #f59e0b;
+}
+
+/* Analysis Lists */
+.analysis-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.analysis-list li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.85rem;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.analysis-list li:last-child {
+  border-bottom: none;
+}
+
+.analysis-list li i {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.strengths .analysis-list li i {
+  color: #10b981;
+}
+
+.weaknesses .analysis-list li i {
+  color: #ef4444;
+}
+
+.advice .analysis-list li i {
+  color: #f59e0b;
+}
+
+/* AI Button */
+.ai-analyze-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.ai-analyze-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+}
+
+.ai-analyze-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ai-analysis-card {
+    padding: 1rem;
+  }
+  
+  .score-circle {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .score-circle span {
+    width: 52px;
+    height: 52px;
+    font-size: 1.2rem;
+  }
+  
+  .ai-title i {
+    font-size: 1.4rem;
+  }
+  
+  .ai-title h4 {
+    font-size: 1rem;
+  }
+  
+  .analysis-list li {
+    font-size: 0.8rem;
+    padding: 0.5rem 0;
+  }
+}

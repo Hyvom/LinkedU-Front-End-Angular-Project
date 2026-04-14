@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { StudentDocument } from '../../shared/models/models';
+import { StudentDocument, CvAnalysis  } from '../../shared/models/models';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
@@ -21,6 +21,10 @@ export class DocumentService {
     form.append('experience', experience);
     form.append('skills', skills);
     return this.http.post<StudentDocument>(`${this.api}/cv`, form);
+  }
+
+  evaluateCv(documentId: number): Observable<CvAnalysis> {
+  return this.http.get<CvAnalysis>(`${this.api}/cv/${documentId}/evaluate`);
   }
 
   uploadPassport(studentId: number, file: File, issueDate: string, expiryDate: string, issuingCountry: string): Observable<StudentDocument> {

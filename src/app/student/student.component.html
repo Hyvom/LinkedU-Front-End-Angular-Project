@@ -464,6 +464,83 @@
               <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
               {{ isUploading ? 'Uploading...' : 'Upload CV' }}
             </button>
+            <!-- AI EVALUATE BUTTON -->
+            <button
+              *ngIf="getDocumentByType('CV')"
+              (click)="analyzeCv()"
+              [disabled]="isAnalyzing"
+              class="ai-analyze-btn">
+              <i *ngIf="!isAnalyzing" class="fa-solid fa-robot"></i>
+              <i *ngIf="isAnalyzing" class="fa-solid fa-spinner fa-spin"></i>
+              {{ isAnalyzing ? 'Analyzing with AI...' : 'Analyze CV with AI' }}
+            </button>
+
+            <!-- ANALYSIS ERROR -->
+            <div *ngIf="analysisError" class="alert alert-error" style="margin-top: 12px;">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ analysisError }}
+            </div>
+
+            <!-- AI RESULTS CARD -->
+            <div *ngIf="cvAnalysis" class="ai-analysis-card">
+              
+              <!-- Header with score -->
+              <div class="ai-header">
+                <div class="ai-title">
+                  <i class="fa-solid fa-robot"></i>
+                  <h4>AI CV Analysis</h4>
+                </div>
+                <!-- Score circle -->
+                <div class="score-circle" [style.background]="'conic-gradient(#6366f1 ' + (cvAnalysis.score * 3.6) + 'deg, #e5e7eb 0deg)'">
+                  <span>{{ cvAnalysis.score }}</span>
+                </div>
+              </div>
+
+              <!-- Summary -->
+              <div class="ai-summary">
+                {{ cvAnalysis.summary }}
+              </div>
+
+              <!-- Strengths -->
+              <div class="analysis-section strengths">
+                <div class="section-header">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <h5>Strengths</h5>
+                </div>
+                <ul class="analysis-list">
+                  <li *ngFor="let s of cvAnalysis.strengths">
+                    <i class="fa-solid fa-check"></i>{{ s }}
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Weaknesses / Areas to Improve -->
+              <div class="analysis-section weaknesses">
+                <div class="section-header">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                  <h5>Areas to Improve</h5>
+                </div>
+                <ul class="analysis-list">
+                  <li *ngFor="let w of cvAnalysis.weaknesses">
+                    <i class="fa-solid fa-xmark"></i>{{ w }}
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Advice -->
+              <div class="analysis-section advice">
+                <div class="section-header">
+                  <i class="fa-solid fa-lightbulb"></i>
+                  <h5>Advice</h5>
+                </div>
+                <ul class="analysis-list">
+                  <li *ngFor="let a of cvAnalysis.advice">
+                    <i class="fa-solid fa-arrow-right"></i>{{ a }}
+                  </li>
+                </ul>
+              </div>
+
+            </div>
           </div>
         </div>
 

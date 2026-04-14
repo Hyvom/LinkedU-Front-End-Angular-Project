@@ -17,7 +17,8 @@ import {
   ProgressStatus,
   Quiz,
   QuizAnswerSubmission,
-  QuizQuestion
+  QuizQuestion,
+  CvAnalysis
 } from '../shared/models/models';
 
 type ActiveSection = 'profile' | 'documents' | 'progress' | 'quizzes' | 'recommendations';
@@ -58,6 +59,11 @@ export class StudentProfileComponent implements OnInit {
   // CV Form
   cvFile: File | null = null;
   cvForm = { summary: '', experience: '', skills: '' };
+
+  //
+  cvAnalysis: CvAnalysis | null = null;
+  isAnalyzing = false;
+  analysisError = '';
 
   // Passport Form
   passportFile: File | null = null;
@@ -470,6 +476,33 @@ export class StudentProfileComponent implements OnInit {
         this.uploadError = err?.error?.message || 'Upload failed.';
         this.isUploading = false;
       }
+    });
+  }
+  analyzeCv(): void {
+    const doc = this.getDocumentByType('CV');
+    if (!doc) {
+      this.analysisError = 'Please upload a CV first.';
+      return;
+    }
+    this.isAnalyzing = true;
+    this.analysisError = '';
+    this.cvAnalysis = null;
+
+    this.documentService.evaluateCv(doc.id).subscribe({
+      next: (result) => {
+        this.cvAnalysis = result;
+        this.isAnalyzing = false;
+      },
+    error: (err: { status?: number; error?: { message?: string } }) => {
+      if (err.status === 429) {
+        this.analysisError = 'AI service is busy. Please wait a moment and try again.';
+      } else if (err.status === 403) {
+        this.analysisError = 'Access denied. Please log out and log back in.';
+      } else {
+        this.analysisError = err?.error?.message || 'AI analysis failed. Please try again.';
+      }
+      this.isAnalyzing = false;
+    }
     });
   }
 
