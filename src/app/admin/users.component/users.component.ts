@@ -30,6 +30,14 @@ export class UsersComponent implements OnInit {
 
   readonly roles: UserRole[] = ['ADMIN', 'USER', 'GUEST', 'STUDENT', 'AGENT', 'LANGUAGE_TEACHER'];
 
+  private readonly roleChangeConfirmCode = 'admine123';
+
+  roleConfirmOpen = false;
+  roleConfirmUser: User | null = null;
+  roleConfirmNewRole: UserRole | null = null;
+  roleConfirmCodeInput = '';
+  roleConfirmModalError = '';
+
   constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
@@ -57,6 +65,39 @@ export class UsersComponent implements OnInit {
   assignRole(user: User): void {
     const newRole = this.selectedRoleMap[user.id];
     if (!newRole || newRole === user.role) return;
+
+    this.roleConfirmUser = user;
+    this.roleConfirmNewRole = newRole;
+    this.roleConfirmCodeInput = '';
+    this.roleConfirmModalError = '';
+    this.roleConfirmOpen = true;
+  }
+
+  cancelRoleConfirm(): void {
+    if (this.roleConfirmUser) {
+      this.selectedRoleMap[this.roleConfirmUser.id] = this.roleConfirmUser.role;
+    }
+    this.closeRoleConfirmModal();
+  }
+
+  onRoleConfirmBackdropClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('role-confirm-backdrop')) {
+      this.cancelRoleConfirm();
+    }
+  }
+
+  submitRoleConfirm(): void {
+    if (!this.roleConfirmUser || !this.roleConfirmNewRole) return;
+
+    if (this.roleConfirmCodeInput.trim() !== this.roleChangeConfirmCode) {
+      this.roleConfirmModalError = 'Wrong confirmation code. The role was not changed.';
+      return;
+    }
+
+    const user = this.roleConfirmUser;
+    const newRole = this.roleConfirmNewRole;
+    this.closeRoleConfirmModal();
+
     this.assigningRole = user.id;
     this.successMsg = '';
     this.errorMsg = '';
@@ -72,6 +113,14 @@ export class UsersComponent implements OnInit {
         this.assigningRole = null;
       }
     });
+  }
+
+  private closeRoleConfirmModal(): void {
+    this.roleConfirmOpen = false;
+    this.roleConfirmUser = null;
+    this.roleConfirmNewRole = null;
+    this.roleConfirmCodeInput = '';
+    this.roleConfirmModalError = '';
   }
 
   assignAgent(student: User): void {
