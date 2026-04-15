@@ -1,0 +1,44 @@
+<div class="quiz-container">
+  <!-- 1. SHOWN IF BEFORE START TIME -->
+  <div *ngIf="quizStatus === 'Upcoming'" class="status-card waiting">
+    <h2>Quiz Not Started</h2>
+    <p>This quiz will be available at: <strong>{{ quiz?.startTime | date:'medium' }}</strong></p>
+    <p style="font-size: 1.2rem; color: #007bff;">{{ remainingTime }}</p>
+    <p>Please wait for the teacher to start.</p>
+  </div>
+
+  <!-- 2. SHOWN DURING THE LIVE WINDOW -->
+  <div *ngIf="quizStatus === 'Active'" class="active-quiz">
+    <div class="timer-banner" style="position: sticky; top: 0; background: white; padding: 15px; border-bottom: 3px solid #007bff; z-index: 100; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-size: 1.3rem; font-weight: bold;">Time Left: <span [style.color]="progressPercent > 85 ? '#d9534f' : '#333'">{{ remainingTime }}</span></span>
+        <span style="font-size: 0.8rem; color: #666;" *ngIf="quiz?.startTime">
+          Started: {{ quiz.startTime | date:'shortTime' }}
+        </span>
+        <span style="font-size: 0.8rem; color: #c53030;" *ngIf="quiz?.endTime">
+          Ends at: {{ quiz.endTime | date:'shortTime' }}
+        </span>
+      </div>
+      <div class="progress-container" style="background: #eee; height: 12px; border-radius: 6px; flex-grow: 1; margin-left: 25px;">
+        <div class="progress-bar" 
+          [style.width.%]="100 - progressPercent" 
+          [style.background-color]="progressPercent > 85 ? '#d9534f' : '#28a745'"
+          style="height: 100%; border-radius: 6px; transition: width 1s linear;">
+        </div>
+      </div>
+    </div>
+
+    <!-- YOUR EXISTING QUESTIONS UI -->
+    <div class="questions">
+       <!-- ... your question loop ... -->
+    </div>
+
+    <button (click)="finishQuiz()" class="submit-btn">Finish Quiz</button>
+  </div>
+
+  <!-- 3. SHOWN AFTER END TIME -->
+  <div *ngIf="quizStatus === 'Expired'" class="status-card expired">
+    <h2>Quiz Closed</h2>
+    <p>The deadline ({{ quiz?.endTime | date:'short' }}) has passed.</p>
+  </div>
+</div>

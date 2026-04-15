@@ -2155,3 +2155,332 @@
     padding: 0.5rem 0;
   }
 }
+
+/* ========== AI CV ANALYSIS STYLES ========== */
+
+.cv-analysis-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(217, 198, 130, 0.2);
+}
+
+/* Trigger Section */
+.analysis-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #0A0F2A 0%, #0F1535 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(217, 198, 130, 0.2);
+}
+
+.analysis-trigger-info h4 {
+  margin: 0 0 0.25rem 0;
+  color: #d9c682;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.analysis-trigger-info p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
+/* Analyze Button */
+.analyze-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.analyze-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+}
+
+.analyze-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.analyzing-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Analysis Results */
+.analysis-results {
+  margin-top: 1.5rem;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Score Card */
+.score-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #F4F5F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.score-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-max {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.score-info {
+  flex: 1;
+}
+
+.score-label {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.score-feedback {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* Score Bar */
+.score-bar-wrapper {
+  background: #e2e8f0;
+  height: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.5s ease;
+}
+
+/* Analysis Grid */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Analysis Cards */
+.analysis-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.analysis-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.analysis-card h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #F4F5F0;
+}
+
+.analysis-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.analysis-card ul li {
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #F4F5F0;
+}
+
+.analysis-card ul li:last-child {
+  border-bottom: none;
+}
+
+.analysis-card ul li i {
+  width: 18px;
+  font-size: 0.8rem;
+}
+
+.analysis-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* Card specific colors */
+.strengths-card h4 {
+  color: #10b981;
+}
+
+.strengths-card ul li i {
+  color: #10b981;
+}
+
+.weaknesses-card h4 {
+  color: #ef4444;
+}
+
+.weaknesses-card ul li i {
+  color: #ef4444;
+}
+
+.suggestions-card h4 {
+  color: #f59e0b;
+}
+
+.suggestions-card ul li i {
+  color: #f59e0b;
+}
+
+.formatting-card h4 {
+  color: #6366f1;
+}
+
+.keywords-card h4 {
+  color: #06b6d4;
+}
+
+.missing-card h4 {
+  color: #ef4444;
+}
+
+/* Keyword Chips */
+.keyword-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.found-chip {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.found-chip i {
+  color: #10b981;
+  font-size: 0.7rem;
+}
+
+.missing-chip {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.missing-chip i {
+  color: #ef4444;
+  font-size: 0.7rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .analysis-trigger {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .score-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .score-label {
+    justify-content: center;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .score-number {
+    font-size: 2rem;
+  }
+}

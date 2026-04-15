@@ -269,12 +269,18 @@ export interface Quiz {
   description?: string;
   language?: string;
   createdAt?: string;
+  startTime?: string;
+  endTime?: string;
+  start_time?: string;
+  end_time?: string;
 }
 
 export interface CreateQuizPayload {
   title: string;
   description: string;
   language: string;
+  startTime?: string;
+  endTime?: string;
 }
 
 export interface QuestionFormPayload {
@@ -401,18 +407,21 @@ export interface StudentDocument {
   documentTitle?: string;
   notes?: string;
 }
+
 // ===========================
-// CV ANALYSIS MODELS
+// CV ANALYSIS
 // ===========================
 export interface CvAnalysis {
   score: number;
-  strengths: string[];
-  weaknesses: string[];
-  advice: string[];
-  summary: string;
-  fileName: string;
-  documentId: number;
+  overallFeedback: string;
+  strengths: string;
+  weaknesses: string;
+  suggestions: string;
+  formattingFeedback: string;
+  keywordsFound: string;
+  missingKeywords: string;
 }
+
 // ===========================
 // PROGRESS MODELS
 // ===========================

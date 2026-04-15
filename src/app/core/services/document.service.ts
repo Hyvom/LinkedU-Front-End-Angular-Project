@@ -23,8 +23,14 @@ export class DocumentService {
     return this.http.post<StudentDocument>(`${this.api}/cv`, form);
   }
 
-  evaluateCv(documentId: number): Observable<CvAnalysis> {
-  return this.http.get<CvAnalysis>(`${this.api}/cv/${documentId}/evaluate`);
+  analyzeCvFile(file: File): Observable<CvAnalysis> {
+  const form = new FormData();
+  form.append('file', file);
+  return this.http.post<CvAnalysis>(`${this.api}/cv/analyze`, form);
+  }
+
+  analyzeExistingCv(studentId: number): Observable<CvAnalysis> {
+    return this.http.get<CvAnalysis>(`${this.api}/cv/${studentId}/analyze`);
   }
 
   uploadPassport(studentId: number, file: File, issueDate: string, expiryDate: string, issuingCountry: string): Observable<StudentDocument> {

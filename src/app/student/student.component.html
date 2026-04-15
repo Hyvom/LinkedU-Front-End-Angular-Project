@@ -215,6 +215,11 @@
         {{ quizError }}
       </div>
 
+      <div *ngIf="timeExpiredMessage" class="alert alert-error" style="margin-top: 10px;">
+        <i class="fa-solid fa-hourglass-end"></i>
+        {{ timeExpiredMessage }}
+      </div>
+
       <div *ngIf="isLoadingQuizzes" class="loading-state">
         <div class="spinner"></div>
         <p>
@@ -227,13 +232,56 @@
         <button class="quiz-card" *ngFor="let quiz of assignedQuizzes" (click)="openQuiz(quiz)">
           <h4>{{ quiz.title }}</h4>
           <p>{{ quiz.description || 'No description provided.' }}</p>
+          <div class="quiz-time-badge" *ngIf="hasValidTiming(quiz)" style="margin: 8px 0; font-size: 0.8rem; color: #666;">
+            <i class="fa-regular fa-clock"></i> {{ getQuizStartTime(quiz) | date:'shortTime' }} - {{ getQuizEndTime(quiz) | date:'shortTime' }}
+            <div style="font-size: 0.7rem;">{{ getQuizStartTime(quiz) | date:'mediumDate' }}</div>
+          </div>
           <span class="quiz-lang">{{ quiz.language || 'General' }}</span>
         </button>
         <p *ngIf="assignedQuizzes.length === 0" class="text-muted">No assigned quizzes yet.</p>
       </div>
 
       <div class="quiz-preview" *ngIf="selectedQuiz">
-        <h3>{{ selectedQuiz.title }}</h3>
+        <!-- Status Overlay -->
+        <div class="quiz-timing-notice" *ngIf="getQuizStatus(selectedQuiz) !== 'Active'" style="padding: 2rem; text-align: center; background: #f8f9fa; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #dee2e6;">
+          <i class="fa-solid fa-lock" style="font-size: 2rem; color: #6c757d; margin-bottom: 1rem;"></i>
+          <h3 *ngIf="getQuizStatus(selectedQuiz) === 'Upcoming'">Quiz Not Started Yet</h3>
+          <h3 *ngIf="getQuizStatus(selectedQuiz) === 'Expired'">Quiz Has Ended</h3>
+          <p>This quiz is only available between:<br>
+            <strong>{{ getQuizStartTime(selectedQuiz) | date:'medium' }}</strong> and 
+            <strong>{{ getQuizEndTime(selectedQuiz) | date:'medium' }}</strong>
+          </p>
+        </div>
+
+        <!-- Quiz Content (Only show if Active) -->
+        <div *ngIf="getQuizStatus(selectedQuiz) === 'Active'" style="display: flex; gap: 24px; align-items: flex-start;">
+          
+          <!-- Left Sidebar: Quiz Timing & Status -->
+          <aside style="flex: 0 0 240px; background: #0A0F2A; border: 1px solid rgba(217, 198, 130, 0.3); border-radius: 16px; padding: 20px; position: sticky; top: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+            <h4 style="color: #d9c682; margin: 0 0 15px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid rgba(217,198,130,0.2); padding-bottom: 10px;">
+              <i class="fa-solid fa-hourglass-half"></i> Quiz Schedule
+            </h4>
+            
+            <div style="margin-bottom: 15px;">
+              <p style="font-size: 0.7rem; color: #94a3b8; margin: 0 0 4px; font-weight: 600;">STARTS</p>
+              <p style="font-weight: 600; color: #f8fafc; margin: 0; font-size: 0.85rem;">{{ hasValidTiming(selectedQuiz) ? (getQuizStartTime(selectedQuiz) | date:'medium') : 'Not Set' }}</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <p style="font-size: 0.7rem; color: #94a3b8; margin: 0 0 4px; font-weight: 600;">DEADLINE</p>
+              <p style="font-weight: 600; color: #ef4444; margin: 0; font-size: 0.85rem;">{{ hasValidTiming(selectedQuiz) ? (getQuizEndTime(selectedQuiz) | date:'medium') : 'Not Set' }}</p>
+            </div>
+
+            <div style="padding: 15px; background: rgba(217, 198, 130, 0.1); border-radius: 12px; border: 1px solid rgba(217, 198, 130, 0.2); text-align: center;">
+              <p style="font-size: 0.65rem; color: #d9c682; margin: 0 0 5px; font-weight: 800; text-transform: uppercase;">Time Left</p>
+              <p style="font-size: 1.8rem; font-weight: 800; color: #d9c682; margin: 0; line-height: 1;">{{ remainingTime || '--:--' }}</p>
+            </div>
+          </aside>
+
+          <!-- Main Quiz Content Area -->
+          <div style="flex: 1;">
+            <h3>{{ selectedQuiz.title }}</h3>
+
         <div class="quiz-progress">
           <div class="quiz-progress-header">
             <span>Progress</span>
@@ -306,6 +354,8 @@
           <p>{{ quizResult.message }}</p>
           <p class="score">Score: {{ quizResult.score | number:'1.0-0' }}%</p>
         </div>
+      </div>
+      </div>
       </div>
     </div>
     <!-- ═══════════ DOCUMENTS SECTION ═══════════ -->
@@ -464,82 +514,147 @@
               <i *ngIf="isUploading" class="fa-solid fa-spinner fa-spin"></i>
               {{ isUploading ? 'Uploading...' : 'Upload CV' }}
             </button>
-            <!-- AI EVALUATE BUTTON -->
-            <button
-              *ngIf="getDocumentByType('CV')"
-              (click)="analyzeCv()"
-              [disabled]="isAnalyzing"
-              class="ai-analyze-btn">
-              <i *ngIf="!isAnalyzing" class="fa-solid fa-robot"></i>
-              <i *ngIf="isAnalyzing" class="fa-solid fa-spinner fa-spin"></i>
-              {{ isAnalyzing ? 'Analyzing with AI...' : 'Analyze CV with AI' }}
-            </button>
+            <!-- ── AI CV ANALYSIS ── -->
+            <div *ngIf="getDocumentByType('CV')" class="cv-analysis-section">
 
-            <!-- ANALYSIS ERROR -->
-            <div *ngIf="analysisError" class="alert alert-error" style="margin-top: 12px;">
-              <i class="fa-solid fa-circle-exclamation"></i>
-              {{ analysisError }}
-            </div>
-
-            <!-- AI RESULTS CARD -->
-            <div *ngIf="cvAnalysis" class="ai-analysis-card">
-              
-              <!-- Header with score -->
-              <div class="ai-header">
-                <div class="ai-title">
-                  <i class="fa-solid fa-robot"></i>
-                  <h4>AI CV Analysis</h4>
+              <div class="analysis-trigger">
+                <div class="analysis-trigger-info">
+                  <h4>
+                    <i class="fa-solid fa-robot"></i>
+                    AI CV Analysis
+                  </h4>
+                  <p>Get an AI-powered score and feedback on your CV</p>
                 </div>
-                <!-- Score circle -->
-                <div class="score-circle" [style.background]="'conic-gradient(#6366f1 ' + (cvAnalysis.score * 3.6) + 'deg, #e5e7eb 0deg)'">
-                  <span>{{ cvAnalysis.score }}</span>
-                </div>
+                <button (click)="analyzeExistingCv()" [disabled]="isAnalyzingCv" class="analyze-btn">
+                  <span *ngIf="!isAnalyzingCv">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Analyze My CV
+                  </span>
+                  <span *ngIf="isAnalyzingCv" class="analyzing-text">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    Analyzing...
+                  </span>
+                </button>
               </div>
 
-              <!-- Summary -->
-              <div class="ai-summary">
-                {{ cvAnalysis.summary }}
+              <!-- Analysis Error -->
+              <div *ngIf="analysisError" class="alert alert-error">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ analysisError }}
               </div>
 
-              <!-- Strengths -->
-              <div class="analysis-section strengths">
-                <div class="section-header">
-                  <i class="fa-solid fa-circle-check"></i>
-                  <h5>Strengths</h5>
+              <!-- Analysis Results -->
+              <div *ngIf="cvAnalysis && !isAnalyzingCv" class="analysis-results">
+
+                <!-- Score Card -->
+                <div class="score-card">
+                  <div class="score-circle" [style.borderColor]="getScoreColor(cvAnalysis.score)">
+                    <span class="score-number" [style.color]="getScoreColor(cvAnalysis.score)">
+                      {{ cvAnalysis.score }}
+                    </span>
+                    <span class="score-max">/100</span>
+                  </div>
+                  <div class="score-info">
+                    <h3 class="score-label" [style.color]="getScoreColor(cvAnalysis.score)">
+                      <i class="fa-solid fa-chart-line"></i>
+                      {{ getScoreLabel(cvAnalysis.score) }}
+                    </h3>
+                    <p class="score-feedback">{{ cvAnalysis.overallFeedback }}</p>
+                  </div>
                 </div>
-                <ul class="analysis-list">
-                  <li *ngFor="let s of cvAnalysis.strengths">
-                    <i class="fa-solid fa-check"></i>{{ s }}
-                  </li>
-                </ul>
-              </div>
 
-              <!-- Weaknesses / Areas to Improve -->
-              <div class="analysis-section weaknesses">
-                <div class="section-header">
-                  <i class="fa-solid fa-circle-xmark"></i>
-                  <h5>Areas to Improve</h5>
+                <!-- Score Bar -->
+                <div class="score-bar-wrapper">
+                  <div class="score-bar-fill"
+                    [style.width]="cvAnalysis.score + '%'"
+                    [style.background]="getScoreColor(cvAnalysis.score)">
+                  </div>
                 </div>
-                <ul class="analysis-list">
-                  <li *ngFor="let w of cvAnalysis.weaknesses">
-                    <i class="fa-solid fa-xmark"></i>{{ w }}
-                  </li>
-                </ul>
-              </div>
 
-              <!-- Advice -->
-              <div class="analysis-section advice">
-                <div class="section-header">
-                  <i class="fa-solid fa-lightbulb"></i>
-                  <h5>Advice</h5>
+                <!-- Analysis Grid -->
+                <div class="analysis-grid">
+
+                  <!-- Strengths -->
+                  <div class="analysis-card strengths-card">
+                    <h4>
+                      <i class="fa-solid fa-circle-check"></i>
+                      Strengths
+                    </h4>
+                    <ul>
+                      <li *ngFor="let s of parseList(cvAnalysis.strengths)">
+                        <i class="fa-solid fa-check"></i>
+                        {{ s }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Weaknesses -->
+                  <div class="analysis-card weaknesses-card">
+                    <h4>
+                      <i class="fa-solid fa-circle-exclamation"></i>
+                      Weaknesses
+                    </h4>
+                    <ul>
+                      <li *ngFor="let w of parseList(cvAnalysis.weaknesses)">
+                        <i class="fa-solid fa-xmark"></i>
+                        {{ w }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Suggestions -->
+                  <div class="analysis-card suggestions-card">
+                    <h4>
+                      <i class="fa-solid fa-lightbulb"></i>
+                      Suggestions
+                    </h4>
+                    <ul>
+                      <li *ngFor="let s of parseList(cvAnalysis.suggestions)">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        {{ s }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Formatting -->
+                  <div class="analysis-card formatting-card">
+                    <h4>
+                      <i class="fa-solid fa-file-lines"></i>
+                      Formatting
+                    </h4>
+                    <p>{{ cvAnalysis.formattingFeedback }}</p>
+                  </div>
+
+                  <!-- Keywords Found -->
+                  <div class="analysis-card keywords-card">
+                    <h4>
+                      <i class="fa-solid fa-key"></i>
+                      Keywords Found
+                    </h4>
+                    <div class="keyword-chips">
+                      <span *ngFor="let k of parseList(cvAnalysis.keywordsFound)" class="keyword-chip found-chip">
+                        <i class="fa-solid fa-check-circle"></i>
+                        {{ k }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Missing Keywords -->
+                  <div class="analysis-card missing-card">
+                    <h4>
+                      <i class="fa-solid fa-key"></i>
+                      Missing Keywords
+                    </h4>
+                    <div class="keyword-chips">
+                      <span *ngFor="let k of parseList(cvAnalysis.missingKeywords)" class="keyword-chip missing-chip">
+                        <i class="fa-solid fa-times-circle"></i>
+                        {{ k }}
+                      </span>
+                    </div>
+                  </div>
+
                 </div>
-                <ul class="analysis-list">
-                  <li *ngFor="let a of cvAnalysis.advice">
-                    <i class="fa-solid fa-arrow-right"></i>{{ a }}
-                  </li>
-                </ul>
               </div>
-
             </div>
           </div>
         </div>
