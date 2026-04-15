@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProductKey, User, AssignRolePayload } from '../shared/models/models';
+import { AdminDashboardStatistics, ProductKey, User } from '../shared/models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,11 @@ export class AdminService {
   private readonly base = 'http://localhost:8080/api/admin';
 
   constructor(private http: HttpClient) {}
+
+  getDashboardStatistics(): Observable<AdminDashboardStatistics> {
+    return this.http.get<AdminDashboardStatistics>(`${this.base}/statistics`);
+  }
+
   // ── Users ─────────────────────────────────────────────
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.base}/users`);

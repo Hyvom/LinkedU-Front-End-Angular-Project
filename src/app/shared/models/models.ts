@@ -249,6 +249,31 @@ export interface ProductKey {
 }
 
 // ===========================
+// ADMIN DASHBOARD STATISTICS
+// ===========================
+export interface AdminUserStatistics {
+  total: number;
+  students: number;
+  agents: number;
+  admins: number;
+  languageTeachers: number;
+  guests: number;
+  users: number;
+}
+
+export interface AdminStudentProgressStageRow {
+  stage: string;
+  notStarted: number;
+  inProgress: number;
+  completed: number;
+}
+
+export interface AdminDashboardStatistics {
+  users: AdminUserStatistics;
+  studentProgressByStage: AdminStudentProgressStageRow[];
+}
+
+// ===========================
 // DESTINATION MODELS
 // ===========================
 export interface Destination {
