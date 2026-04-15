@@ -86,7 +86,12 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN'] },
     children: [
-      { path: '', redirectTo: 'product-keys', pathMatch: 'full' },
+      { path: '', redirectTo: 'statistics', pathMatch: 'full' },
+      {
+        path: 'statistics',
+        loadComponent: () =>
+          import('../admin/statistics.component/statistics.component').then(m => m.AdminStatisticsComponent)
+      },
       {
         path: 'product-keys',
         loadComponent: () =>
