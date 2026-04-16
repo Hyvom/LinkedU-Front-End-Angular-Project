@@ -117,4 +117,82 @@
       </table>
     </div>
   </div>
+
+  <!-- Role change confirmation (centered modal) -->
+  <div
+    class="role-confirm-backdrop"
+    *ngIf="roleConfirmOpen && roleConfirmUser && roleConfirmNewRole"
+    (click)="onRoleConfirmBackdropClick($event)"
+    role="presentation"
+  >
+    <div
+      class="role-confirm-dialog"
+      (click)="$event.stopPropagation()"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="role-confirm-title"
+    >
+      <div class="role-confirm-header">
+        <div class="role-confirm-icon-wrap">
+          <i class="fas fa-shield-halved" aria-hidden="true"></i>
+        </div>
+        <h3 id="role-confirm-title">Confirm role change</h3>
+        <p class="role-confirm-subtitle">Enter the admin confirmation code to apply this change.</p>
+      </div>
+
+      <div class="role-confirm-body">
+        <div class="role-confirm-user-card">
+          <p class="role-confirm-label">User</p>
+          <p class="role-confirm-name">
+            {{ roleConfirmUser.firstName }} {{ roleConfirmUser.lastName }}
+          </p>
+          <p class="role-confirm-email">{{ roleConfirmUser.email }}</p>
+        </div>
+
+        <div class="role-confirm-transition">
+          <span class="role-pill role-pill-from">
+            <i [ngClass]="getRoleIcon(roleConfirmUser.role)"></i>
+            {{ roleConfirmUser.role }}
+          </span>
+          <i class="fas fa-arrow-right role-confirm-arrow" aria-hidden="true"></i>
+          <span class="role-pill role-pill-to">
+            <i [ngClass]="getRoleIcon(roleConfirmNewRole)"></i>
+            {{ roleConfirmNewRole }}
+          </span>
+        </div>
+
+        <form (ngSubmit)="submitRoleConfirm()" class="role-confirm-form">
+          <label class="role-confirm-field-label" for="role-confirm-code">Confirmation code</label>
+          <input
+            id="role-confirm-code"
+            name="roleConfirmCode"
+            type="text"
+            class="role-confirm-input"
+            [(ngModel)]="roleConfirmCodeInput"
+            (input)="roleConfirmModalError = ''"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          />
+          <p class="role-confirm-modal-error" *ngIf="roleConfirmModalError" role="alert">
+            <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+            {{ roleConfirmModalError }}
+          </p>
+          <div class="role-confirm-actions">
+            <button type="button" class="btn-role-cancel" (click)="cancelRoleConfirm()">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn-role-confirm"
+              [disabled]="assigningRole !== null"
+            >
+              <i class="fas fa-check" aria-hidden="true"></i>
+              Apply role
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

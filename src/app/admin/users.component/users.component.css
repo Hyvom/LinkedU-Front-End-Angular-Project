@@ -352,6 +352,282 @@ select.role-language_teacher {
   }
 }
 
+/* --- Role confirm modal (centered) --- */
+.users-container .role-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(0, 7, 45, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: role-confirm-fade-in 0.2s ease-out;
+}
+
+@keyframes role-confirm-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.role-confirm-dialog {
+  width: 100%;
+  max-width: 440px;
+  max-height: min(90vh, 640px);
+  overflow-y: auto;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 7, 45, 0.45),
+    0 0 0 1px rgba(217, 198, 130, 0.35);
+  animation: role-confirm-slide 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes role-confirm-slide {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.role-confirm-header {
+  text-align: center;
+  padding: 1.75rem 1.75rem 1.25rem;
+  background: linear-gradient(135deg, #1e4f70 0%, #0e3a55 100%);
+  color: white;
+  border-radius: 20px 20px 0 0;
+  border-bottom: 3px solid #d9c682;
+}
+
+.role-confirm-icon-wrap {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: rgba(217, 198, 130, 0.2);
+  border: 2px solid rgba(217, 198, 130, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #d9c682;
+}
+
+.role-confirm-header h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.role-confirm-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.92;
+  line-height: 1.45;
+}
+
+.role-confirm-body {
+  padding: 1.5rem 1.75rem 1.75rem;
+}
+
+.role-confirm-user-card {
+  background: linear-gradient(135deg, #f4f5f0 0%, #e8e9e4 100%);
+  border: 1px solid rgba(30, 79, 112, 0.12);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  margin-bottom: 1.25rem;
+}
+
+.role-confirm-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1e4f70;
+  opacity: 0.85;
+}
+
+.role-confirm-name {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #00072d;
+}
+
+.role-confirm-email {
+  margin: 0;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+  color: #1e4f70;
+  word-break: break-all;
+}
+
+.role-confirm-transition {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.35rem;
+}
+
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.role-pill-from {
+  background: #e2e8f0;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.role-pill-to {
+  background: linear-gradient(135deg, #d9c682 0%, #c4b56a 100%);
+  color: #00072d;
+  border: 1px solid rgba(0, 7, 45, 0.15);
+}
+
+.role-confirm-arrow {
+  color: #1e4f70;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.role-confirm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.role-confirm-field-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e4f70;
+  margin: 0;
+}
+
+.role-confirm-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #d9c682;
+  border-radius: 12px;
+  background: white;
+  color: #00072d;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.role-confirm-input:focus {
+  outline: none;
+  border-color: #1e4f70;
+  box-shadow: 0 0 0 4px rgba(30, 79, 112, 0.15);
+}
+
+.role-confirm-input::placeholder {
+  color: #94a3b8;
+}
+
+.role-confirm-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.role-confirm-hint strong {
+  color: #1e4f70;
+  font-weight: 700;
+}
+
+.role-confirm-modal-error {
+  margin: 0.35rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  color: #b71c1c;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border: 1px solid #ef9a9a;
+}
+
+.role-confirm-modal-error i {
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+}
+
+.role-confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.btn-role-cancel,
+.btn-role-confirm {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+}
+
+.btn-role-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: 2px solid #e2e8f0;
+}
+
+.btn-role-cancel:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn-role-confirm {
+  background: linear-gradient(135deg, #1e4f70 0%, #0e3a55 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(30, 79, 112, 0.35);
+}
+
+.btn-role-confirm:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(30, 79, 112, 0.4);
+}
+
+.btn-role-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 @media (max-width: 768px) {
   .users-header h2 {
     font-size: 1.8rem;
