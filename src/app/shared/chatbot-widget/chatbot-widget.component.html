@@ -1,18 +1,41 @@
 <button class="chatbot-fab" type="button" (click)="toggleChat()" aria-label="Open chatbot">
-  <img class="chatbot-icon" src="/pics/chatbotlogo.png" alt="Chatbot" />
+  <i class="fa-solid fa-comment-dots chatbot-icon"></i>
 </button>
 
 <section class="chatbot-panel" *ngIf="isOpen">
   <header class="chatbot-header">
-    <h3>LinkedU Assistant</h3>
-    <button type="button" class="close-btn" (click)="toggleChat()">×</button>
+    <div class="chatbot-header-info">
+      <i class="fa-solid fa-robot"></i>
+      <h3>LinkedU Assistant</h3>
+    </div>
+    <button type="button" class="close-btn" (click)="toggleChat()">
+      <i class="fa-solid fa-times"></i>
+    </button>
   </header>
 
-  <div class="chatbot-messages">
-    <div *ngFor="let message of messages" [class.user]="message.role === 'user'" class="chat-message">
-      {{ message.content }}
+  <div class="chatbot-messages" #messageContainer>
+    <div *ngFor="let message of messages" 
+         class="chat-message" 
+         [class.user-message]="message.role === 'user'"
+         [class.bot-message]="message.role === 'assistant'">
+      <div class="message-avatar">
+        <i *ngIf="message.role === 'assistant'" class="fa-solid fa-robot"></i>
+        <i *ngIf="message.role === 'user'" class="fa-solid fa-user"></i>
+      </div>
+      <div class="message-content">
+        {{ message.content }}
+      </div>
     </div>
-    <div *ngIf="isLoading" class="chat-message">Thinking...</div>
+    <div *ngIf="isLoading" class="chat-message bot-message">
+      <div class="message-avatar">
+        <i class="fa-solid fa-robot"></i>
+      </div>
+      <div class="message-content typing-indicator">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
   </div>
 
   <form class="chatbot-input" (ngSubmit)="sendMessage()">
@@ -20,9 +43,11 @@
       type="text"
       name="question"
       [(ngModel)]="question"
-      placeholder="Ask about LinkedU website..."
+      placeholder="Ask me anything about LinkedU..."
       autocomplete="off"
     />
-    <button type="submit" [disabled]="isLoading">Send</button>
+    <button type="submit" [disabled]="isLoading">
+      <i class="fa-solid fa-paper-plane"></i>
+    </button>
   </form>
 </section>
