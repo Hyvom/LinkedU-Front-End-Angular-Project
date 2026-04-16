@@ -259,3 +259,84 @@
   width: 100%;
   background: #34d399;
 }
+
+/* Input icon wrapper styles */
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.form-input {
+  padding-left: 2.75rem !important;
+  width: 100%;
+}
+
+/* Adjust form-row to work with icon wrappers */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+
+.form-row .input-icon-wrapper {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+/* Adjust date input icon position */
+input[type="date"] {
+  padding-left: 2.75rem;
+}
+
+/* Fix for the duplicate password strength text */
+.password-strength {
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Fix strength bar spacing */
+.strength-bar {
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .input-icon {
+    left: 0.875rem;
+    font-size: 0.875rem;
+  }
+  
+  .form-input {
+    padding-left: 2.5rem !important;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .form-row .input-icon-wrapper {
+    margin-bottom: 1rem;
+  }
+  
+  .form-row .input-icon-wrapper:last-child {
+    margin-bottom: 0;
+  }
+}

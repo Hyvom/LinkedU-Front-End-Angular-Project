@@ -26,34 +26,65 @@
 
     <!-- TABS -->
     <div class="tab-switcher">
-      <a routerLink="/signup/guest" class="tab-btn active">🌍 Guest Registration</a>
-      <a routerLink="/signup/contract" class="tab-btn">📄 Contract Registration</a>
+      <a routerLink="/signup/guest" class="tab-btn active">
+        <i class="fa-solid fa-globe"></i>
+        Guest Registration
+      </a>
+      <a routerLink="/signup/contract" class="tab-btn">
+        <i class="fa-solid fa-file-contract"></i>
+        Contract Registration
+      </a>
     </div>
 
     <p class="tab-description">
+      <i class="fa-solid fa-info-circle"></i>
       Register as a guest to explore our platform.
     </p>
 
     <form class="signup-form" (ngSubmit)="onSubmit()">
 
-      <input class="form-input" name="username" [(ngModel)]="form.username" placeholder="Username *" required />
-
-      <div class="form-row">
-        <input class="form-input" name="firstName" [(ngModel)]="form.firstName" placeholder="First name *" required />
-        <input class="form-input" name="lastName" [(ngModel)]="form.lastName" placeholder="Last name *" required />
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-user input-icon"></i>
+        <input class="form-input" name="username" [(ngModel)]="form.username" placeholder="Username *" required />
       </div>
 
-      <input class="form-input" name="email" type="email" [(ngModel)]="form.email" placeholder="Email address *" required />
-
       <div class="form-row">
-        <input class="form-input" name="phoneNumber" [(ngModel)]="form.phoneNumber" placeholder="Phone number *" required />
-        <input class="form-input" name="birthDate" type="date" [(ngModel)]="form.birthDate" required />
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-user-pen input-icon"></i>
+          <input class="form-input" name="firstName" [(ngModel)]="form.firstName" placeholder="First name *" required />
+        </div>
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-user-pen input-icon"></i>
+          <input class="form-input" name="lastName" [(ngModel)]="form.lastName" placeholder="Last name *" required />
+        </div>
+      </div>
+      <br>
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-envelope input-icon"></i>
+        <input class="form-input" name="email" type="email" [(ngModel)]="form.email" placeholder="Email address *" required />
       </div>
 
-      <input class="form-input" name="address" [(ngModel)]="form.address" placeholder="Address (optional)" />
+      <div class="form-row">
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-phone input-icon"></i>
+          <input class="form-input" name="phoneNumber" [(ngModel)]="form.phoneNumber" placeholder="Phone number *" required />
+        </div>
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-calendar input-icon"></i>
+          <input class="form-input" name="birthDate" type="date" [(ngModel)]="form.birthDate" required />
+        </div>
+      </div>
+      <br>
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-location-dot input-icon"></i>
+        <input class="form-input" name="address" [(ngModel)]="form.address" placeholder="Address (optional)" />
+      </div>
 
       <!-- PASSWORD -->
-      <input class="form-input" name="password" type="password" [(ngModel)]="form.password" placeholder="Password *" required />
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input class="form-input" name="password" type="password" [(ngModel)]="form.password" placeholder="Password *" required />
+      </div>
 
       <!-- STRENGTH BAR -->
       <div *ngIf="form.password.length > 0" class="strength-bar">
@@ -66,35 +97,50 @@
         </div>
       </div>
 
-      <p *ngIf="form.password.length > 0" class="password-strength">{{ passwordStrength }}
+      <p *ngIf="form.password.length > 0" class="password-strength">
+        <i class="fa-solid fa-shield-haltered"></i>
         {{ passwordStrength }}
       </p>
 
       <!-- CONFIRM PASSWORD -->
-      <input class="form-input"
-        name="confirmPassword"
-        type="password"
-        [(ngModel)]="form.confirmPassword"
-        placeholder="Confirm Password *"
-        required />
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input class="form-input"
+          name="confirmPassword"
+          type="password"
+          [(ngModel)]="form.confirmPassword"
+          placeholder="Confirm Password *"
+          required />
+      </div>
 
-      <p *ngIf="form.confirmPassword && !passwordsMatch"
-         class="error-message">
-        ⚠️ Passwords do not match
+      <p *ngIf="form.confirmPassword && !passwordsMatch" class="error-message">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        Passwords do not match
       </p>
 
-      <div *ngIf="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
-      <div *ngIf="successMessage" class="success-message">✅ {{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="error-message">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="success-message">
+        <i class="fa-solid fa-circle-check"></i>
+        {{ successMessage }}
+      </div>
 
       <button type="submit" class="submit-btn"
         [disabled]="isSubmitting || !passwordsMatch">
+        <i *ngIf="!isSubmitting" class="fa-solid fa-user-plus"></i>
+        <i *ngIf="isSubmitting" class="fa-solid fa-spinner fa-spin"></i>
         {{ isSubmitting ? 'Creating account...' : 'Create Guest Account' }}
       </button>
 
     </form>
 
     <div class="signup-footer">
-      Already have an account? <a routerLink="/login">Sign in</a>
+      Already have an account? <a routerLink="/login">
+        <i class="fa-solid fa-sign-in-alt"></i>
+        Sign in
+      </a>
     </div>
 
   </div>

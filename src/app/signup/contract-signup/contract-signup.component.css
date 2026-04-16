@@ -259,3 +259,46 @@
   width: 100%;
   background: #34d399;
 }
+
+/* Input icon wrapper styles */
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.form-input {
+  padding-left: 2.75rem !important;
+  width: 100%;
+}
+
+.product-key-icon {
+  color: #d9c682;
+}
+
+/* Adjust date input icon position */
+input[type="date"] {
+  padding-left: 2.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .input-icon {
+    left: 0.875rem;
+    font-size: 0.875rem;
+  }
+  
+  .form-input {
+    padding-left: 2.5rem !important;
+  }
+}

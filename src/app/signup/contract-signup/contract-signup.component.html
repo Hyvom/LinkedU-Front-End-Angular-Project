@@ -22,34 +22,65 @@
     </div>
 
     <div class="tab-switcher">
-      <a routerLink="/signup/guest" class="tab-btn">🌍 Guest Registration</a>
-      <a routerLink="/signup/contract" class="tab-btn active">📄 Contract Registration</a>
+      <a routerLink="/signup/guest" class="tab-btn">
+        <i class="fa-solid fa-globe"></i>
+        Guest Registration
+      </a>
+      <a routerLink="/signup/contract" class="tab-btn active">
+        <i class="fa-solid fa-file-contract"></i>
+        Contract Registration
+      </a>
     </div>
 
     <p class="tab-description">
+      <i class="fa-solid fa-key"></i>
       Have a product key? Register as a student with full access.
     </p>
 
     <form class="signup-form" (ngSubmit)="onSubmit()">
 
-      <input class="form-input" name="username" [(ngModel)]="form.username" placeholder="Username *" required />
-
-      <div class="form-row">
-        <input class="form-input" name="c_firstName" [(ngModel)]="form.firstName" placeholder="First name *" required />
-        <input class="form-input" name="c_lastName" [(ngModel)]="form.lastName" placeholder="Last name *" required />
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-user input-icon"></i>
+        <input class="form-input" name="username" [(ngModel)]="form.username" placeholder="Username *" required />
       </div>
 
-      <input class="form-input" name="c_email" type="email" [(ngModel)]="form.email" placeholder="Email address *" required />
-
       <div class="form-row">
-        <input class="form-input" name="c_phoneNumber" [(ngModel)]="form.phoneNumber" placeholder="Phone number *" required />
-        <input class="form-input" name="c_birthDate" type="date" [(ngModel)]="form.birthDate" required />
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-user-pen input-icon"></i>
+          <input class="form-input" name="c_firstName" [(ngModel)]="form.firstName" placeholder="First name *" required />
+        </div>
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-user-pen input-icon"></i>
+          <input class="form-input" name="c_lastName" [(ngModel)]="form.lastName" placeholder="Last name *" required />
+        </div>
       </div>
 
-      <input class="form-input" name="c_address" [(ngModel)]="form.address" placeholder="Address (optional)" />
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-envelope input-icon"></i>
+        <input class="form-input" name="c_email" type="email" [(ngModel)]="form.email" placeholder="Email address *" required />
+      </div>
+
+      <div class="form-row">
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-phone input-icon"></i>
+          <input class="form-input" name="c_phoneNumber" [(ngModel)]="form.phoneNumber" placeholder="Phone number *" required />
+        </div>
+        <div class="input-icon-wrapper">
+          <i class="fa-solid fa-calendar input-icon"></i>
+          <input class="form-input" name="c_birthDate" type="date" [(ngModel)]="form.birthDate" required />
+        </div>
+      </div>
+
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-location-dot input-icon"></i>
+        <input class="form-input" name="c_address" [(ngModel)]="form.address" placeholder="Address (optional)" />
+      </div>
 
       <!-- PASSWORD -->
-      <input class="form-input" name="c_password" type="password" [(ngModel)]="form.password" placeholder="Password *" required />
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input class="form-input" name="c_password" type="password" [(ngModel)]="form.password" placeholder="Password *" required />
+      </div>
 
       <!-- BAR -->
       <div *ngIf="form.password.length > 0" class="strength-bar">
@@ -62,44 +93,65 @@
         </div>
       </div>
 
-      <p *ngIf="form.password.length > 0" class="password-strength">{{ passwordStrength }}</p>
-
-      <!-- CONFIRM -->
-      <input class="form-input"
-        name="c_confirmPassword"
-        type="password"
-        [(ngModel)]="form.confirmPassword"
-        placeholder="Confirm Password *"
-        required />
-
-      <p *ngIf="form.confirmPassword && !passwordsMatch"
-         class="error-message">
-        ⚠️ Passwords do not match
+      <p *ngIf="form.password.length > 0" class="password-strength">
+        <i class="fa-solid fa-shield-haltered"></i>
+        {{ passwordStrength }}
       </p>
 
-      <input class="form-input product-key-input"
-        name="c_productKey"
-        [(ngModel)]="form.productKey"
-        placeholder="🔑 Product Key *"
-        required />
+      <!-- CONFIRM -->
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input class="form-input"
+          name="c_confirmPassword"
+          type="password"
+          [(ngModel)]="form.confirmPassword"
+          placeholder="Confirm Password *"
+          required />
+      </div>
+
+      <p *ngIf="form.confirmPassword && !passwordsMatch" class="error-message">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        Passwords do not match
+      </p>
+
+      <div class="input-icon-wrapper">
+        <i class="fa-solid fa-key input-icon product-key-icon"></i>
+        <input class="form-input product-key-input"
+          name="c_productKey"
+          [(ngModel)]="form.productKey"
+          placeholder="Product Key *"
+          required />
+      </div>
 
       <p class="product-key-hint">
+        <i class="fa-solid fa-info-circle"></i>
         Your product key was provided in your contract.
       </p>
 
-      <div *ngIf="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
-      <div *ngIf="successMessage" class="success-message">✅ {{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="error-message">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="success-message">
+        <i class="fa-solid fa-circle-check"></i>
+        {{ successMessage }}
+      </div>
 
       <button type="submit"
         class="submit-btn"
         [disabled]="isSubmitting || !passwordsMatch">
+        <i *ngIf="!isSubmitting" class="fa-solid fa-key"></i>
+        <i *ngIf="isSubmitting" class="fa-solid fa-spinner fa-spin"></i>
         {{ isSubmitting ? 'Registering...' : 'Register with Product Key' }}
       </button>
 
     </form>
 
     <div class="signup-footer">
-      Already have an account? <a routerLink="/login">Sign in</a>
+      Already have an account? <a routerLink="/login">
+        <i class="fa-solid fa-sign-in-alt"></i>
+        Sign in
+      </a>
     </div>
 
   </div>
